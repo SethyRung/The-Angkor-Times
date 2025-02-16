@@ -11,11 +11,13 @@ export default defineNuxtConfig({
     "dayjs-nuxt",
     "@nuxtjs/google-fonts",
     "nuxt-directus",
+    "@nuxt/image",
   ],
   runtimeConfig: {
     public: {
+      siteName: "",
       directus: {
-        url: "https://the-angkor-times-backend.onrender.com",
+        url: "",
       },
     },
   },
@@ -27,6 +29,11 @@ export default defineNuxtConfig({
     families: {
       "Playfair Display": [400, 500, 600, 700, 800, 900],
       "Red Hat Display": [300, 400, 500, 600, 700, 800, 900],
+    },
+  },
+  image: {
+    directus: {
+      baseURL: `${process.env.NUXT_PUBLIC_DIRECTOS_URL}/assets/`,
     },
   },
 });

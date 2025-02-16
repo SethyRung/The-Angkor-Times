@@ -12,6 +12,7 @@
   "dependencies": {
     "@iconify-json/lucide": "^1.2.26",
     "@nuxt/eslint": "^0.6.1",
+    "@nuxt/image": "^1.9.0",
     "@nuxt/ui": "^3.0.0-alpha.12",
     "@nuxtjs/google-fonts": "^3.2.0",
     "@pinia/nuxt": "^0.6.0",
