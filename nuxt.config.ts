@@ -16,6 +16,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       siteName: "",
+      copyright: "",
       directus: {
         url: "",
       },
@@ -29,6 +30,7 @@ export default defineNuxtConfig({
     families: {
       "Playfair Display": [400, 500, 600, 700, 800, 900],
       "Red Hat Display": [300, 400, 500, 600, 700, 800, 900],
+      Inter: [100, 200, 300, 400, 500, 600, 700, 800, 900],
     },
   },
   image: {
