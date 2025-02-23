@@ -1,6 +1,6 @@
 <template>
-  <div :class="ui.root">
-    <NuxtImg :class="ui.image" :src="image" />
+  <NuxtLink :to="to" :class="ui.root">
+    <NuxtImg :class="ui.image" :src="image" provider="directus" />
     <div :class="ui.wrapper">
       <h3 :class="ui.title">
         {{ title }}
@@ -9,7 +9,7 @@
         {{ description }}
       </p>
     </div>
-  </div>
+  </NuxtLink>
 </template>
 
 <script lang="ts" setup>
@@ -26,22 +26,21 @@ type CardProps = {
   image: string;
   title: string;
   description: string;
-  orientation?: "horizontal" | "vertical";
+  to?: string;
   ui?: UI;
 };
 
 const props = withDefaults(defineProps<CardProps>(), {
-  orientation: "vertical",
+  to: undefined,
   ui: undefined,
 });
 
 const defaultUI: UI = {
   root: clsx(
-    "w-full flex gap-3",
-    props.orientation === "vertical" ? "flex-col" : "flex-row",
+    "w-full h-full overflow-hidden p-2 grid gap-3 grid-rows-2 hover:cursor-pointer bg-white",
   ),
+  image: "size-full object-cover",
   wrapper: "space-y-3",
-  image: "w-full object-cover",
   title: "font-bold",
   description: "text-justify text-sm",
 };

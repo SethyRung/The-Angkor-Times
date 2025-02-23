@@ -35,7 +35,7 @@ export default defineNuxtConfig({
   },
   image: {
     directus: {
-      baseURL: `${process.env.NUXT_PUBLIC_DIRECTOS_URL}/assets/`,
+      baseURL: `${process.env.NUXT_PUBLIC_DIRECTUS_URL}/assets/`,
     },
   },
 });
