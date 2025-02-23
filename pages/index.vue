@@ -1,90 +1,73 @@
 <template>
   <div class="max-w-[1280px] mx-auto p-4">
-    <div class="grid computer:grid-cols-[75%_1fr] gap-4">
-      <div class="flex flex-col-reverse computer:flex-row gap-4">
-        <div class="computer:max-w-[240px] h-full my-4 space-y-3">
+    <div class="computer:h-[740px] grid computer:grid-cols-[75%_1fr] gap-2">
+      <div
+        class="h-full overflow-hidden flex flex-col-reverse computer:flex-row gap-4"
+      >
+        <div
+          v-if="recentNews.length > 0"
+          class="computer:max-w-[240px] h-full my-4 computer:my-0 space-y-3"
+        >
           <h2 class="font-bold underline font-red-hat-display">Recent News</h2>
           <div class="flex flex-col items-center gap-3">
-            <NuxtLink
-              class="space-y-2 hover:text-neutral-600 hover:cursor-pointer"
-            >
-              <h3 class="font-bold text-lg">
-                Rewriting History, Trump Blames Ukraine for War and Calls
-                Zelensky ‘Dictator’
-              </h3>
-              <p class="text-sm line-clamp-3 break-all">
-                President Trump made an array of false claims as he tried to
-                cast President Volodymyr Zelensky as a villain who conned the
-                U.S. into helping Ukraine.
-              </p>
-              <p class="text-sm text-neutral-600">5 min</p>
-            </NuxtLink>
-            <div class="w-[80%] border border-[var(--ui-border)]"></div>
-            <NuxtLink
-              class="space-y-2 hover:text-neutral-600 hover:cursor-pointer"
-            >
-              <h3 class="font-bold text-lg">
-                Musk Team Cuts 9/11 Survivors’ Fund, and Republicans Join
-                Democrats in Rebuke
-              </h3>
-              <p class="text-sm line-clamp-3 break-all">
-                After 20 percent of the World Trade Center Health Program staff
-                was terminated last week, Democratic lawmakers were outraged.
-                Republicans have now joined them.
-              </p>
-              <p class="text-sm">8 min</p>
-            </NuxtLink>
-            <div class="w-[80%] border border-[var(--ui-border)]"></div>
-            <NuxtLink
-              class="space-y-2 hover:text-neutral-600 hover:cursor-pointer"
-            >
-              <h3 class="font-bold text-lg">
-                Musk Team Cuts 9/11 Survivors’ Fund, and Republicans Join
-                Democrats in Rebuke
-              </h3>
-              <p class="text-sm line-clamp-3 break-all">
-                After 20 percent of the World Trade Center Health Program staff
-                was terminated last week, Democratic lawmakers were outraged.
-                Republicans have now joined them.
-              </p>
-              <p class="text-sm">8 min</p>
-            </NuxtLink>
+            <template v-for="(news, index) in recentNews" :key="news.id">
+              <NuxtLink
+                class="space-y-2 hover:text-neutral-600 hover:cursor-pointer"
+              >
+                <h3 class="font-bold text-lg">
+                  {{ news.title }}
+                </h3>
+                <p class="text-sm line-clamp-3 break-all">
+                  {{ news.description }}
+                </p>
+                <p class="text-sm text-neutral-600">
+                  {{ convertStringToDate(news.date_published) }}
+                </p>
+              </NuxtLink>
+              <div
+                v-if="index !== recentNews.length - 1"
+                class="w-[80%] border border-[var(--ui-border)]"
+              ></div>
+            </template>
           </div>
         </div>
         <div
-          class="computer:p-2 computer:border-x-1 border-neutral-300 space-y-4"
+          class="h-full computer:px-2 grid grid-rows-2 computer:grid-rows-[70%_1fr] gap-2 computer:border-x-1 border-neutral-300 space-y-4"
         >
           <NewsCard
-            image="https://static01.nyt.com/images/2025/02/13/multimedia/15trump-news-russia-ukraine-01/15trump-news-russia-ukraine-01-threeByTwoSmallAt2X.jpg?format=pjpg&quality=75&auto=webp&disable=upscale"
-            title="Trump Aides and Russian Officials to Meet Next Week on Ukraine War"
-            description="The talks would be the first between American and Russian delegations since the start of Russia’s full-scale invasion of Ukraine in February 2022."
-            public-date="2025-10-01"
+            v-if="heroNews"
+            :image="heroNews.featured_image"
+            :title="heroNews.title"
+            :description="heroNews.description"
           />
           <NewsCard
-            orientation="horizontal"
-            image="https://static01.nyt.com/images/2025/02/13/multimedia/15trump-news-russia-ukraine-01/15trump-news-russia-ukraine-01-threeByTwoSmallAt2X.jpg?format=pjpg&quality=75&auto=webp&disable=upscale"
-            title="Trump Aides and Russian Officials to Meet Next Week on Ukraine War"
-            description="The talks would be the first between American and Russian delegations since the start of Russia’s full-scale invasion of Ukraine in February 2022."
-            public-date="2025-10-01"
-            :ui="{ root: 'hidden computer:flex' }"
+            v-if="headerNews.length > 1"
+            :image="headerNews[0].featured_image"
+            :title="headerNews[0].title"
+            :description="headerNews[0].description"
+            :ui="{
+              root: 'grid-rows-2 grid-cols-1 computer:grid-rows-1 computer:grid-cols-2',
+            }"
           />
         </div>
       </div>
-      <div class="computer:py-2 space-y-4">
+      <div
+        v-if="headerNews.length === 3"
+        class="h-full flex flex-col overflow-hidden gap-4"
+      >
         <NewsCard
-          image="https://static01.nyt.com/images/2025/02/14/multimedia/00WestBank-Displacement-08-wmjt/00WestBank-Displacement-08-wmjt-threeByTwoSmallAt2X.jpg?format=pjpg&quality=75&auto=webp&disable=upscale"
-          title="Palestinian Displacement in West Bank Is Highest Since 1967, Experts Say"
-          description="The Israeli military launched a wide-scale operation last month against militants in the West Bank. Now, roughly 40,000 Palestinians have fled their homes."
+          :image="headerNews[1].featured_image"
+          :title="headerNews[1].title"
+          :description="headerNews[1].description"
           :ui="{
             title: 'text-sm',
             description: 'line-clamp-3 break-all',
           }"
         />
-        <div class="w-[80%] mx-auto border border-[var(--ui-border)]"></div>
         <NewsCard
-          image="https://static01.nyt.com/images/2025/02/17/multimedia/17pope-health-zcqw/17pope-health-zcqw-threeByTwoSmallAt2X.jpg?format=pjpg&quality=75&auto=webp&disable=upscale"
-          title="Pope to Stay in Hospital to Address ‘Complex’ Clinical Issue, Vatican Says"
-          description="Pope Francis was admitted on Friday with a respiratory infection. Today’s announcement had no further details but raised fresh concerns about his health."
+          :image="headerNews[2].featured_image"
+          :title="headerNews[2].title"
+          :description="headerNews[2].description"
           :ui="{
             title: 'text-sm',
             description: 'line-clamp-3 break-all',
@@ -92,32 +75,24 @@
         />
       </div>
     </div>
-    <div class="my-10 space-y-4">
-      <h2 class="text-lg font-bold underline font-red-hat-display">Sport</h2>
-      <div class="grid grid-cols-[repeat(auto-fit,_minmax(280px,_1fr))] gap-4">
+    <div
+      v-for="newByCategory in newsByCategory"
+      :key="newByCategory.category.id"
+      class="my-10 space-y-4"
+    >
+      <h2 class="text-lg font-bold underline font-red-hat-display">
+        {{ newByCategory.category.name }}
+      </h2>
+      <div class="grid grid-cols-[repeat(auto-fit,_minmax(280px,_1fr))] gap-2">
         <NewsCard
-          image="https://ichef.bbci.co.uk/ace/standard/976/cpsprodpb/35e7/live/fbc72030-ee20-11ef-b60b-b99009067101.jpg.webp"
-          title="Ireland's Jack Conan admits the side's back row will be under a 'huge amount of pressure' to fill the void left by Caelan Doris' injury against Wales in the Six Nations on Saturday (14:15 GMT)."
-          description="Simon Easterby's side have won their opening two games of the championship against England and Scotland, but will be forced into changes for this weekend's trip to Cardiff with captain Doris and Ronan Kelleher both ruled out."
+          v-for="news in newByCategory.news"
+          :key="news.id"
+          :image="news.featured_image"
+          :title="news.title"
+          :description="news.description"
           :ui="{
-            title: 'text-sm',
-            description: 'line-clamp-3 break-all',
-          }"
-        />
-        <NewsCard
-          image="https://ichef.bbci.co.uk/ace/standard/976/cpsprodpb/35e7/live/fbc72030-ee20-11ef-b60b-b99009067101.jpg.webp"
-          title="Ireland's Jack Conan admits the side's back row will be under a 'huge amount of pressure' to fill the void left by Caelan Doris' injury against Wales in the Six Nations on Saturday (14:15 GMT)."
-          description="Simon Easterby's side have won their opening two games of the championship against England and Scotland, but will be forced into changes for this weekend's trip to Cardiff with captain Doris and Ronan Kelleher both ruled out."
-          :ui="{
-            title: 'text-sm',
-            description: 'line-clamp-3 break-all',
-          }"
-        />
-        <NewsCard
-          image="https://ichef.bbci.co.uk/ace/standard/976/cpsprodpb/35e7/live/fbc72030-ee20-11ef-b60b-b99009067101.jpg.webp"
-          title="Ireland's Jack Conan admits the side's back row will be under a 'huge amount of pressure' to fill the void left by Caelan Doris' injury against Wales in the Six Nations on Saturday (14:15 GMT)."
-          description="Simon Easterby's side have won their opening two games of the championship against England and Scotland, but will be forced into changes for this weekend's trip to Cardiff with captain Doris and Ronan Kelleher both ruled out."
-          :ui="{
+            root: 'h-80 border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100',
+            image: 'rounded-t-md',
             title: 'text-sm',
             description: 'line-clamp-3 break-all',
           }"
@@ -127,4 +102,81 @@
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import type { Category } from "~/types/Category";
+import type { News } from "~/types/News";
+const { path } = useRoute();
+
+const heroNews = ref<News>();
+const recentNews = ref<News[]>([]);
+const headerNews = ref<News[]>([]);
+const newsByCategory = ref<{ category: Category; news: News[] }[]>([]);
+
+const groupNewsByCategory = (
+  categories: Category[],
+  data: News[],
+): { category: Category; news: News[] }[] => {
+  const news: { category: Category; news: News[] }[] = [];
+  categories.forEach((category) => {
+    news.push({
+      category: category,
+      news: data.filter((d) => d.category.id === category.id),
+    });
+  });
+  return news;
+};
+
+const processNewsData = (
+  categories: Category[],
+  data: News[],
+): {
+  heroNews: News | undefined;
+  recentNews: News[];
+  headerNews: News[];
+  newsByCategory: { category: Category; news: News[] }[];
+} => {
+  return data.length < 7
+    ? {
+        heroNews: undefined,
+        recentNews: [],
+        headerNews: [],
+        newsByCategory: [],
+      }
+    : {
+        heroNews: data[0],
+        recentNews: data.slice(1, 4),
+        headerNews: data.slice(4, 7),
+        newsByCategory: groupNewsByCategory(categories, data),
+      };
+};
+
+const { getItems } = useDirectusItems();
+const { data, status } = await useAsyncData(path, async () => {
+  return {
+    news: await getItems<News>({
+      collection: "news",
+      params: {
+        fields: [
+          "id",
+          "title",
+          "description",
+          "featured_image",
+          "date_published",
+          "category.*",
+        ],
+      },
+    }),
+    categories: await getItems<Category>({ collection: "categories" }),
+  };
+});
+
+if (status.value === "success" && data.value) {
+  const processedData = processNewsData(data.value.categories, data.value.news);
+  heroNews.value = processedData.heroNews;
+  recentNews.value = processedData.recentNews;
+  headerNews.value = processedData.headerNews;
+  newsByCategory.value = processedData.newsByCategory;
+}
+
+const isLoading = computed(() => status.value === "pending");
+</script>
