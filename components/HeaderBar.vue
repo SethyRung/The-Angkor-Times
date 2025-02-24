@@ -92,7 +92,7 @@
                   ring: '',
                   font: 'font-inter',
                   padding: 'py-3',
-                  active: 'text-neutral-950 before:bg-transparent',
+                  active: 'text-neutral-950 font-bold before:bg-transparent',
                   inactive: 'text-neutral-500 hover:before:bg-transparent',
                 }"
               />
