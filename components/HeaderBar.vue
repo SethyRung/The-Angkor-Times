@@ -36,57 +36,67 @@
         "
       >
         <template v-if="isComputerSize">
-          <UNavigationMenu
-            variant="link"
-            orientation="horizontal"
-            :items="items"
+          <UHorizontalNavigation
+            :links="items"
             :ui="{
-              root: 'grow',
-              list: 'space-x-6',
-              item: 'py-0',
-              link: 'text-sm font-bold',
+              wrapper: 'grow w-fit',
+              base: 'font-inter py-0',
+              active: 'text-white',
+              inactive: 'text-gray-300 hover:text-white',
+              before: '',
+              after: '',
             }"
           />
         </template>
         <template v-else>
           <UButton
-            :ui="{
-              base: 'text-white',
-            }"
-            variant="ghost"
+            color="white"
+            variant="soft"
             icon="i-lucide-menu"
             @click="isOpen = !isOpen"
           />
-          <USlideover
-            v-model:open="isOpen"
-            side="left"
-            :title="siteName"
-            :ui="{
-              header: 'bg-neutral-950',
-              title: 'text-lg font-playfair-display font-bold text-white ',
-              body: 'space-y-2',
-            }"
-            :close="{
-              class: 'text-white',
-            }"
-          >
-            <template #body>
+          <USlideover v-model="isOpen" side="left">
+            <UCard
+              class="flex flex-col flex-1"
+              :ui="{
+                header: {
+                  background: 'bg-neutral-950',
+                  padding: 'p-3',
+                },
+                body: { base: 'flex-1 space-y-2' },
+              }"
+            >
+              <template #header>
+                <div class="flex items-center justify-between text-white">
+                  <h1 class="text-lg font-playfair-display font-bold">
+                    {{ siteName }}
+                  </h1>
+                  <UButton
+                    color="white"
+                    variant="soft"
+                    icon="i-lucide-x"
+                    @click="isOpen = false"
+                  />
+                </div>
+              </template>
               <UInput
                 variant="outline"
                 placeholder="Search anything here"
                 :ui="{ root: 'w-full', base: ' h-10' }"
               />
-              <UNavigationMenu
-                color="secondary"
-                variant="link"
-                orientation="vertical"
-                :items="items"
+              <UVerticalNavigation
+                :links="items"
                 :ui="{
-                  item: 'border-b last:border-0 border-(--ui-border)',
-                  link: 'w-full h-14 text-sm font-bold',
+                  base: 'border-b border-(--ui-border)',
+                  rounded: '',
+                  ring: '',
+                  font: 'font-inter',
+                  padding: 'py-3',
+                  active: 'text-neutral-950 before:bg-transparent',
+                  inactive: 'text-neutral-500 hover:before:bg-transparent',
                 }"
               />
-            </template>
+            </UCard>
           </USlideover>
         </template>
 
@@ -116,6 +126,7 @@
 </template>
 
 <script lang="ts" setup>
+import { UHorizontalNavigation } from "#components";
 import clsx from "clsx";
 import type { Navigation } from "~/types/Navigation";
 const { width: windowWidth } = useWindowSize();
@@ -137,6 +148,12 @@ const { data, status } = useAsyncData(async () => {
 });
 
 if (status.value === "success" && data.value) {
-  items.value = data.value.map((d) => ({ label: d.label, to: d.url }));
+  items.value = data.value.map((d) => ({
+    label: d.label,
+    to: d.url,
+    click: () => {
+      isOpen.value = false;
+    },
+  }));
 }
 </script>

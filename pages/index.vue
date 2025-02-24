@@ -39,6 +39,7 @@
             :image="heroNews.featured_image"
             :title="heroNews.title"
             :description="heroNews.description"
+            :to="`/details/${heroNews.id}`"
           />
           <NewsCard
             v-if="headerNews.length > 1"
@@ -48,6 +49,7 @@
             :ui="{
               root: 'grid-rows-2 grid-cols-1 computer:grid-rows-1 computer:grid-cols-2',
             }"
+            :to="`/details/${headerNews[0].id}`"
           />
         </div>
       </div>
@@ -63,6 +65,7 @@
             title: 'text-sm',
             description: 'line-clamp-3 break-all',
           }"
+          :to="`/details/${headerNews[1].id}`"
         />
         <NewsCard
           :image="headerNews[2].featured_image"
@@ -72,6 +75,7 @@
             title: 'text-sm',
             description: 'line-clamp-3 break-all',
           }"
+          :to="`/details/${headerNews[2].id}`"
         />
       </div>
     </div>
@@ -96,6 +100,7 @@
             title: 'text-sm',
             description: 'line-clamp-3 break-all',
           }"
+          :to="`/details/${news.id}`"
         />
       </div>
     </div>
