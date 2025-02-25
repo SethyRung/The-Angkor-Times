@@ -15,12 +15,7 @@
   </div>
   <div class="w-full sticky top-0 z-50 text-sm text-white bg-neutral-950">
     <div
-      :class="
-        clsx(
-          'max-w-[1280px] mx-auto p-4 flex items-center gap-8',
-          !isComputerSize && 'justify-between',
-        )
-      "
+      class="max-w-[1280px] mx-auto p-4 flex items-center justify-between gap-8"
     >
       <template v-if="isComputerSize">
         <UHorizontalNavigation
