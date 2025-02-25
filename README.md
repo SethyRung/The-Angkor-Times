@@ -1,75 +1,82 @@
-# Nuxt Minimal Starter
+# 📰 The Angkor Times
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+_A modern news website powered by \***\*Nuxt.js\*\*** (Frontend) and \***\*Directus\*\*** (Headless CMS)._
 
-## Setup
+---
 
-Make sure to install dependencies:
+## 🚀 Features
 
-```bash
-# npm
+- **News Publishing System** – Authors can publish news articles.
+- **Admin Approval** – All news requires admin approval before being published.
+- **Dynamic Navigation** – The website navigation is managed via Directus.
+- **Pagination** – Efficient data fetching with Nuxt's SSR.
+
+---
+
+## 🛠️ Tech Stack
+
+### **Frontend (Nuxt.js)**
+
+- [Nuxt 3](https://nuxt.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Nuxt UI](https://ui.nuxt.com/)
+- [Nuxt Directus Module](https://nuxt.com/modules/directus)
+- Vue 3 Composition API
+
+### **Backend (Directus)**
+
+- [Directus](https://directus.io/) – Open-source headless CMS
+- PostgreSQL (Database)
+
+---
+
+## 🛋️ Installation
+
+### **1️⃣ Clone the Repository**
+
+```sh
+git clone https://github.com/SethyRung/The-Angkor-Times.git
+cd The-Angkor-Times
+```
+
+### **2️⃣ Install Dependencies**
+
+```sh
+# Install dependencies for Nuxt frontend
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
+### **3️⃣ Setup Environment Variables**
 
-Start the development server on `http://localhost:3000`:
+Copy `.env.example-nuxt` and create a `.env` file:
 
-```bash
-# npm
+```sh
+cp .env.example .env
+```
+
+Edit `.env` with your **Directus API URL** and other settings.
+
+---
+
+## 🚀 Hosting Directus on Render
+
+1. Create an account on [Render](https://render.com/).
+2. Click **New Web Service** and connect your GitHub repository.
+3. Select the **Directus** repository and choose a region.
+4. Select the **Docker** for Language.
+5. Set up the environment variables from your `.env.example-directus` file in Render’s settings.
+6. Deploy the service, and once completed, Directus will be accessible at your assigned Render URL.
+
+---
+
+## 🚀 Running the Project
+
+### **1️⃣ Start Nuxt Development Server**
+
+```sh
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+By default, the frontend runs on `http://localhost:3000`.
 
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+🚀 **Happy Coding!** 🚀
