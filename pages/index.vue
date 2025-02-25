@@ -12,6 +12,7 @@
             <template v-for="(news, index) in recentNews" :key="news.id">
               <NuxtLink
                 class="space-y-2 hover:text-neutral-600 hover:cursor-pointer"
+                :to="`/details/${news.id}`"
               >
                 <h3 class="font-bold text-lg">
                   {{ news.title }}
@@ -20,7 +21,13 @@
                   {{ news.description }}
                 </p>
                 <p class="text-sm text-neutral-600">
-                  {{ convertStringToDate(news.date_published) }}
+                  {{
+                    new Date(news.date_published).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })
+                  }}
                 </p>
               </NuxtLink>
               <div
