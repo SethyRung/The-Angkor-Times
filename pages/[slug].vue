@@ -11,7 +11,7 @@
         :title="news.title"
         :description="news.description"
         :ui="{
-          root: 'h-80 border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100',
+          root: 'h-80 grid-rows-2 border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100',
           image: 'rounded-t-md',
           title: 'text-sm line-clamp-3 break-all',
           description: 'line-clamp-3 break-all',

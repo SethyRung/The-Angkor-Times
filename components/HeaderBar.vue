@@ -1,15 +1,6 @@
 <template>
   <ClientOnly>
-    <div
-      :class="
-        clsx(
-          'max-w-[1280px] mx-auto p-4',
-          isComputerSize
-            ? 'flex items-center justify-between'
-            : 'grid grid-cols-[54px_1fr] place-items-center',
-        )
-      "
-    >
+    <div class="max-w-[1280px] mx-auto p-4 flex items-center justify-between">
       <div class="flex items-center space-x-1.5">
         <NuxtLink to="https://web.facebook.com/Joker.username/">
           <UIcon name="i-ic-round-facebook" size="24" />
@@ -19,19 +10,16 @@
         </NuxtLink>
       </div>
       <h1 class="font-playfair-display font-bold text-xl">{{ siteName }}</h1>
-      <UInput
-        v-if="isComputerSize"
-        variant="outline"
-        placeholder="Search anything here"
-        :ui="{ root: 'w-56' }"
-      />
+      <NuxtLink to="/search">
+        <UIcon name="i-lucide-search" size="24" />
+      </NuxtLink>
     </div>
-    <div class="w-full sticky top-0 text-sm text-white bg-neutral-950">
+    <div class="w-full sticky top-0 z-50 text-sm text-white bg-neutral-950">
       <div
         :class="
           clsx(
             'max-w-[1280px] mx-auto p-4 flex items-center gap-8',
-            !isComputerSize && 'justify-between py-2',
+            !isComputerSize && 'justify-between',
           )
         "
       >
@@ -51,8 +39,9 @@
         <template v-else>
           <UButton
             color="white"
-            variant="soft"
+            variant="link"
             icon="i-lucide-menu"
+            :padded="false"
             @click="isOpen = !isOpen"
           />
           <USlideover v-model="isOpen" side="left">
@@ -73,17 +62,13 @@
                   </h1>
                   <UButton
                     color="white"
-                    variant="soft"
+                    variant="link"
                     icon="i-lucide-x"
+                    :padded="false"
                     @click="isOpen = false"
                   />
                 </div>
               </template>
-              <UInput
-                variant="outline"
-                placeholder="Search anything here"
-                :ui="{ root: 'w-full', base: ' h-10' }"
-              />
               <UVerticalNavigation
                 :links="items"
                 :ui="{

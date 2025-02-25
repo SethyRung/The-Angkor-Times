@@ -32,7 +32,7 @@
           </div>
         </div>
         <div
-          class="h-full computer:px-2 grid grid-rows-2 computer:grid-rows-[70%_1fr] gap-2 computer:border-x-1 border-neutral-300 space-y-4"
+          class="h-full computer:px-2 grid grid-rows-2 computer:grid-rows-[70%_1fr] gap-2 computer:border-x-2 border-neutral-300 space-y-4"
         >
           <NewsCard
             v-if="heroNews"
@@ -47,7 +47,7 @@
             :title="headerNews[0].title"
             :description="headerNews[0].description"
             :ui="{
-              root: 'grid-rows-2 grid-cols-1 computer:grid-rows-1 computer:grid-cols-2',
+              root: 'grid-rows-[1fr_auto] grid-cols-1 computer:grid-rows-1 computer:grid-cols-2',
             }"
             :to="`/details/${headerNews[0].id}`"
           />
@@ -95,9 +95,9 @@
           :title="news.title"
           :description="news.description"
           :ui="{
-            root: 'h-80 border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100',
+            root: 'h-80 grid-rows-2 border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100',
             image: 'rounded-t-md',
-            title: 'text-sm',
+            title: 'text-sm line-clamp-3 break-all',
             description: 'line-clamp-3 break-all',
           }"
           :to="`/details/${news.id}`"

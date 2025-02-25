@@ -20,6 +20,9 @@ export default defineAppConfig({
         size: "md",
       },
     },
+    skeleton: {
+      background: "bg-gray-200 dark:bg-gray-900",
+    },
     primary: "neutral",
   },
 });
