@@ -12,10 +12,16 @@
         class="flex flex-wrap items-center mt-3 text-sm font-medium text-white sm:mt-0"
       >
         <li>
-          <NuxtLink to="#" class="hover:underline me-4 md:me-6">About</NuxtLink>
+          <NuxtLink
+            to="https://sethyrung.netlify.app/"
+            class="hover:underline me-4 md:me-6"
+            >About</NuxtLink
+          >
         </li>
         <li>
-          <NuxtLink to="#" class="hover:underline">Contact</NuxtLink>
+          <NuxtLink to="mailto:rungsethyhk@gmail.com" class="hover:underline"
+            >Contact</NuxtLink
+          >
         </li>
       </ul>
     </div>
