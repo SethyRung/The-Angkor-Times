@@ -103,7 +103,7 @@ import type { News } from "~/types/News";
 const keyWord = ref<string>("");
 const search = ref<string>("");
 const sort = ref<"newest" | "oldest">("newest");
-const limit = ref<number>(2);
+const limit = ref<number>(10);
 const page = ref<number>(1);
 const totalCount = ref<number>(0);
 

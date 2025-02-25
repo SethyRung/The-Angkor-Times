@@ -1,5 +1,7 @@
 <template>
-  <div class="max-w-[1280px] mx-auto p-4 space-y-4">
+  <div
+    class="max-w-[1280px] min-h-[calc(100vh_-_202px)] computer:min-h-[calc(100vh_-_166px)] mx-auto p-4 space-y-4"
+  >
     <h2 class="font-bold border-l-4 border-neutral-950 pl-2">
       More of the latest stories
     </h2>
@@ -18,6 +20,14 @@
         }"
         :to="`/details/${news.id}`"
       />
+      <template v-if="isLoading">
+        <div v-for="i in Array(8)" :key="i" class="w-full space-y-2">
+          <USkeleton class="w-full h-36" />
+          <USkeleton class="h-5 w-full" />
+          <USkeleton class="h-3 w-[90%]" />
+          <USkeleton class="h-3 w-[70%]" />
+          <USkeleton class="h-3 w-[80%]" /></div
+      ></template>
     </div>
   </div>
 </template>
@@ -27,30 +37,40 @@ import type { News } from "~/types/News";
 
 const { path } = useRoute();
 const { getItems } = useDirectusItems();
-const { data } = await useAsyncData(path, async () => {
-  const navigation = await getItems<Navigation>({
-    collection: "navigation",
-    params: {
-      fields: ["id", "category.*"],
-      filter: {
-        url: {
-          _eq: path,
-        },
-      },
-    },
-  });
-  return navigation.length > 0
-    ? await getItems<News>({
-        collection: "news",
-        params: {
-          fields: ["id", "title", "description", "featured_image"],
-          filter: {
-            category: {
-              _eq: navigation[0].category.id,
-            },
+const { data, status, execute } = await useAsyncData(
+  path,
+  async () => {
+    const navigation = await getItems<Navigation>({
+      collection: "navigation",
+      params: {
+        fields: ["id", "category.*"],
+        filter: {
+          url: {
+            _eq: path,
           },
         },
-      })
-    : [];
+      },
+    });
+    return navigation.length > 0
+      ? await getItems<News>({
+          collection: "news",
+          params: {
+            fields: ["id", "title", "description", "featured_image"],
+            filter: {
+              category: {
+                _eq: navigation[0].category.id,
+              },
+            },
+          },
+        })
+      : [];
+  },
+  { lazy: true, immediate: false },
+);
+
+const isLoading = computed(() => status.value !== "success");
+
+onMounted(() => {
+  execute();
 });
 </script>
