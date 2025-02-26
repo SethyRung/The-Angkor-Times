@@ -8,7 +8,7 @@
         <UIcon name="i-ic-round-telegram" size="24" />
       </NuxtLink>
     </div>
-    <h1 class="font-playfair-display font-bold text-xl">{{ siteName }}</h1>
+    <h1 class="font-playfair-display font-bold text-xl">{{ config.public.siteName }}</h1>
     <NuxtLink to="/search">
       <UIcon name="i-lucide-search" size="24" />
     </NuxtLink>
@@ -52,7 +52,7 @@
             <template #header>
               <div class="flex items-center justify-between text-white">
                 <h1 class="text-lg font-playfair-display font-bold">
-                  {{ siteName }}
+                  {{ config.public.siteName }}
                 </h1>
                 <UButton
                   color="white"
@@ -99,7 +99,7 @@ import clsx from "clsx";
 import type { Navigation } from "~/types/Navigation";
 const { width: windowWidth } = useWindowSize();
 const isComputerSize = computed(() => windowWidth.value >= 1024);
-const siteName = ref<string>("The Angkor News");
+const config = useRuntimeConfig();
 
 const isOpen = ref<boolean>(false);
 const links = ref<{ label: string; to: string }[]>([]);
