@@ -105,7 +105,7 @@ const isOpen = ref<boolean>(false);
 const links = ref<{ label: string; to: string }[]>([]);
 
 const { getItems } = useDirectusItems();
-const { data, status, execute } = useAsyncData(
+const { data, status, execute } = await useAsyncData(
   async () => {
     return await getItems<Navigation>({
       collection: "navigation",

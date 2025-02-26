@@ -1,5 +1,6 @@
 import type { Author } from "./Author";
 import type { Category } from "./Category";
+import type { Tag } from "./Tag";
 
 export type News = {
   id: string;
@@ -10,5 +11,5 @@ export type News = {
   description: string;
   category: Category;
   date_published: string;
-  tags: number[];
+  tags: Tag[];
 };

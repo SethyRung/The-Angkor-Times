@@ -19,6 +19,17 @@
         </div>
 
         <div class="space-y-2">
+          <div class="w-full flex items-center gap-1 flex-wrap">
+            <UBadge
+              v-for="tag in data?.news.tags"
+              :key="tag.id"
+              size="xs"
+              color="white"
+              variant="solid"
+              :ui="{ rounded: 'rounded-full' }"
+              >{{ tag.name }}</UBadge
+            >
+          </div>
           <p class="text-xs">
             By {{ data?.news.author.first_name }}
             {{ data?.news.author.last_name }}
@@ -100,14 +111,14 @@ import dayjs from "dayjs";
 const config = useRuntimeConfig();
 const { path, params } = useRoute();
 const { getItemById, getItems } = useDirectusItems();
-const { data, status, execute } = useAsyncData(
+const { data, status, execute } = await useAsyncData(
   path,
   async () => {
     const news = await getItemById<News>({
       collection: "news",
       id: params.id as string,
       params: {
-        fields: ["*", "author.*", "category.*"],
+        fields: ["*", "author.*", "category.*", "tags.tags_id.*"],
       },
     });
 
@@ -135,7 +146,17 @@ const { data, status, execute } = useAsyncData(
 
     return { news, moreNews };
   },
-  { lazy: true, immediate: false },
+  {
+    lazy: true,
+    immediate: false,
+    transform: (data) => ({
+      ...data,
+      news: {
+        ...data.news,
+        tags: data.news.tags.map((tag: any) => tag.tags_id),
+      },
+    }),
+  },
 );
 
 const isLoading = computed(() => status.value !== "success");
