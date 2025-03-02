@@ -13,7 +13,7 @@
       >
         <li>
           <NuxtLink
-            to="https://sethyrung.netlify.app/"
+            to="https://sethyrung.vercel.app"
             class="hover:underline me-4 md:me-6"
             >About</NuxtLink
           >
