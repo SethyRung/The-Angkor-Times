@@ -1,49 +1,51 @@
 <template>
-  <div
-    class="max-w-[1280px] min-h-[calc(100vh_-_202px)] computer:min-h-[calc(100vh_-_166px)] mx-auto p-4 space-y-4"
-  >
-    <UInput
-      v-model="keyWord"
-      size="lg"
-      placeholder="Search..."
-      autocomplete="off"
-      color="primary"
-      :ui="{ icon: { trailing: { pointer: '' } } }"
-      @keyup.enter="handleSearch"
-    >
-      <template #trailing>
-        <UButton
-          color="gray"
-          variant="link"
-          icon="i-lucide-search"
-          :padded="false"
-          @click="handleSearch"
-        />
-      </template>
-    </UInput>
+  <div class="space-y-4">
+    <UButtonGroup size="lg" class="w-full">
+      <UInput
+        v-model="keyWord"
+        placeholder="Search..."
+        color="neutral"
+        :ui="{
+          root: 'flex-1',
+        }"
+        @keyup.enter="handleSearch"
+      />
+      <UButton
+        icon="i-lucide-search"
+        color="neutral"
+        variant="subtle"
+        @click="handleSearch"
+      />
+    </UButtonGroup>
     <div class="grid grid-rows-[auto_1fr_auto] gap-4">
       <div
         v-if="totalCount > 0"
         class="flex justify-between items-center flex-wrap gap-2"
       >
         <p>
-          Displaying {{ (page - 1) * limit + 1 }}-{{ totalCount<limit || (page * limit) > totalCount ? totalCount : page * limit }} results out
-          of {{ totalCount }} for
-          <span class="font-bold">{{ search }}</span>
+          Displaying {{ (page - 1) * limit + 1 }} -
+          {{
+            totalCount < limit || page * limit > totalCount
+              ? totalCount
+              : page * limit
+          }}
+          results out of
+          {{ totalCount }} for
+          <span class="font-bold">
+            {{ search }}
+          </span>
         </p>
         <div class="flex items-center gap-1">
           <p>Sorting by</p>
-          <UButton
-            label="Newest"
-            color="black"
-            :variant="sort === 'newest' ? 'solid' : 'outline'"
-            @click="sort = 'newest'"
-          />
-          <UButton
-            label="Oldest"
-            color="black"
-            :variant="sort === 'oldest' ? 'solid' : 'outline'"
-            @click="sort = 'oldest'"
+          <UTabs
+            v-model="sort"
+            :items="sortOptions"
+            color="neutral"
+            :ui="{
+              list: 'w-fit bg-transparent gap-2',
+              trigger:
+                'border border-inverted data-[state=inactive]:text-neutral-900',
+            }"
           />
         </div>
       </div>
@@ -83,7 +85,10 @@
             :to="`/details/${news.id}`"
           />
         </template>
-        <p v-else-if="data" class="text-center font-bold text-neutral-600">Oops! We couldn't find anything matching your search. Try refining your keywords.</p>
+        <p v-else-if="data" class="text-center font-bold text-neutral-600">
+          Oops! We couldn't find anything matching your search. Try refining
+          your keywords.
+        </p>
       </div>
       <div class="flex justify-center">
         <UPagination
@@ -100,22 +105,34 @@
 </template>
 
 <script lang="ts" setup>
+import type { TabsItem } from "@nuxt/ui";
 import type { News } from "~/types/News";
+
+const sortOptions: TabsItem[] = [
+  {
+    label: "Newest",
+    value: "newest",
+  },
+  {
+    label: "Oldest",
+    value: "oldest",
+  },
+];
 
 const keyWord = ref<string>("");
 const search = ref<string>("");
-const sort = ref<"newest" | "oldest">("newest");
+const sort = ref("newest");
 const limit = ref<number>(10);
 const page = ref<number>(1);
 const totalCount = ref<number>(0);
 
 const { path } = useRoute();
 const { getItems } = useDirectusItems();
-const filter =  computed(()=>({
+const filter = computed(() => ({
   title: {
-    _contains: search.value 
-  }
-})); 
+    _contains: search.value,
+  },
+}));
 const { data, status, execute } = await useAsyncData(
   path,
   async () => {
@@ -154,16 +171,16 @@ const getTotalSearchItems = async (filter: Record<string, unknown>) => {
 };
 
 const handleSearch = async () => {
-  if(keyWord.value !== ''){
+  if (keyWord.value !== "") {
     search.value = keyWord.value.trim();
     totalCount.value = await getTotalSearchItems(filter.value);
     execute();
   }
 };
 
-watch([limit, page, sort], ()=>{
+watch([limit, page, sort], () => {
   execute();
-})
+});
 
 const formatDate = (date: string) => {
   return new Date(date).toLocaleDateString("en-US", {

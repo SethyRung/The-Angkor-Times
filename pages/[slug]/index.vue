@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="max-w-[1280px] min-h-[calc(100vh_-_202px)] computer:min-h-[calc(100vh_-_166px)] mx-auto p-4 space-y-4"
-  >
+  <div class="min-h-full space-y-4">
     <h2 class="font-bold border-l-4 border-neutral-950 pl-2">
       More of the latest stories
     </h2>
@@ -18,7 +16,7 @@
           title: 'text-sm line-clamp-3 break-all',
           description: 'line-clamp-3 break-all',
         }"
-        :to="`/details/${news.id}`"
+        :to="`${path}/${news.id}`"
       />
       <template v-if="isLoading">
         <div v-for="i in Array(8)" :key="i" class="w-full space-y-2">
@@ -58,7 +56,7 @@ const { data, status, execute } = await useAsyncData(
             fields: ["id", "title", "description", "featured_image"],
             filter: {
               category: {
-                _eq: navigation[0].category.id,
+                _eq: navigation[0]?.category.id,
               },
             },
           },
