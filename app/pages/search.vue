@@ -106,7 +106,6 @@
 
 <script lang="ts" setup>
 import type { TabsItem } from "@nuxt/ui";
-import type { News } from "~/types/News";
 
 const sortOptions: TabsItem[] = [
   {

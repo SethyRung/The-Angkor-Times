@@ -180,8 +180,6 @@
 
 <script lang="ts" setup>
 import clsx from "clsx";
-import type { Category } from "~/types/Category";
-import type { News } from "~/types/News";
 const { path } = useRoute();
 
 const heroNews = ref<News>();

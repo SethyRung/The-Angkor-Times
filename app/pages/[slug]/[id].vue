@@ -104,7 +104,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { News } from "~/types/News";
 import dayjs from "dayjs";
 
 const config = useRuntimeConfig();

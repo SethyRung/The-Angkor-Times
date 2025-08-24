@@ -84,7 +84,6 @@
 
 <script lang="ts" setup>
 import type { NavigationMenuItem } from "@nuxt/ui";
-import type { Navigation } from "~/types/Navigation";
 const config = useRuntimeConfig();
 
 const links = ref<NavigationMenuItem[]>([
