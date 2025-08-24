@@ -30,9 +30,6 @@
   </div>
 </template>
 <script setup lang="ts">
-import type { Navigation } from "~/types/Navigation";
-import type { News } from "~/types/News";
-
 const { path } = useRoute();
 const { getItems } = useDirectusItems();
 const { data, status, execute } = await useAsyncData(

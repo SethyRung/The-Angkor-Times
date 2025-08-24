@@ -84,7 +84,6 @@
 
 <script lang="ts" setup>
 import type { NavigationMenuItem } from "@nuxt/ui";
-import type { Navigation } from "~/types/Navigation";
 const config = useRuntimeConfig();
 
 const links = ref<NavigationMenuItem[]>([
@@ -119,7 +118,7 @@ watch(status, (value) => {
       to: d.url,
     }));
 
-    links.value = links.value.length === 1 ? [...links.value, ...data] : data;
+    links.value = [...links.value, ...data];
   }
 });
 

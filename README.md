@@ -196,12 +196,6 @@ docker exec -it the_angkor_times_minio mc mb local/theangkortimes
 
 ### 4️⃣ Restore Database (Optional)
 
-Got it ✅
-
-Here’s a revised **Restore Database** step that matches your setup (with the provided `backup/the_angkor_times.dump` and the need to stop Directus first if dropping the DB):
-
----
-
 ### 🔄 Restore Database
 
 You can restore the database from the provided backup file: `backup/the_angkor_times.dump`.
