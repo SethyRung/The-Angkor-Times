@@ -9,9 +9,9 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "@vueuse/motion/nuxt",
     "dayjs-nuxt",
-    "@nuxtjs/google-fonts",
     "nuxt-directus",
     "@nuxt/image",
+    "@nuxt/fonts",
   ],
   runtimeConfig: {
     public: {
@@ -24,14 +24,6 @@ export default defineNuxtConfig({
   },
   colorMode: {
     preference: "light",
-  },
-  googleFonts: {
-    download: true,
-    families: {
-      "Playfair Display": [400, 500, 600, 700, 800, 900],
-      "Red Hat Display": [300, 400, 500, 600, 700, 800, 900],
-      Inter: [100, 200, 300, 400, 500, 600, 700, 800, 900],
-    },
   },
   image: {
     directus: {

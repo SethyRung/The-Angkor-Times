@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-[1280px] mx-auto p-4">
+  <div>
     <div class="computer:h-[740px] grid computer:grid-cols-[75%_1fr] gap-2">
       <div
         class="h-full overflow-hidden flex flex-col-reverse computer:flex-row gap-4"
@@ -86,7 +86,7 @@
             <USkeleton class="h-3 w-[80%]" />
           </div>
           <NewsCard
-            v-if="headerNews.length > 1"
+            v-if="headerNews.length > 1 && headerNews[0]"
             :image="headerNews[0].featured_image"
             :title="headerNews[0].title"
             :description="headerNews[0].description"
@@ -128,24 +128,24 @@
         </template>
         <template v-if="headerNews.length === 3">
           <NewsCard
-            :image="headerNews[1].featured_image"
-            :title="headerNews[1].title"
-            :description="headerNews[1].description"
+            :image="headerNews[1]!.featured_image"
+            :title="headerNews[1]!.title"
+            :description="headerNews[1]!.description"
             :ui="{
               title: 'text-sm',
               description: 'line-clamp-3 break-all',
             }"
-            :to="`/details/${headerNews[1].id}`"
+            :to="`/details/${headerNews[1]!.id}`"
           />
           <NewsCard
-            :image="headerNews[2].featured_image"
-            :title="headerNews[2].title"
-            :description="headerNews[2].description"
+            :image="headerNews[2]!.featured_image"
+            :title="headerNews[2]!.title"
+            :description="headerNews[2]!.description"
             :ui="{
               title: 'text-sm',
               description: 'line-clamp-3 break-all',
             }"
-            :to="`/details/${headerNews[2].id}`"
+            :to="`/details/${headerNews[2]!.id}`"
           />
         </template>
       </div>

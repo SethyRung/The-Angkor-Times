@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="max-w-[1280px] min-h-[calc(100vh_-_202px)] computer:min-h-[calc(100vh_-_166px)] mx-auto p-4 space-y-4"
-  >
+  <div class="space-y-4">
     <div
       class="grid grid-cols-1 computer:grid-cols-[70%_1fr] grid-rows-[auto_auto_1fr_auto] computer:grid-rows-[auto_auto_1fr] gap-8"
     >
@@ -24,11 +22,12 @@
               v-for="tag in data?.news.tags"
               :key="tag.id"
               size="xs"
-              color="white"
-              variant="solid"
-              :ui="{ rounded: 'rounded-full' }"
-              >{{ tag.name }}</UBadge
+              color="neutral"
+              variant="subtle"
+              class="rounded-full"
             >
+              {{ tag.name }}
+            </UBadge>
           </div>
           <p class="text-xs">
             By {{ data?.news.author.first_name }}
@@ -52,7 +51,7 @@
       />
       <div
         v-dompurify-html="data?.news.content"
-        class="news-content col-start-1 col-end-2 row-start-3 row-end-4"
+        class="content col-start-1 col-end-2 row-start-3 row-end-4"
       ></div>
       <div
         v-if="isLoading"
@@ -165,69 +164,3 @@ onMounted(() => {
   execute();
 });
 </script>
-<style scoped>
-.news-content :deep(h1) {
-  @apply text-4xl font-bold mt-0 mb-4;
-}
-
-.news-content :deep(h2) {
-  @apply text-3xl font-bold mt-0 mb-5;
-}
-
-.news-content :deep(h3) {
-  @apply text-xl font-bold mt-0 mb-6;
-}
-
-/* Paragraphs */
-.news-content :deep(p) {
-  @apply mt-0 mb-4;
-}
-
-.news-content :deep(strong) {
-  @apply font-bold;
-}
-
-.news-content :deep(em) {
-  @apply italic;
-}
-
-.news-content :deep(ul) {
-  @apply list-disc pl-8 mt-0 mb-4;
-}
-
-.news-content :deep(ul li) {
-  @apply mb-2;
-}
-
-.news-content :deep(ol) {
-  @apply list-decimal pl-8 mt-0 mb-4;
-}
-
-.news-content :deep(ol li) {
-  @apply mb-2;
-}
-
-.news-content :deep(blockquote) {
-  @apply my-0 mx-0 py-2 pl-4 border-l-4 border-gray-300 text-gray-600;
-}
-
-.news-content :deep(a) {
-  @apply text-blue-600 underline;
-}
-
-.news-content :deep(a:hover) {
-  @apply no-underline;
-}
-
-.news-content :deep(code) {
-  @apply font-mono bg-gray-100 px-1 py-0.5 rounded;
-}
-
-.news-content :deep(pre) {
-  @apply font-mono bg-gray-100 p-4 my-0 mb-4 overflow-auto rounded;
-}
-
-.news-content :deep(pre code) {
-  @apply p-0 bg-transparent;
-}
-</style>

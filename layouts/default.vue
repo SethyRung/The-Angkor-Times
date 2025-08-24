@@ -1,19 +1,19 @@
 <template>
   <div
     ref="wrapper"
-    class="w-screen min-h-screen max-h-screen overflow-x-hidden overflow-y-auto font-inter text-primary-950 relative"
+    class="w-screen h-screen overflow-x-hidden overflow-y-auto font-inter text-neutral-900"
   >
-    <HeaderBar />
-    <slot></slot>
-    <FooterBar />
+    <AppHeader />
+    <main class="w-full max-w-[1280px] min-h-screen mx-auto p-4">
+      <slot></slot>
+    </main>
+    <AppFooter />
   </div>
 </template>
 
 <script lang="ts" setup>
-import HeaderBar from "~/components/HeaderBar.vue";
-
 const route = useRoute();
-const wrapper = templateRef("wrapper");
+const wrapper = useTemplateRef("wrapper");
 const { y } = useScroll(wrapper, { behavior: "smooth" });
 
 watch(

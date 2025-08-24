@@ -1,3 +1,15 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme static {
+  --font-playfair-display: "Playfair Display", "sans-serif";
+  --font-red-hat-display: "Red Hat Display", "sans-serif";
+  --font-inter: "Inter", "sans-serif";
+
+  --breakpoint-tablet: 440px;
+  --breakpoint-computer: 1024px;
+}
+
 ::-webkit-scrollbar {
   background-color: transparent;
   height: 0.3em;
@@ -44,4 +56,100 @@
 .no-scrollbar {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+}
+
+.content {
+  h1 {
+    @apply text-4xl text-(--ui-text-highlighted) font-bold mb-8 scroll-mt-[calc(45px+var(--ui-header-height))] lg:scroll-mt-(--ui-header-height);
+  }
+
+  h2 {
+    @apply relative text-2xl text-(--ui-text-highlighted) font-bold mt-12 mb-6 scroll-mt-[calc(48px+45px+var(--ui-header-height))] lg:scroll-mt-[calc(48px+var(--ui-header-height))] [&>a]:focus-visible:outline-(--ui-primary) [&>a>code]:border-dashed hover:[&>a>code]:border-(--ui-primary) hover:[&>a>code]:text-(--ui-primary) [&>a>code]:text-xl/7 [&>a>code]:font-bold [&>a>code]:transition-colors;
+  }
+
+  h3 {
+    @apply relative text-xl text-(--ui-text-highlighted) font-bold mt-8 mb-3 scroll-mt-[calc(32px+45px+var(--ui-header-height))] lg:scroll-mt-[calc(32px+var(--ui-header-height))] [&>a]:focus-visible:outline-(--ui-primary) [&>a>code]:border-dashed hover:[&>a>code]:border-(--ui-primary) hover:[&>a>code]:text-(--ui-primary) [&>a>code]:text-lg/6 [&>a>code]:font-bold [&>a>code]:transition-colors;
+  }
+
+  h4 {
+    @apply text-lg text-(--ui-text-highlighted) font-bold mt-6 mb-2 scroll-mt-[calc(24px+45px+var(--ui-header-height))] lg:scroll-mt-[calc(24px+var(--ui-header-height))] [&>a]:focus-visible:outline-(--ui-primary);
+  }
+
+  p {
+    @apply my-5 leading-7 text-pretty;
+  }
+
+  p a,
+  li a {
+    @apply text-(--ui-primary) border-b border-transparent hover:border-(--ui-primary) font-medium focus-visible:outline-(--ui-primary) [&>code]:border-dashed hover:[&>code]:border-(--ui-primary) hover:[&>code]:text-(--ui-primary) transition-colors [&>code]:transition-colors;
+  }
+
+  pre {
+    @apply font-mono text-sm/6 border border-(--ui-border-muted) bg-(--ui-bg-muted) rounded-[calc(var(--ui-radius)*1.5)] px-4 py-3 whitespace-pre-wrap break-words overflow-x-auto focus:outline-none;
+  }
+
+  code:not(pre code) {
+    @apply px-1.5 py-0.5 text-sm font-mono font-medium rounded-[calc(var(--ui-radius)*1.5)] inline-block border border-(--ui-border-muted) text-(--ui-text-highlighted) bg-(--ui-bg-muted);
+  }
+
+  ul {
+    @apply list-disc ps-6 my-5 marker:text-(--ui-border-accented);
+  }
+
+  ol {
+    @apply list-decimal ps-6 my-5;
+  }
+
+  ul[data-type="taskList"] {
+    @apply list-none p-0 my-5 marker:text-(--ui-border-accented);
+  }
+
+  li div {
+    @apply inline-block px-2;
+  }
+
+  li p {
+    @apply my-0;
+  }
+
+  li[data-checked="true"] p,
+  li[data-checked="true"] a {
+    @apply line-through opacity-60 border-0;
+  }
+
+  li {
+    @apply my-1.5 ps-1.5 leading-7 [&>ul]:my-0;
+  }
+
+  blockquote {
+    @apply border-s-4 border-(--ui-border-accented) ps-4 italic;
+  }
+
+  hr {
+    @apply border-t border-(--ui-border) my-12;
+  }
+
+  img {
+    @apply rounded-lg;
+  }
+
+  table {
+    @apply w-full border-separate border-spacing-0 rounded-[calc(var(--ui-radius)*1.5)];
+  }
+
+  thead {
+    @apply bg-(--ui-bg-muted);
+  }
+
+  tr {
+    @apply [&:first-child>th:first-child]:rounded-tl-[calc(var(--ui-radius)*1.5)] [&:first-child>th:last-child]:rounded-tr-[calc(var(--ui-radius)*1.5)] [&:last-child>td:first-child]:rounded-bl-[calc(var(--ui-radius)*1.5)] [&:last-child>td:last-child]:rounded-br-[calc(var(--ui-radius)*1.5)];
+  }
+
+  th {
+    @apply py-3 px-4 font-semibold text-sm text-left border-e border-b first:border-s border-t border-(--ui-border-muted);
+  }
+
+  td {
+    @apply py-3 px-4 text-sm text-left align-top border-e border-b first:border-s border-(--ui-border-muted) [&_code]:text-xs/5 [&_p]:my-0 [&_p]:leading-6 [&_ul]:my-0 [&_ol]:my-0 [&_ul]:ps-4.5 [&_ol]:ps-4.5 [&_li]:leading-6 [&_li]:my-0.5;
+  }
 }
