@@ -118,7 +118,7 @@ watch(status, (value) => {
       to: d.url,
     }));
 
-    links.value = links.value.length === 1 ? [...links.value, ...data] : data;
+    links.value = [...links.value, ...data];
   }
 });
 
