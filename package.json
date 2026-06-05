@@ -19,11 +19,9 @@
     "@tailwindcss/vite": "^4.3.0",
     "@vueuse/core": "^14.3.0",
     "@vueuse/nuxt": "^14.3.0",
-    "dayjs-nuxt": "^2.1.11",
     "nuxt": "^4.0.3",
     "nuxt-directus": "^5.7.0",
     "vue": "latest",
-    "vue-dompurify-html": "^5.3.0",
     "vue-router": "latest",
     "zod": "^4.0.17"
   },
