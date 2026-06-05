@@ -1,3 +1,11 @@
 export default defineAppConfig({
-  ui: {},
+  ui: {
+    colors: {
+      primary: "mint",
+      secondary: "ultraviolet",
+      neutral: "canvas",
+      success: "mint",
+      error: "ultraviolet",
+    },
+  },
 });
