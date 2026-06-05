@@ -1,18 +1,11 @@
 export default defineNuxtConfig({
-  compatibilityDate: "2024-04-03",
+  future: {
+    compatibilityVersion: 4,
+  },
+  compatibilityDate: "2026-01-01",
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
-  modules: [
-    "@nuxt/ui",
-    "@nuxt/eslint",
-    "@pinia/nuxt",
-    "@vueuse/nuxt",
-    "@vueuse/motion/nuxt",
-    "dayjs-nuxt",
-    "nuxt-directus",
-    "@nuxt/image",
-    "@nuxt/fonts",
-  ],
+  modules: ["@nuxt/ui", "@vueuse/nuxt", "dayjs-nuxt", "nuxt-directus"],
   runtimeConfig: {
     public: {
       siteName: "",
@@ -20,14 +13,6 @@ export default defineNuxtConfig({
       directus: {
         url: "",
       },
-    },
-  },
-  colorMode: {
-    preference: "light",
-  },
-  image: {
-    directus: {
-      baseURL: `${process.env.NUXT_PUBLIC_DIRECTUS_URL}/assets/`,
     },
   },
 });

@@ -23,6 +23,7 @@ _A modern news website powered by **Nuxt.js** (Frontend) and **Directus** (Headl
 ## Tech Stack
 
 ### Frontend
+
 - [Nuxt 4](https://nuxt.com/) – Vue.js meta-framework
 - [Nuxt UI](https://ui.nuxt.com/) – UI component library
 - [Tailwind CSS](https://tailwindcss.com/) – Utility-first CSS
@@ -32,11 +33,13 @@ _A modern news website powered by **Nuxt.js** (Frontend) and **Directus** (Headl
 - [dayjs](https://day.js.org/) – Date manipulation
 
 ### Backend
+
 - [Directus](https://directus.io/) – Headless CMS
 - [PostgreSQL](https://www.postgresql.org/) – Primary database
 - [MinIO](https://min.io/) – S3-compatible object storage
 
 ### DevOps
+
 - [Docker Compose](https://www.docker.com/) – Container orchestration
 - Resource limits configured for all services
 
@@ -108,6 +111,7 @@ pnpm dev
 ```
 
 Visit:
+
 - **Frontend** → http://localhost:3000
 - **Directus Admin** → http://localhost:8055
 - **MinIO Console** → http://localhost:9090
@@ -192,11 +196,11 @@ docker stats
 
 ### Resource Limits
 
-| Service | CPU Limit | Memory Limit |
-|---------|-----------|--------------|
-| postgres | 1 core | 512M |
-| minio | 1 core | 512M |
-| directus | 1 core | 1G |
+| Service  | CPU Limit | Memory Limit |
+| -------- | --------- | ------------ |
+| postgres | 1 core    | 512M         |
+| minio    | 1 core    | 512M         |
+| directus | 1 core    | 1G           |
 
 ---
 
@@ -205,53 +209,53 @@ docker stats
 <details>
 <summary>Categories</summary>
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | UUID | Unique identifier |
-| `name` | String | Category name |
+| Field  | Type   | Description       |
+| ------ | ------ | ----------------- |
+| `id`   | UUID   | Unique identifier |
+| `name` | String | Category name     |
 
 </details>
 
 <details>
 <summary>Tags</summary>
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | UUID | Unique identifier |
-| `name` | String | Tag name |
+| Field  | Type   | Description       |
+| ------ | ------ | ----------------- |
+| `id`   | UUID   | Unique identifier |
+| `name` | String | Tag name          |
 
 </details>
 
 <details>
 <summary>Navigation</summary>
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | UUID | Unique identifier |
-| `label` | String | Menu label |
-| `url` | String | Navigation path |
-| `order` | Integer | Menu position |
-| `category` | M2O | Linked category |
+| Field      | Type    | Description       |
+| ---------- | ------- | ----------------- |
+| `id`       | UUID    | Unique identifier |
+| `label`    | String  | Menu label        |
+| `url`      | String  | Navigation path   |
+| `order`    | Integer | Menu position     |
+| `category` | M2O     | Linked category   |
 
 </details>
 
 <details>
 <summary>News</summary>
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | UUID | Unique identifier |
-| `title` | String | Article title |
-| `featured_image` | Image | Main image |
-| `description` | Text | Short description |
-| `content` | WYSIWYG | Full content |
-| `author` | M2O | Author (directus_users) |
-| `category` | M2O | Category |
-| `tags` | M2M | Tags |
-| `status` | Enum | Pending / Published / Rejected |
-| `date_published` | DateTime | Publish date |
-| `date_created` | DateTime | Created timestamp |
-| `date_updated` | DateTime | Updated timestamp |
+| Field            | Type     | Description                    |
+| ---------------- | -------- | ------------------------------ |
+| `id`             | UUID     | Unique identifier              |
+| `title`          | String   | Article title                  |
+| `featured_image` | Image    | Main image                     |
+| `description`    | Text     | Short description              |
+| `content`        | WYSIWYG  | Full content                   |
+| `author`         | M2O      | Author (directus_users)        |
+| `category`       | M2O      | Category                       |
+| `tags`           | M2M      | Tags                           |
+| `status`         | Enum     | Pending / Published / Rejected |
+| `date_published` | DateTime | Publish date                   |
+| `date_created`   | DateTime | Created timestamp              |
+| `date_updated`   | DateTime | Updated timestamp              |
 
 </details>
 
