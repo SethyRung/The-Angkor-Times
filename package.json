@@ -15,21 +15,21 @@
     "fmt:check": "oxfmt --check"
   },
   "dependencies": {
-    "@nuxt/ui": "^3.3.2",
+    "@nuxt/ui": "^4.8.2",
     "@tailwindcss/vite": "^4.3.0",
     "@vueuse/core": "^14.3.0",
     "@vueuse/nuxt": "^14.3.0",
-    "nuxt": "^4.0.3",
+    "nuxt": "^4.4.7",
     "nuxt-directus": "^5.7.0",
     "vue": "latest",
     "vue-router": "latest",
-    "zod": "^4.0.17"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "^1.2.63",
-    "@iconify-json/simple-icons": "^1.2.48",
-    "oxfmt": "^0.51.0",
-    "oxlint": "^1.66.0"
+    "@iconify-json/lucide": "^1.2.111",
+    "@iconify-json/simple-icons": "^1.2.85",
+    "oxfmt": "^0.53.0",
+    "oxlint": "^1.68.0"
   },
   "packageManager": "pnpm@11.5.1"
 }
