@@ -1,31 +1,7 @@
 <script setup lang="ts">
-const copyright = useRuntimeConfig().public.copyright || new Date().getFullYear();
+const copyright = dayjs().year();
 const siteName = useRuntimeConfig().public.siteName || "The Angkor Times";
 const { navItems } = useNavLinks();
-
-const columns = computed(() => [
-  {
-    label: "Sections",
-    links: navItems.value,
-  },
-  {
-    label: "Company",
-    links: [
-      { label: "About", to: "/about" },
-      { label: "Contact", to: "/contact" },
-      { label: "Careers", to: "/careers" },
-      { label: "Advertise", to: "/advertise" },
-    ],
-  },
-  {
-    label: "Legal",
-    links: [
-      { label: "Privacy", to: "/privacy" },
-      { label: "Terms", to: "/terms" },
-      { label: "Ethics", to: "/ethics" },
-    ],
-  },
-]);
 
 const socials = [
   { icon: "i-simple-icons-github", to: "https://github.com/SethyRung/The-Angkor-Times" },
@@ -48,7 +24,7 @@ const socials = [
       <span
         class="font-mono text-xs uppercase tracking-widest text-canvas-300 text-center md:text-left"
       >
-        &copy; {{ copyright }} {{ siteName }}. All Rights Reserved.
+        &copy;{{ copyright }} {{ siteName }}. All Rights Reserved.
       </span>
     </template>
 
