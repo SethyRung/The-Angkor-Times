@@ -6,6 +6,9 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
   modules: ["@nuxt/ui", "@vueuse/nuxt", "nuxt-directus"],
+  dayjs: {
+    plugins: ["relativeTime", "utc"],
+  },
   colorMode: {
     preference: "dark",
     fallback: "dark",
