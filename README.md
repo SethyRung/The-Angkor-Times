@@ -1,10 +1,10 @@
 # The Angkor Times
 
 [![Nuxt](https://img.shields.io/badge/Nuxt-4.0-00DC82?logo=nuxt.js)](https://nuxt.com/)
-[![Directus](https://img.shields.io/badge/Directus-Latest-1E96FC?logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTEyIDJMNiA3djZsNiA1IDYtNVY3bC02LTV6Ii8+PC9zdmc+)](https://directus.io/)
+[![Nuxt Hub](https://img.shields.io/badge/Nuxt%20Hub-Latest-00DC82)](https://hub.nuxt.com/)
 [![License](https://img.shields.io/github/license/SethyRung/The-Angkor-Times)](LICENSE)
 
-_A modern news website powered by **Nuxt.js** (Frontend) and **Directus** (Headless CMS)._
+_A modern news website powered by **Nuxt 4** (Frontend) on **Nuxt Hub** (Backend) with **PostgreSQL**._
 
 ---
 
@@ -12,7 +12,7 @@ _A modern news website powered by **Nuxt.js** (Frontend) and **Directus** (Headl
 
 - **News Publishing System** – Authors can publish news articles
 - **Admin Approval Workflow** – All news requires admin approval before being published
-- **Dynamic Navigation** – Website navigation managed via Directus CMS
+- **Dynamic Navigation** – Website navigation surfaced from the database
 - **Category-based Organization** – News grouped by categories with dedicated pages
 - **Responsive Design** – Mobile-first layout using Tailwind CSS and Nuxt UI
 - **Lazy Loading** – Efficient data fetching with skeleton states
@@ -27,18 +27,16 @@ _A modern news website powered by **Nuxt.js** (Frontend) and **Directus** (Headl
 - [Nuxt UI](https://ui.nuxt.com/) – UI component library
 - [Tailwind CSS](https://tailwindcss.com/) – Utility-first CSS
 - [Vue 3](https://vuejs.org/) – Progressive JavaScript framework
-- [VueUse](https://vueuse.org/) – Composition utilitie
+- [VueUse](https://vueuse.org/) – Composition utilities
 
 ### Backend
 
-- [Directus](https://directus.io/) – Headless CMS
+- [Nuxt Hub](https://hub.nuxt.com/) – Backend runtime with managed Postgres and deploy targets
 - [PostgreSQL](https://www.postgresql.org/) – Primary database
-- [MinIO](https://min.io/) – S3-compatible object storage
 
 ### DevOps
 
-- [Docker Compose](https://www.docker.com/) – Container orchestration
-- Resource limits configured for all services
+- [Docker Compose](https://www.docker.com/) – Local Postgres container for development
 
 ## License
 

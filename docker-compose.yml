@@ -10,45 +10,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - directus_network
-
-  minio:
-    image: minio/minio:latest
-    container_name: the_angkor_times_minio
-    restart: always
-    env_file:
-      - .env
-    command: server /data --console-address ":9090"
-    ports:
-      - "9000:9000"
-      - "9090:9090"
-    volumes:
-      - minio_data:/data
-    networks:
-      - directus_network
-
-  directus:
-    image: directus/directus:latest
-    container_name: the_angkor_times_app
-    restart: always
-    ports:
-      - "8055:8055"
-    env_file:
-      - .env
-    depends_on:
-      - postgres
-      - minio
-    networks:
-      - directus_network
+      - hub_network
 
 volumes:
   postgres_data:
     driver: local
-  minio_data:
-    driver: local
-  directus_uploads:
-    driver: local
 
 networks:
-  directus_network:
+  hub_network:
     driver: bridge

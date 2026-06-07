@@ -10,16 +10,6 @@
       "type": "remote",
       "url": "https://ui.nuxt.com/mcp",
       "enabled": true
-    },
-    "directus": {
-      "type": "local",
-      "command": ["npx", "-y", "@directus/content-mcp@latest"],
-      "enabled": true,
-      "environment": {
-        "DIRECTUS_URL": "http://localhost:8055",
-        "DIRECTUS_USER_EMAIL": "admin@example.com",
-        "DIRECTUS_USER_PASSWORD": "supersecret"
-      }
     }
   }
 }

@@ -4,7 +4,7 @@ Notes for AI agents working in this repo.
 
 ## Project
 
-The Angkor Times — a news website (admin-approval workflow) built on **Nuxt 4** frontend + **Directus** headless CMS, with **PostgreSQL** and **MinIO** (S3) storage. Backend services run via Docker Compose.
+The Angkor Times — a news website (admin-approval workflow) built on **Nuxt 4** frontend + **Nuxt Hub** backend, with **PostgreSQL** as the database. The `@nuxthub/core` module provides the database abstraction (Drizzle ORM under the hood) and a `nuxthub deploy` path to NuxtHub Cloud. Dev runs against a local Postgres container; production deploys to NuxtHub Cloud's managed Postgres.
 
 ## Commands
 
@@ -25,13 +25,13 @@ pnpm typecheck        # nuxt typecheck — runs vue-tsc against generated .nuxt/
 
 Required order when validating a change: **`lint` -> `fmt` -> `typecheck`**. There is no test suite yet.
 
-Backend services (required for `pnpm dev` to talk to Directus):
+Backend service (required for `pnpm dev` so Nuxt Hub can reach Postgres):
 
 ```bash
-docker compose up -d                # postgres:5432, minio:9000 + console:9090, directus:8055
+docker compose up -d                # postgres:5432 only
 ```
 
-Copy `.env.example` to `.env` before first run — both Nuxt and the Docker stack read from it.
+Copy `.env.example` to `.env` before first run. Nuxt Hub reads `NUXT_HUB_DB_URL` to connect.
 
 ## Architecture notes
 
@@ -53,11 +53,16 @@ A local Nuxt module lives at `modules/dayjs/` (mirrors the one in `../portfolio`
 - **Nuxt UI MCP** (`opencode.json` → `nuxt-ui` server) may still serve v3 docs for some components. Cross-check with generated theme files in `.nuxt/ui/` when API details matter.
 - **`@nuxt/fonts` is NOT installed** — fonts are loaded via Google Fonts CDN `<link>` tags in `nuxt.config.ts` `app.head`. Do not assume `@nuxt/fonts` auto-loads `@theme` font declarations.
 
-## Directus
+## Data layer (Nuxt Hub + Postgres)
 
-- **Directus URL** is wired through `runtimeConfig.public.directus.url` and read from `NUXT_PUBLIC_DIRECTUS_URL`. Use `useDirectus*` composables from `nuxt-directus` rather than rolling your own fetch.
-- **Collections**: `news`, `categories`, `tags`, `news_tags` (junction), `navigation`. Types in `shared/types/news.ts`.
-- **The `news` collection has a `status` field** with values `Pending Approval` | `Published` | `Rejected` — only fetch `Published` for public pages.
+- **Nuxt Hub** (`@nuxthub/core@0.10.7`) is enabled in `nuxt.config.ts` via `hub: { db: "postgresql" }`. It auto-imports `useDb()` (Drizzle ORM) and a `tables` const referencing `server/db/schema.ts`.
+- **Connection**: `NUXT_HUB_DB_URL` in `.env`, e.g. `postgresql://admin:supersecret@localhost:5432/the_angkor_times`. The `docker compose up -d` Postgres is the only local backend now.
+- **Schema**: lives in `server/db/schema.ts` (Drizzle table definitions). When you add a table, export it from `server/db/schema.ts` so `useDb()`'s `tables` is correctly typed.
+- **Queries**: from any `server/api/**` route, call `const db = useDb(); await db.select().from(tables.news).where(...)`. From the client side, wrap with `useFetch('/api/...')` or a typed `useXxx()` composable in `app/composables/`.
+- **Local dev cache**: `.data/` is the Nuxt Hub working folder (gitignored). Don't commit it; don't put secrets in it.
+- **Production**: `pnpm build` then `nuxthub deploy` to push to NuxtHub Cloud, which provisions managed Postgres. No separate `docker compose` for prod.
+- **Status field**: under Directus the `news.status` enum was `Pending Approval` | `Published` | `Rejected`. In the Drizzle schema this becomes a `publishedAt: timestamp` column — `NULL` = pending/draft, non-NULL = published. Public pages filter on `publishedAt IS NOT NULL`.
+- **Types pending rename**: `shared/types/news.ts` still uses Directus-era snake_case (`featured_image`, `date_published`) and nested `category`/`author` objects. A camelCase + FK-id refactor is pending — touch them only with explicit user sign-off, since `app/pages/index.vue` and the components still consume the current shape.
 
 ## Design system
 
@@ -81,7 +86,7 @@ Enforced by `oxfmt.config.ts` and `oxlint.config.ts`:
 
 ## Tooling (OpenCode)
 
-`opencode.json` wires three MCP servers: `nuxt` (remote), `nuxt-ui` (remote), and a local `directus` MCP pointed at `http://localhost:8055` with hardcoded dev creds (`admin@example.com` / `supersecret`) — the Directus stack must be up for that MCP to work.
+`opencode.json` wires two MCP servers: `nuxt` (remote) and `nuxt-ui` (remote).
 
 Installed agent skills (see `skills-lock.json`): `agent-browser`, `nuxt-ui`. The `nuxt-ui` skill is the right starting point when building or restyling components.
 

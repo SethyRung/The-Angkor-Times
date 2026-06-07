@@ -7,7 +7,16 @@ export default defineNuxtConfig({
   compatibilityDate: "2026-01-01",
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
-  modules: ["@nuxt/ui", "@vueuse/nuxt", "nuxt-directus"],
+  modules: ["@nuxt/ui", "@vueuse/nuxt", "@nuxthub/core"],
+  hub: {
+    db: {
+      dialect: "postgresql",
+      driver: process.env.DATABASE_DRIVER as "postgres-js" | "neon-http",
+    },
+    blob: {
+      driver: "vercel-blob",
+    },
+  },
   dayjs: {
     plugins: ["relativeTime", "utc"],
   },
@@ -25,14 +34,5 @@ export default defineNuxtConfig({
   },
   colorMode: {
     preference: "dark",
-    fallback: "dark",
-  },
-  runtimeConfig: {
-    public: {
-      siteName: "",
-      directus: {
-        url: "",
-      },
-    },
   },
 });
