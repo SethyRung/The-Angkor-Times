@@ -28,10 +28,11 @@ export default defineNuxtConfig({
     optimizeDeps: {
       include: [
         "dayjs",
+        "dayjs/plugin/relativeTime",
         "dayjs/plugin/timezone",
         "dayjs/plugin/updateLocale",
-        "dayjs/plugin/relativeTime",
         "dayjs/plugin/utc",
+        "zod",
       ],
     },
   },
