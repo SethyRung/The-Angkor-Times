@@ -1,11 +1,40 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
+@font-face {
+  font-family: "IoskeleyMono";
+  src: url("/IoskeleyMono/IoskeleyMono-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IoskeleyMono";
+  src: url("/IoskeleyMono/IoskeleyMono-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IoskeleyMono";
+  src: url("/IoskeleyMono/IoskeleyMono-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IoskeleyMono";
+  src: url("/IoskeleyMono/IoskeleyMono-BoldItalic.ttf") format("truetype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
 @theme static {
-  --font-sans: "Space Grotesk", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
-  --font-serif: "Newsreader", Georgia, serif;
-  --font-display: "Archivo Black", Impact, sans-serif;
+  --font-mono: "IoskeleyMono", monospace;
 }
 
 @theme {

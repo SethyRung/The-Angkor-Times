@@ -8,6 +8,9 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
   modules: ["@nuxt/ui", "@vueuse/nuxt", "@nuxthub/core"],
+  fonts: {
+    families: [{ name: "IoskeleyMono", provider: "local" }],
+  },
   hub: {
     db: {
       dialect: "postgresql",
