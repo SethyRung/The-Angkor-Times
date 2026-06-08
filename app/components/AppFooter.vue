@@ -1,7 +1,6 @@
 <script setup lang="ts">
 const copyright = dayjs().year();
 const siteName = useRuntimeConfig().public.siteName || "The Angkor Times";
-const { navItems } = useNavLinks();
 
 const socials = [
   { icon: "i-simple-icons-github", to: "https://github.com/SethyRung/The-Angkor-Times" },

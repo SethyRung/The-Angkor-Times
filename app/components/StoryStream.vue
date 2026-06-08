@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { NewsItem } from "#shared/types/news";
+import type { NewsItem } from "~/types/news";
 
 defineProps<{
   stories: NewsItem[];
 }>();
 
-const formatTimestamp = (dateString: string) => {
+const formatTimestamp = (dateString: string | null) => {
   if (!dateString) return "";
   const date = dayjs(dateString);
   const now = dayjs();
@@ -29,7 +29,7 @@ const formatTimestamp = (dateString: string) => {
       <span
         class="absolute left-0 top-2 -translate-x-[calc(100%+12px)] font-mono text-xs uppercase tracking-widest text-canvas-300 whitespace-nowrap hidden sm:block"
       >
-        {{ formatTimestamp(story.date_published) }}
+        {{ formatTimestamp(story.publishedAt) }}
       </span>
 
       <NuxtLink :to="`/news/${story.id}`" class="block group">
@@ -41,7 +41,7 @@ const formatTimestamp = (dateString: string) => {
               {{ story.category?.name }}
             </span>
             <span class="sm:hidden font-mono text-xs uppercase tracking-widest text-canvas-300">
-              {{ formatTimestamp(story.date_published) }}
+              {{ formatTimestamp(story.publishedAt) }}
             </span>
           </div>
 

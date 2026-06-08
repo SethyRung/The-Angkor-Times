@@ -1,18 +1,24 @@
 <script setup lang="ts">
-import type { NewsItem } from "#shared/types/news";
+import type { NewsItem } from "~/types/news";
 
 const props = defineProps<{
   story: NewsItem;
 }>();
 
 const formattedDate = computed(() => {
-  if (!props.story.date_published) return "";
-  return dayjs(props.story.date_published).format("MMM D, YYYY");
+  if (!props.story.publishedAt) return "";
+  return dayjs(props.story.publishedAt).format("MMM D, YYYY");
+});
+
+const authorName = computed(() => {
+  const a = props.story.author;
+  if (!a?.firstName) return "";
+  return a.lastName ? `${a.firstName} ${a.lastName}` : a.firstName;
 });
 </script>
 
 <template>
-  <article class="group cursor-pointer">
+  <NuxtLink :to="`/news/${story.id}`" class="block group cursor-pointer">
     <div class="mb-6 flex items-center gap-4">
       <span v-if="story.category" class="font-mono text-xs uppercase tracking-widest text-mint-500">
         {{ story.category.name }}
@@ -35,12 +41,8 @@ const formattedDate = computed(() => {
       {{ story.description }}
     </p>
 
-    <p
-      v-if="story.author?.first_name"
-      class="font-mono text-xs uppercase tracking-widest text-canvas-300"
-    >
-      By {{ story.author.first_name
-      }}{{ story.author.last_name ? ` ${story.author.last_name}` : "" }}
+    <p v-if="authorName" class="font-mono text-xs uppercase tracking-widest text-canvas-300">
+      By {{ authorName }}
     </p>
-  </article>
+  </NuxtLink>
 </template>

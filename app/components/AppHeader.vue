@@ -5,15 +5,20 @@ const props = defineProps<{
   navItems?: NavigationMenuItem[];
 }>();
 
-const siteName = useRuntimeConfig().public.siteName || "The Angkor Times";
-const { navItems: defaultNavItems } = useNavLinks();
+const defaultNavItems = computed<NavigationMenuItem[]>(() => [
+  { label: "Technology", to: "/category/technology" },
+  { label: "Business", to: "/category/business" },
+  { label: "Culture", to: "/category/culture" },
+  { label: "Sports", to: "/category/sports" },
+  { label: "Politics", to: "/category/politics" },
+]);
 
 const items = computed(() => props.navItems ?? defaultNavItems.value);
 </script>
 
 <template>
   <UHeader
-    :title="siteName"
+    title="The Angkor Times"
     :ui="{
       root: 'bg-canvas-900 border-b border-white/10',
       title: 'font-display text-xl md:text-3xl lg:text-4xl tracking-tight text-white leading-none',
