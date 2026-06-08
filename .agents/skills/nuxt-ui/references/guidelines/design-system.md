@@ -299,8 +299,7 @@ Customize Tailwind design tokens in `main.css`:
 
 ```css
 @theme {
-  --font-sans: 'Public Sans', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-mono: "IoskeleyMono", monospace;
 }
 ```
 
