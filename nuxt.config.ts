@@ -35,4 +35,25 @@ export default defineNuxtConfig({
   colorMode: {
     preference: "dark",
   },
+  runtimeConfig: {
+    admin: {
+      email: "",
+      password: "",
+    },
+    jwt: {
+      access: {
+        secret: "",
+        expiresIn: "",
+      },
+      refresh: {
+        secret: "",
+        expiresIn: "",
+      },
+    },
+  },
+  nitro: {
+    experimental: {
+      tasks: true,
+    },
+  },
 });

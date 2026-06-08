@@ -23,10 +23,13 @@
     "@vercel/blob": "^2.4.0",
     "@vueuse/core": "^14.3.0",
     "@vueuse/nuxt": "^14.3.0",
+    "bcryptjs": "^3.0.3",
     "dayjs": "^1.11.21",
     "drizzle-orm": "^0.45.2",
+    "jsonwebtoken": "^9.0.3",
     "nuxt": "^4.4.7",
     "postgres": "^3.4.9",
+    "tailwind-variants": "^3.2.2",
     "vue": "latest",
     "vue-router": "latest",
     "zod": "^4.4.3"
@@ -34,6 +37,7 @@
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.111",
     "@iconify-json/simple-icons": "^1.2.85",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.9.1",
     "drizzle-kit": "^0.31.10",
     "oxfmt": "^0.53.0",
