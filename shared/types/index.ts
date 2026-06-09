@@ -1,4 +1,6 @@
 export * from "./response";
+export * from "./user";
+export * from "./news";
 
 import type {
   users,
@@ -34,12 +36,28 @@ export interface NewsWithRelations extends DbNews {
   tags?: Pick<DbTag, "id" | "name" | "slug">[];
 }
 
+export interface DashboardStats {
+  news: {
+    total: number;
+    pending: number;
+    published: number;
+  };
+  users: {
+    total: number;
+    admins: number;
+    editors: number;
+  };
+  recent: NewsWithRelations[];
+}
+
+export type UserRole = "admin" | "editor";
+
 export interface AuthUser {
   id: string;
   email: string;
   firstName: string | null;
   lastName: string | null;
-  role: string;
+  role: UserRole;
 }
 
 export interface AccessTokenPayload {
@@ -47,5 +65,5 @@ export interface AccessTokenPayload {
   email: string;
   firstName: string | null;
   lastName: string | null;
-  role: string;
+  role: UserRole;
 }
