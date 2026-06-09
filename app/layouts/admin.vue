@@ -28,6 +28,7 @@ async function onLogout() {
       resizable
       :ui="{
         root: 'border-r border-muted',
+        header: 'border-b border-muted',
         footer: 'border-t border-muted py-3',
       }"
     >
@@ -40,11 +41,11 @@ async function onLogout() {
         >
           <span
             v-if="!collapsed"
-            class="text-lg uppercase tracking-tight text-highlighted truncate"
+            class="text-xs uppercase tracking-widest text-highlighted truncate"
           >
             The Angkor Times
           </span>
-          <span v-else class="text-sm uppercase text-primary-500">AT</span>
+          <span v-else class="text-xs uppercase text-primary-500">AT</span>
         </NuxtLink>
       </template>
 
@@ -53,6 +54,7 @@ async function onLogout() {
           :collapsed="collapsed"
           :items="items"
           orientation="vertical"
+          color="neutral"
           :ui="{ link: 'font-mono text-xs uppercase tracking-widest' }"
         />
       </template>
@@ -60,20 +62,21 @@ async function onLogout() {
       <template #footer="{ collapsed }">
         <div v-if="user" class="flex flex-col gap-2 w-full">
           <div v-if="!collapsed" class="px-1 min-w-0">
-            <p class="font-mono text-xs uppercase tracking-widest text-primary-100 truncate">
+            <p class="font-mono text-[10px] uppercase tracking-widest text-highlighted truncate">
               {{ user.firstName }} {{ user.lastName }}
             </p>
-            <p class="font-mono text-[10px] uppercase tracking-widest text-primary-500">
+            <p class="font-mono text-[10px] uppercase tracking-widest text-muted">
               {{ user.role }}
             </p>
           </div>
+
           <UButton
-            color="neutral"
-            variant="soft"
             :icon="collapsed ? 'i-lucide-log-out' : undefined"
             :label="collapsed ? undefined : 'Sign out'"
             :block="!collapsed"
             :square="collapsed"
+            variant="soft"
+            class="rounded-sm font-mono uppercase tracking-widest text-[10px]"
             @click="onLogout"
           />
         </div>

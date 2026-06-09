@@ -33,7 +33,7 @@ const stories = computed<NewsItem[]>(() => {
   <UContainer class="py-10 md:py-16 font-mono max-w-5xl">
     <NuxtLink
       to="/category"
-      class="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-canvas-600 dark:text-canvas-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors mb-4"
+      class="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-toned hover:text-primary-500 dark:hover:text-primary-400 transition-colors mb-4"
     >
       &larr; All categories
     </NuxtLink>
@@ -54,13 +54,11 @@ const stories = computed<NewsItem[]>(() => {
     </div>
 
     <div v-else class="py-16 text-center space-y-3">
-      <p class="text-xs uppercase tracking-widest text-canvas-500 dark:text-ink-500">[-] Empty</p>
-      <p class="text-canvas-600 dark:text-canvas-400 text-sm">
-        No published stories in this category yet.
-      </p>
+      <p class="text-xs uppercase tracking-widest text-muted">[-] Empty</p>
+      <p class="text-toned text-sm">No published stories in this category yet.</p>
       <NuxtLink
         to="/"
-        class="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-primary-500 dark:text-primary-400 hover:underline"
+        class="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-primary hover:underline"
       >
         &larr; Back to home
       </NuxtLink>

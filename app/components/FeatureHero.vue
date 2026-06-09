@@ -18,28 +18,29 @@ const authorName = computed(() => {
 </script>
 
 <template>
-  <NuxtLink :to="`/news/${story.id}`" class="block group cursor-pointer">
-    <div class="mb-6 flex items-center gap-4">
-      <span v-if="story.category" class="text-xs uppercase tracking-widest text-primary-500">
+  <NuxtLink :to="`/news/${story.id}`" class="block group font-mono">
+    <div class="mb-6 flex items-center gap-3 text-xs uppercase tracking-widest">
+      <span class="text-primary-500">[+]</span>
+      <span v-if="story.category" class="text-toned">
         {{ story.category.name }}
       </span>
-      <span v-if="formattedDate" class="text-xs uppercase tracking-widest text-toned">
+      <span v-if="formattedDate" class="text-muted">
         {{ formattedDate }}
       </span>
     </div>
 
     <h1
-      class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-highlighted leading-none tracking-tight mb-6 group-hover:text-[#3860be] transition-colors duration-150"
+      class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-highlighted leading-[1.1] tracking-tight mb-6 group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors duration-150"
     >
       {{ story.title }}
     </h1>
 
-    <p class="text-lg text-toned max-w-3xl leading-relaxed mb-6">
+    <p class="text-base md:text-lg text-toned max-w-3xl leading-relaxed mb-6">
       {{ story.description }}
     </p>
 
     <p v-if="authorName" class="text-xs uppercase tracking-widest text-muted">
-      By {{ authorName }}
+      by {{ authorName }}
     </p>
   </NuxtLink>
 </template>

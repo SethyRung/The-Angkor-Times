@@ -98,14 +98,19 @@ function onSubmit(event: FormSubmitEvent<NewsFormSchema>) {
     v-model:open="open"
     :title="isEdit ? 'Edit Story' : 'Add Story'"
     :fullscreen="fullScreen"
-    :ui="{ content: !fullScreen && 'max-w-3xl', footer: 'flex justify-end gap-2' }"
+    :ui="{
+      content: !fullScreen && 'max-w-3xl rounded-sm font-mono',
+      header: 'border-b border-default',
+      title: 'text-base uppercase tracking-widest text-highlighted',
+      footer: 'flex justify-end gap-2 border-t border-default',
+    }"
   >
     <template #actions>
       <UButton
         :icon="fullScreen ? 'i-lucide-minimize' : 'i-lucide-maximize'"
         color="neutral"
         variant="ghost"
-        class="absolute top-4 end-14"
+        class="absolute top-4 end-14 rounded-sm"
         @click="fullScreen = !fullScreen"
       />
     </template>
@@ -115,16 +120,16 @@ function onSubmit(event: FormSubmitEvent<NewsFormSchema>) {
         :props="{
           input: {
             size: 'lg',
-            class: 'w-full',
+            class: 'w-full font-mono',
           },
           select: {
             size: 'lg',
-            class: 'w-full',
+            class: 'w-full font-mono',
           },
           textarea: {
             size: 'lg',
             rows: 3,
-            class: 'w-full',
+            class: 'w-full font-mono',
           },
         }"
       >
@@ -163,6 +168,7 @@ function onSubmit(event: FormSubmitEvent<NewsFormSchema>) {
                     slot: 'upload' as const,
                   },
                 ]"
+                color="neutral"
                 :ui="{
                   root: 'items-start',
                   list: 'w-fit p-0',
@@ -202,12 +208,14 @@ function onSubmit(event: FormSubmitEvent<NewsFormSchema>) {
         color="neutral"
         variant="ghost"
         :disabled="submitting"
+        class="rounded-sm font-mono uppercase tracking-widest text-xs"
         @click="close"
       />
 
       <UButton
         :label="isEdit ? 'Save Changes' : 'Create Story'"
         :loading="submitting"
+        class="rounded-sm font-mono uppercase tracking-widest text-xs"
         @click="formRef?.submit()"
       />
     </template>

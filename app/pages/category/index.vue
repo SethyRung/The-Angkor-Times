@@ -47,11 +47,11 @@ const categories = computed<CategoryWithCount[]>(() => {
           >
             {{ cat.name }}
           </span>
-          <span class="text-xs uppercase tracking-widest text-canvas-500 dark:text-ink-500">
+          <span class="text-xs uppercase tracking-widest text-muted">
             {{ cat.newsCount }} {{ cat.newsCount === 1 ? "story" : "stories" }}
           </span>
           <span
-            class="text-canvas-500 dark:text-ink-500 text-xs uppercase tracking-widest group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors"
+            class="text-muted text-xs uppercase tracking-widest group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors"
           >
             &rarr;
           </span>
@@ -59,10 +59,7 @@ const categories = computed<CategoryWithCount[]>(() => {
       </li>
     </ul>
 
-    <div
-      v-else
-      class="py-16 text-center text-xs uppercase tracking-widest text-canvas-500 dark:text-ink-500"
-    >
+    <div v-else class="py-16 text-center text-xs uppercase tracking-widest text-muted">
       [-] No categories with published stories yet
     </div>
   </UContainer>

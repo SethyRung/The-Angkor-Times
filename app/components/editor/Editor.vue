@@ -350,14 +350,14 @@ const emojiItems: EditorEmojiMenuItem[] = gitHubEmojis.filter(
     :handlers="customHandlers"
     placeholder="Write something amazing..."
     :ui="{
-      root: 'w-full pt-16 rounded-md border border-inset border-accented relative overflow-clip',
+      root: 'w-full pt-16 rounded-sm border border-muted relative overflow-clip font-mono',
       base: 'p-4',
     }"
   >
     <UEditorToolbar
       :editor="editor"
       :items="fixedToolbarItems"
-      class="w-full border-b border-accented p-4 absolute top-0 z-50 bg-default overflow-x-auto"
+      class="w-full border-b border-muted p-4 absolute top-0 z-50 bg-default overflow-x-auto"
     >
       <template #link>
         <EditorLinkPopover :editor="editor" auto-open />

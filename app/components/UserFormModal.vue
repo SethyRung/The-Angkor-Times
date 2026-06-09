@@ -54,6 +54,11 @@ function onSubmit(event: FormSubmitEvent<UserFormSchema>) {
   <UModal
     :open="open"
     :title="isEdit ? 'Edit User' : 'Add User'"
+    :ui="{
+      content: 'rounded-sm font-mono',
+      header: 'border-b border-default',
+      title: 'text-base uppercase tracking-widest text-highlighted',
+    }"
     @update:open="(v) => emit('update:open', v)"
   >
     <template #body>
@@ -64,7 +69,7 @@ function onSubmit(event: FormSubmitEvent<UserFormSchema>) {
           },
           input: {
             size: 'lg',
-            class: 'w-full',
+            class: 'w-full font-mono',
           },
           formField: {
             required: true,
@@ -78,7 +83,7 @@ function onSubmit(event: FormSubmitEvent<UserFormSchema>) {
               type="email"
               autocomplete="off"
               class="w-full"
-              :ui="{ base: 'rounded-sm' }"
+              :ui="{ base: 'rounded-sm font-mono' }"
             />
           </UFormField>
 
@@ -88,7 +93,7 @@ function onSubmit(event: FormSubmitEvent<UserFormSchema>) {
                 v-model="state.firstName"
                 autocomplete="off"
                 class="w-full"
-                :ui="{ base: 'rounded-sm' }"
+                :ui="{ base: 'rounded-sm font-mono' }"
               />
             </UFormField>
             <UFormField name="lastName" label="Last Name">
@@ -96,7 +101,7 @@ function onSubmit(event: FormSubmitEvent<UserFormSchema>) {
                 v-model="state.lastName"
                 autocomplete="off"
                 class="w-full"
-                :ui="{ base: 'rounded-sm' }"
+                :ui="{ base: 'rounded-sm font-mono' }"
               />
             </UFormField>
           </div>
@@ -109,6 +114,7 @@ function onSubmit(event: FormSubmitEvent<UserFormSchema>) {
                 { label: 'Admin', value: 'admin' },
               ]"
               class="w-full"
+              :ui="{ base: 'rounded-sm font-mono' }"
             />
           </UFormField>
 
@@ -122,15 +128,15 @@ function onSubmit(event: FormSubmitEvent<UserFormSchema>) {
               type="password"
               autocomplete="new-password"
               class="w-full"
-              :ui="{ base: 'rounded-sm' }"
+              :ui="{ base: 'rounded-sm font-mono' }"
             />
           </UFormField>
 
           <p
             v-if="formError"
-            class="font-mono text-xs uppercase tracking-widest text-ultraviolet-400 flex items-center gap-2"
+            class="font-mono text-xs uppercase tracking-widest text-error flex items-center gap-2"
           >
-            <span class="block size-1.5 rounded-full bg-ultraviolet-500" />
+            <span class="text-primary-500">[+]</span>
             {{ formError }}
           </p>
 
@@ -140,12 +146,14 @@ function onSubmit(event: FormSubmitEvent<UserFormSchema>) {
               color="neutral"
               variant="ghost"
               :disabled="submitting"
+              class="rounded-sm font-mono uppercase tracking-widest text-xs"
               @click="emit('update:open', false)"
             />
             <UButton
               type="submit"
               :loading="submitting"
               :label="isEdit ? 'Save Changes' : 'Create User'"
+              class="rounded-sm font-mono uppercase tracking-widest text-xs"
             />
           </div>
         </UForm>

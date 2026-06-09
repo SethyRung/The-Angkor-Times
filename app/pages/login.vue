@@ -44,131 +44,112 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <div class="min-h-dvh grid lg:grid-cols-2 font-mono">
+  <div class="min-h-dvh grid lg:grid-cols-2 font-mono bg-default">
     <aside
-      class="relative hidden lg:flex flex-col justify-between p-12 xl:p-16 bg-primary-950 border-r border-muted overflow-hidden"
+      class="relative hidden lg:flex flex-col justify-between p-12 xl:p-16 bg-default text-highlighted border-r border-default overflow-hidden"
     >
-      <div
-        class="pointer-events-none absolute -right-40 -top-40 size-80 rounded-full bg-primary-500/15 blur-3xl"
-      />
-      <div
-        class="pointer-events-none absolute -right-20 -bottom-20 size-60 rounded-full bg-ultraviolet-500/25 blur-3xl"
-      />
-
-      <UButton
-        icon="i-lucide:chevron-left"
-        label="Back to Front Page"
-        color="neutral"
-        variant="link"
-        class="px-0"
+      <NuxtLink
         to="/"
-      />
+        class="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-muted hover:text-primary-400 transition-colors self-start"
+      >
+        [+] Back to Front Page
+      </NuxtLink>
 
-      <div class="relative space-y-8 max-w-xl">
-        <div class="flex items-center gap-3">
-          <span class="block size-3 rounded-full bg-primary-500 animate-pulse" />
-          <span class="text-xs uppercase tracking-widest text-primary-500">
-            Admin Access · Editorial Console
-          </span>
+      <div class="space-y-6 max-w-xl">
+        <div class="flex items-center gap-3 text-xs uppercase tracking-widest">
+          <span class="size-2 rounded-full bg-primary-500 animate-pulse" />
+          <span class="text-primary-400">Admin Access &middot; Editorial Console</span>
         </div>
 
-        <h1
-          class="text-7xl xl:text-[7.5rem] leading-[0.85] tracking-tight uppercase text-highlighted"
-        >
-          The Angkor Times
-        </h1>
+        <h1 class="text-5xl xl:text-7xl tracking-tight uppercase">The Angkor Times</h1>
 
-        <p class="text-xl text-toned leading-relaxed">
+        <p class="text-base xl:text-lg text-muted leading-relaxed">
           The console for reporting, reviewing, and publishing the day&apos;s stories. Credentials
           are issued by the managing editor.
         </p>
       </div>
 
-      <div class="relative flex items-center justify-between gap-4">
-        <div class="flex items-center gap-2">
-          <span class="block size-1.5 rounded-full bg-primary-500" />
-          <span class="block size-1.5 rounded-full bg-ultraviolet-500" />
-          <span class="block size-1.5 rounded-full bg-primary-500" />
+      <div
+        class="flex items-center justify-between gap-4 text-xs uppercase tracking-widest text-dimmed"
+      >
+        <div class="flex items-center gap-1.5">
+          <span class="size-1.5 rounded-full bg-primary-500" />
+          <span class="size-1.5 rounded-full bg-accented" />
+          <span class="size-1.5 rounded-full bg-primary-500" />
         </div>
-        <span class="text-xs uppercase tracking-widest text-toned">
-          v1.0 · {{ new Date().getFullYear() }}
-        </span>
+        <span>v1.0 &middot; {{ new Date().getFullYear() }}</span>
       </div>
     </aside>
 
     <main class="flex items-center justify-center p-6 md:p-10">
-      <div class="relative w-full max-w-md">
-        <div class="absolute -top-6 left-0 w-12 h-1 bg-primary-500 rounded-full" />
-
-        <div class="lg:hidden mb-10 space-y-5">
-          <UButton
-            icon="i-lucide:chevron-left"
-            label="Back to Front Page"
-            color="neutral"
-            variant="link"
-            class="px-0"
+      <div class="w-full max-w-md">
+        <div class="lg:hidden mb-10 space-y-3">
+          <NuxtLink
             to="/"
-          />
+            class="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-muted hover:text-primary-500"
+          >
+            [+] Back to Front Page
+          </NuxtLink>
 
           <h1 class="text-4xl uppercase text-highlighted tracking-tighter">The Angkor Times</h1>
         </div>
 
-        <header class="space-y-3 mb-8">
-          <span class="text-xs uppercase tracking-widest text-primary-500"> Editor Sign In </span>
-
-          <h2 class="text-3xl md:text-6xl uppercase text-highlighted tracking-tighter">Sign In</h2>
-
+        <header class="space-y-2 mb-8">
+          <span class="text-xs uppercase tracking-widest text-primary-500">
+            [+] Editor Sign In
+          </span>
+          <h2 class="text-3xl md:text-4xl uppercase text-highlighted tracking-tight">Sign In</h2>
           <p class="text-sm text-toned">
             Use your editor credentials to access the queue. Sessions are stored as httpOnly
             cookies.
           </p>
         </header>
 
-        <UTheme
-          :props="{
-            input: {
-              size: 'lg',
-              class: 'w-full',
-            },
-            formField: {
-              required: true,
-            },
-          }"
-        >
-          <UForm :schema="schema" :state="state" class="space-y-5" @submit="onSubmit">
-            <UAlert
-              v-if="errorMessage"
-              icon="i-lucide:alert-triangle"
-              color="error"
-              variant="subtle"
-              title="Something went wrong"
-              :description="errorMessage"
+        <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
+          <UAlert
+            v-if="errorMessage"
+            icon="i-lucide:alert-triangle"
+            color="error"
+            variant="subtle"
+            title="Something went wrong"
+            :description="errorMessage"
+          />
+
+          <UFormField name="email" label="Email">
+            <UInput
+              v-model="state.email"
+              type="email"
+              autocomplete="email"
+              placeholder="your-email@example.com"
+              class="w-full"
+              :ui="{ base: 'rounded-sm font-mono' }"
             />
+          </UFormField>
 
-            <UFormField name="email" label="Email">
-              <UInput
-                v-model="state.email"
-                type="email"
-                autocomplete="email"
-                placeholder="your-email@example.com"
-              />
-            </UFormField>
+          <UFormField name="password" label="Password">
+            <UInput
+              v-model="state.password"
+              type="password"
+              autocomplete="current-password"
+              placeholder="••••••••••••"
+              class="w-full"
+              :ui="{ base: 'rounded-sm font-mono' }"
+            />
+          </UFormField>
 
-            <UFormField name="password" label="Password">
-              <UInput
-                v-model="state.password"
-                type="password"
-                autocomplete="current-password"
-                placeholder="••••••••••••"
-              />
-            </UFormField>
+          <UButton
+            type="submit"
+            label="Sign In"
+            block
+            :loading="submitting"
+            class="rounded-sm font-mono uppercase tracking-widest text-xs"
+          />
+        </UForm>
 
-            <UButton type="submit" label="Sign In" block color="neutral" :loading="submitting" />
-          </UForm>
-        </UTheme>
-
-        <footer class="mt-10 pt-6 border-t border-muted">
-          <p class="text-sm text-toned text-center">Need Access? Contact the Managing Editor.</p>
+        <footer
+          class="mt-10 pt-6 border-t border-default text-center text-xs uppercase tracking-widest text-toned"
+        >
+          [-] Need Access? Contact the Managing Editor.
         </footer>
       </div>
     </main>

@@ -205,7 +205,7 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
       <UDashboardNavbar
         title="News"
         :ui="{
-          title: ' text-xl md:text-2xl uppercase tracking-tight text-highlighted',
+          title: 'text-base md:text-lg uppercase tracking-widest text-highlighted',
         }"
       >
         <template #leading>
@@ -220,6 +220,7 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
             icon="i-lucide-search"
             placeholder="Search stories..."
             class="w-full sm:w-72"
+            :ui="{ base: 'rounded-sm font-mono' }"
           />
         </template>
         <template #right>
@@ -230,7 +231,9 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
               { label: 'Pending', value: 'pending' },
               { label: 'Published', value: 'published' },
             ]"
+            color="neutral"
             :content="false"
+            :ui="{ list: 'font-mono' }"
           />
         </template>
       </UDashboardToolbar>
@@ -239,42 +242,57 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
     <template #body>
       <header class="flex items-end justify-between gap-4 flex-wrap">
         <div class="space-y-1">
-          <p class="text-xs uppercase tracking-widest text-toned">News Queue</p>
-          <p class="text-toned">Review, publish, and manage story submissions.</p>
+          <p class="text-xs uppercase tracking-widest text-muted">[+] News Queue</p>
+          <p class="text-sm text-toned">Review, publish, and manage story submissions.</p>
         </div>
-        <UButton icon="i-lucide-plus" label="Add Story" @click="openCreate" />
+        <UButton
+          icon="i-lucide-plus"
+          label="Add Story"
+          class="rounded-sm font-mono uppercase tracking-widest text-xs"
+          @click="openCreate"
+        />
       </header>
 
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <article class="border border-default rounded-2xl p-6 bg-elevated">
-          <p class="text-xs uppercase tracking-widest text-toned">Pending</p>
-          <p class="text-4xl md:text-5xl text-error mt-3">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <article class="border border-default rounded-sm p-5 bg-default">
+          <p class="text-xs uppercase tracking-widest text-muted">[+] Pending</p>
+          <p class="text-3xl md:text-4xl text-error mt-2 leading-none">
             {{ stats.pending }}
           </p>
-          <p class="text-[10px] uppercase tracking-widest text-toned mt-1">Awaiting review</p>
+          <p class="text-[10px] uppercase tracking-widest text-muted mt-1">Awaiting review</p>
         </article>
 
-        <article class="border border-default rounded-2xl p-6 bg-elevated">
-          <p class="text-xs uppercase tracking-widest text-toned">Published</p>
-          <p class="text-4xl md:text-5xl text-primary mt-3">
+        <article class="border border-default rounded-sm p-5 bg-default">
+          <p class="text-xs uppercase tracking-widest text-muted">[+] Published</p>
+          <p class="text-3xl md:text-4xl text-primary-500 mt-2 leading-none">
             {{ stats.published }}
           </p>
-          <p class="text-[10px] uppercase tracking-widest text-toned mt-1">Live now</p>
+          <p class="text-[10px] uppercase tracking-widest text-muted mt-1">Live now</p>
         </article>
 
-        <article class="border border-default rounded-2xl p-6 bg-elevated">
-          <p class="text-xs uppercase tracking-widest text-toned">Total</p>
-          <p class="text-4xl md:text-5xl text-highlighted mt-3">
+        <article class="border border-default rounded-sm p-5 bg-default">
+          <p class="text-xs uppercase tracking-widest text-muted">[+] Total</p>
+          <p class="text-3xl md:text-4xl text-highlighted mt-2 leading-none">
             {{ stats.total }}
           </p>
-          <p class="text-[10px] uppercase tracking-widest text-toned mt-1">All stories</p>
+          <p class="text-[10px] uppercase tracking-widest text-muted mt-1">All stories</p>
         </article>
       </div>
 
-      <UTable :data="visibleItems" :columns="columns" :loading="pending" caption="News queue">
+      <UTable
+        :data="visibleItems"
+        :columns="columns"
+        :loading="pending"
+        caption="News queue"
+        :ui="{
+          root: 'font-mono rounded-sm border border-default',
+          th: 'text-xs uppercase tracking-widest text-muted',
+          td: 'text-sm',
+        }"
+      >
         <template #title-cell="{ row }">
           <div class="flex items-center gap-3 min-w-0 py-1">
-            <div class="size-10 shrink-0 rounded-sm bg-accented overflow-hidden">
+            <div class="size-10 shrink-0 rounded-sm bg-muted overflow-hidden">
               <img
                 v-if="row.original.featuredImage"
                 :src="row.original.featuredImage"
@@ -283,12 +301,12 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
               />
             </div>
             <div class="min-w-0">
-              <p class="text-sm uppercase text-highlighted truncate">
+              <p class="text-sm text-highlighted truncate">
                 {{ row.original.title }}
               </p>
               <p
                 v-if="row.original.description"
-                class="text-[10px] uppercase tracking-widest text-toned line-clamp-1 mt-0.5"
+                class="text-[10px] uppercase tracking-widest text-muted line-clamp-1 mt-0.5"
               >
                 {{ row.original.description }}
               </p>
@@ -297,30 +315,37 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
         </template>
 
         <template #category-cell="{ row }">
-          <span v-if="row.original.category" class="text-xs uppercase tracking-widest text-primary">
+          <span v-if="row.original.category" class="text-xs uppercase tracking-widest text-toned">
             {{ row.original.category.name }}
           </span>
-          <span v-else class="text-xs uppercase tracking-widest text-toned">—</span>
+          <span v-else class="text-xs uppercase tracking-widest text-muted">—</span>
         </template>
 
         <template #author-cell="{ row }">
-          <span v-if="row.original.author" class="whitespace-nowrap">
+          <span
+            v-if="row.original.author"
+            class="whitespace-nowrap text-xs uppercase tracking-widest"
+          >
             {{ row.original.author.firstName }} {{ row.original.author.lastName }}
           </span>
-          <span v-else class="text-toned">—</span>
+          <span v-else class="text-muted">—</span>
         </template>
 
         <template #status-cell="{ row }">
           <span
-            class="text-xs uppercase tracking-widest"
-            :class="row.original.publishedAt ? 'text-primary' : 'text-error'"
+            class="text-[10px] uppercase tracking-widest px-2 py-1 rounded-sm border"
+            :class="
+              row.original.publishedAt
+                ? 'text-primary border-primary/30'
+                : 'text-error border-error/30'
+            "
           >
             {{ row.original.publishedAt ? "Published" : "Pending" }}
           </span>
         </template>
 
         <template #date-cell="{ row }">
-          <span class="text-xs uppercase tracking-widest text-toned">
+          <span class="text-[10px] uppercase tracking-widest text-muted">
             {{ dayjs(row.original.publishedAt ?? row.original.createdAt).fromNow() }}
           </span>
         </template>
@@ -332,14 +357,15 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
               color="neutral"
               variant="ghost"
               aria-label="Actions"
+              class="rounded-sm"
             />
           </UDropdownMenu>
         </template>
 
         <template #empty>
-          <div class="py-10 text-center space-y-4">
-            <p class="text-xs uppercase tracking-widest text-toned">Queue Empty</p>
-            <p class="text-toned">No stories match this filter.</p>
+          <div class="py-10 text-center space-y-2">
+            <p class="text-xs uppercase tracking-widest text-muted">[-] Queue Empty</p>
+            <p class="text-sm text-toned">No stories match this filter.</p>
           </div>
         </template>
       </UTable>

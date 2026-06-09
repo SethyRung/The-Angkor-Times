@@ -158,7 +158,7 @@ function initials(item: PublicUser) {
       <UDashboardNavbar
         title="Users"
         :ui="{
-          title: ' text-xl md:text-2xl uppercase tracking-tight text-highlighted',
+          title: 'text-base md:text-lg uppercase tracking-widest text-highlighted',
         }"
       >
         <template #leading>
@@ -170,26 +170,40 @@ function initials(item: PublicUser) {
     <template #body>
       <header class="flex items-end justify-between gap-4 flex-wrap">
         <div class="space-y-1">
-          <p class="text-xs uppercase tracking-widest text-toned">User Management</p>
-          <p class="text-toned">Create, edit, and remove editor and admin accounts.</p>
+          <p class="text-xs uppercase tracking-widest text-muted">[+] User Management</p>
+          <p class="text-sm text-toned">Create, edit, and remove editor and admin accounts.</p>
         </div>
 
-        <UButton icon="i-lucide-plus" label="Add User" @click="openCreate" />
+        <UButton
+          icon="i-lucide-plus"
+          label="Add User"
+          class="rounded-sm font-mono uppercase tracking-widest text-xs"
+          @click="openCreate"
+        />
       </header>
 
-      <UTable :data="items" :columns="columns" :loading="pending">
+      <UTable
+        :data="items"
+        :columns="columns"
+        :loading="pending"
+        :ui="{
+          root: 'font-mono rounded-sm border border-default',
+          th: 'text-xs uppercase tracking-widest text-muted',
+          td: 'text-sm',
+        }"
+      >
         <template #user-cell="{ row }">
           <div class="flex items-center gap-3 min-w-0 py-1">
-            <div class="size-10 shrink-0 rounded-full bg-accented flex items-center justify-center">
-              <span class="text-xs uppercase">
-                {{ initials(row.original) }}
-              </span>
+            <div
+              class="size-10 shrink-0 rounded-full bg-muted flex items-center justify-center text-highlighted text-xs"
+            >
+              {{ initials(row.original) }}
             </div>
             <div class="min-w-0">
-              <p class="text-neutral-100 font-medium truncate">
+              <p class="text-sm text-highlighted truncate">
                 {{ fullName(row.original) }}
               </p>
-              <p class="text-[10px] tracking-widest text-toned truncate mt-0.5">
+              <p class="text-[10px] uppercase tracking-widest text-muted truncate mt-0.5">
                 {{ row.original.email }}
               </p>
             </div>
@@ -198,15 +212,19 @@ function initials(item: PublicUser) {
 
         <template #role-cell="{ row }">
           <span
-            class="uppercase tracking-widest"
-            :class="row.original.role === 'admin' ? 'text-primary' : 'text-toned'"
+            class="text-[10px] uppercase tracking-widest px-2 py-1 rounded-sm border"
+            :class="
+              row.original.role === 'admin'
+                ? 'text-primary border-primary/30'
+                : 'text-toned border-default'
+            "
           >
             {{ row.original.role }}
           </span>
         </template>
 
         <template #joined-cell="{ row }">
-          <span class="uppercase tracking-widest">
+          <span class="text-[10px] uppercase tracking-widest text-muted">
             {{ dayjs(row.original.createdAt).fromNow() }}
           </span>
         </template>
@@ -218,20 +236,22 @@ function initials(item: PublicUser) {
               color="neutral"
               variant="ghost"
               aria-label="Actions"
+              class="rounded-sm"
             />
           </UDropdownMenu>
         </template>
 
         <template #empty>
-          <div class="py-10 text-center space-y-4">
-            <p class="text-xs uppercase tracking-widest text-toned">No Users</p>
-            <p class="text-neutral-200">
+          <div class="py-10 text-center space-y-3">
+            <p class="text-xs uppercase tracking-widest text-muted">[-] No Users</p>
+            <p class="text-sm text-toned">
               Get started by creating the first editor or admin account.
             </p>
             <UButton
               icon="i-lucide-plus"
               label="Add User"
-              :ui="{ base: 'rounded-3xl' }"
+              color="primary"
+              class="rounded-sm font-mono uppercase tracking-widest text-xs"
               @click="openCreate"
             />
           </div>
