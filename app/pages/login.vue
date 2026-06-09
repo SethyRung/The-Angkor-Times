@@ -44,12 +44,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <div class="min-h-dvh bg-canvas-900 grid lg:grid-cols-2 font-mono">
+  <div class="min-h-dvh grid lg:grid-cols-2 font-mono">
     <aside
-      class="relative hidden lg:flex flex-col justify-between p-12 xl:p-16 bg-canvas-950 border-r border-white/10 overflow-hidden"
+      class="relative hidden lg:flex flex-col justify-between p-12 xl:p-16 bg-primary-950 border-r border-muted overflow-hidden"
     >
       <div
-        class="pointer-events-none absolute -right-40 -top-40 size-80 rounded-full bg-mint-500/15 blur-3xl"
+        class="pointer-events-none absolute -right-40 -top-40 size-80 rounded-full bg-primary-500/15 blur-3xl"
       />
       <div
         class="pointer-events-none absolute -right-20 -bottom-20 size-60 rounded-full bg-ultraviolet-500/25 blur-3xl"
@@ -66,8 +66,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
       <div class="relative space-y-8 max-w-xl">
         <div class="flex items-center gap-3">
-          <span class="block size-3 rounded-full bg-mint-500 animate-pulse" />
-          <span class="text-xs uppercase tracking-widest text-mint-500">
+          <span class="block size-3 rounded-full bg-primary-500 animate-pulse" />
+          <span class="text-xs uppercase tracking-widest text-primary-500">
             Admin Access · Editorial Console
           </span>
         </div>
@@ -86,9 +86,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
       <div class="relative flex items-center justify-between gap-4">
         <div class="flex items-center gap-2">
-          <span class="block size-1.5 rounded-full bg-mint-500" />
+          <span class="block size-1.5 rounded-full bg-primary-500" />
           <span class="block size-1.5 rounded-full bg-ultraviolet-500" />
-          <span class="block size-1.5 rounded-full bg-mint-500" />
+          <span class="block size-1.5 rounded-full bg-primary-500" />
         </div>
         <span class="text-xs uppercase tracking-widest text-toned">
           v1.0 · {{ new Date().getFullYear() }}
@@ -98,7 +98,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
     <main class="flex items-center justify-center p-6 md:p-10">
       <div class="relative w-full max-w-md">
-        <div class="absolute -top-6 left-0 w-12 h-1 bg-mint-500 rounded-full" />
+        <div class="absolute -top-6 left-0 w-12 h-1 bg-primary-500 rounded-full" />
 
         <div class="lg:hidden mb-10 space-y-5">
           <UButton
@@ -114,9 +114,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         </div>
 
         <header class="space-y-3 mb-8">
-          <span class="font-mono text-xs uppercase tracking-widest text-mint-500">
-            Editor Sign In
-          </span>
+          <span class="text-xs uppercase tracking-widest text-primary-500"> Editor Sign In </span>
 
           <h2 class="text-3xl md:text-6xl uppercase text-highlighted tracking-tighter">Sign In</h2>
 
@@ -152,7 +150,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
                 v-model="state.email"
                 type="email"
                 autocomplete="email"
-                placeholder="editor@theangkortimes.local"
+                placeholder="your-email@example.com"
               />
             </UFormField>
 

@@ -2,16 +2,10 @@
 import type { NewsItem, TileVariant } from "~/types/news";
 import type { ApiResponse, NewsWithRelations } from "#shared/types";
 
-useSeoMeta({
-  title: "The Angkor Times — Latest News",
-  description: "Your trusted source for the latest news and stories.",
-});
+const tileVariants: TileVariant[] = ["primary", "ultraviolet", "yellow", "pink", "orange", "white"];
 
-const tileVariants: TileVariant[] = ["mint", "ultraviolet", "yellow", "pink", "orange", "white"];
-
-const fetched = useFetchApi<ApiResponse<NewsWithRelations[]>>("/api/news", {
+const fetched = useFetchApi("/api/news", {
   query: { limit: 20, offset: 0 },
-  key: "news:home",
 });
 const pending = computed(() => fetched.pending.value);
 const stories = computed<NewsItem[]>(() => {
@@ -37,10 +31,10 @@ const mostReadStories = computed<NewsItem[]>(() => stories.value.slice(0, 4));
       <FeatureHero v-else-if="featuredStory" :story="featuredStory" />
     </UContainer>
 
-    <UContainer class="py-8 md:py-12 border-t border-white/10">
+    <UContainer class="py-8 md:py-12 border-t border-muted">
       <div class="flex items-center gap-4 mb-8">
-        <span class="font-mono text-xs uppercase tracking-widest text-mint-500"> Latest </span>
-        <span class="h-px flex-1 bg-white/10" />
+        <span class="text-xs uppercase tracking-widest text-primary-500"> Latest </span>
+        <span class="h-px flex-1 bg-muted" />
       </div>
 
       <div
@@ -60,14 +54,12 @@ const mostReadStories = computed<NewsItem[]>(() => stories.value.slice(0, 4));
       </div>
     </UContainer>
 
-    <UContainer class="py-8 md:py-12 border-t border-white/10">
+    <UContainer class="py-8 md:py-12 border-t border-muted">
       <div class="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8 md:gap-12">
         <div>
           <div class="flex items-center gap-4 mb-8">
-            <span class="font-mono text-xs uppercase tracking-widest text-mint-500">
-              StoryStream
-            </span>
-            <span class="h-px flex-1 bg-white/10" />
+            <span class="text-xs uppercase tracking-widest text-primary-500"> StoryStream </span>
+            <span class="h-px flex-1 bg-muted" />
           </div>
 
           <div class="hidden sm:block ml-24">
@@ -80,34 +72,30 @@ const mostReadStories = computed<NewsItem[]>(() => stories.value.slice(0, 4));
 
         <aside class="hidden lg:flex flex-col gap-6">
           <div class="rounded-[20px] bg-ultraviolet-500 p-6 flex flex-col gap-3 min-h-[200px]">
-            <span class="font-mono text-xs uppercase tracking-widest text-white/70">
-              Newsletter
-            </span>
-            <h3 class="font-display text-2xl text-white leading-tight">
+            <span class="text-xs uppercase tracking-widest text-highlighted/70"> Newsletter </span>
+            <h3 class="text-2xl text-highlighted leading-tight">
               Get the stories that matter, delivered.
             </h3>
-            <p class="text-sm text-white/80">
+            <p class="text-sm text-highlighted/80">
               Sign up for our daily digest — every story, every morning.
             </p>
             <UButton
               label="Subscribe"
               color="neutral"
               variant="solid"
-              class="font-mono uppercase tracking-widest text-xs mt-2 self-start"
+              class="uppercase tracking-widest text-xs mt-2 self-start"
             />
           </div>
 
-          <div class="rounded-[20px] bg-mint-500 p-6 flex flex-col gap-3 min-h-[200px]">
-            <span class="font-mono text-xs uppercase tracking-widest text-black/70">
-              Most Read
-            </span>
+          <div class="rounded-[20px] bg-primary-500 p-6 flex flex-col gap-3 min-h-[200px]">
+            <span class="text-xs uppercase tracking-widest text-black/70"> Most Read </span>
             <ol class="flex flex-col gap-3 mt-1">
               <li
                 v-for="(story, idx) in mostReadStories"
                 :key="story.id"
                 class="flex gap-3 items-start group cursor-pointer"
               >
-                <span class="font-display text-2xl text-black/40 leading-none mt-0.5 w-6 shrink-0">
+                <span class="text-2xl text-black/40 leading-none mt-0.5 w-6 shrink-0">
                   {{ String(idx + 1).padStart(2, "0") }}
                 </span>
                 <NuxtLink

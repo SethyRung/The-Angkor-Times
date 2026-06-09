@@ -6,9 +6,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
   }
 
   try {
-    const res = await $fetch("/api/auth/me", { credentials: "include" });
-    if (isSuccessResponse(res) && res.data) {
-      user.value = res.data as AuthUser;
+    const res = await useApi<ApiResponse<AuthUser>>("/api/auth/me");
+    if (isSuccessResponse<AuthUser>(res) && res.data) {
+      user.value = res.data;
     }
   } catch {
     // fall through

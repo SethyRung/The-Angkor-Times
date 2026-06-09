@@ -1,174 +1,202 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: false,
+  layout: "admin",
   middleware: ["admin"],
 });
 
-const filter = ref<"all" | "pending" | "published">("pending");
-
-const queryParams = computed(() => ({ status: filter.value, limit: 50 }));
-
-const { data, pending, refresh } = await useFetchApi<ApiResponse<NewsWithRelations[]>>(
-  "/api/admin/news",
-  { query: queryParams },
-);
-
-const items = computed<NewsWithRelations[]>(() => data.value?.data ?? []);
-
 const user = useUser();
 
-async function publish(id: string) {
-  await useApi(`/api/admin/news/${id}`, {
-    method: "PUT",
-    body: { publish: true },
-  });
-  await refresh();
-}
+const { data } = await useFetchApi<ApiResponse<DashboardStats>>("/api/admin/stats");
 
-async function unpublish(id: string) {
-  await useApi(`/api/admin/news/${id}`, {
-    method: "PUT",
-    body: { unpublish: true },
-  });
-  await refresh();
-}
+const payload = computed<DashboardStats>(
+  () =>
+    data.value?.data ?? {
+      news: { total: 0, pending: 0, published: 0 },
+      users: { total: 0, admins: 0, editors: 0 },
+      recent: [],
+    },
+);
 
-async function remove(id: string) {
-  if (!confirm("Delete this story? This cannot be undone.")) return;
-  await useApi(`/api/admin/news/${id}`, {
-    method: "DELETE",
-  });
-  await refresh();
-}
+const stats = computed(() => ({
+  pending: payload.value.news.pending,
+  published: payload.value.news.published,
+  total: payload.value.news.total,
+  editors: payload.value.users.total,
+}));
 
-async function onLogout() {
-  await useApi("/api/auth/logout", { method: "POST", credentials: "include" });
-  user.value = null;
-  await navigateTo("/login");
-}
+const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
 </script>
 
 <template>
-  <div class="min-h-screen bg-canvas-900 p-6 md:p-10">
-    <div class="max-w-6xl mx-auto space-y-8">
-      <header class="flex items-end justify-between flex-wrap gap-4">
-        <div>
-          <p class="font-mono text-xs uppercase tracking-widest text-canvas-400 mb-2">
-            Editorial Console
-          </p>
-          <h1 class="text-4xl md:text-5xl font-display uppercase">The Angkor Times</h1>
-          <p class="text-canvas-300 mt-2">
-            Signed in as
-            <span class="text-canvas-100 font-medium">
-              {{ user?.firstName }} {{ user?.lastName }}
-            </span>
-            <span class="font-mono text-xs uppercase tracking-widest text-mint-500 ml-2">
-              {{ user?.role }}
-            </span>
-          </p>
-        </div>
-        <div class="flex items-center gap-3">
-          <UTabs
-            v-model="filter"
-            :items="[
-              { label: 'Pending', value: 'pending' },
-              { label: 'Published', value: 'published' },
-              { label: 'All', value: 'all' },
-            ]"
-            :ui="{ root: 'gap-2' }"
-          />
-          <UButton
-            color="neutral"
-            variant="outline"
-            icon="i-lucide-log-out"
-            label="Logout"
-            @click="onLogout"
-          />
-        </div>
+  <UDashboardPanel>
+    <template #header>
+      <UDashboardNavbar
+        title="Dashboard"
+        :ui="{
+          title: 'text-xl md:text-2xl uppercase tracking-tight text-highlighted',
+        }"
+      >
+        <template #leading>
+          <UDashboardSidebarCollapse />
+        </template>
+      </UDashboardNavbar>
+    </template>
+
+    <template #body>
+      <header class="space-y-2">
+        <p class="text-xs uppercase tracking-widest text-toned">
+          Editorial Console · {{ dayjs().format("ddd, MMM D") }}
+        </p>
+        <h1 class="text-4xl md:text-5xl uppercase tracking-tight text-highlighted leading-none">
+          Welcome back, {{ user?.firstName }}
+        </h1>
+        <p class="text-toned">
+          <template v-if="stats.pending > 0">
+            {{ stats.pending }}
+            {{ stats.pending === 1 ? "story is" : "stories are" }} awaiting your review.
+          </template>
+          <template v-else>The queue is clear. Nothing pending right now.</template>
+        </p>
       </header>
 
-      <USkeleton v-if="pending" class="h-32 w-full" />
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <article class="border border-default rounded-2xl p-6 bg-elevated">
+          <p class="text-xs uppercase tracking-widest text-toned">Pending</p>
+          <p class="text-4xl md:text-5xl text-error mt-3">
+            {{ stats.pending }}
+          </p>
+          <p class="text-[10px] uppercase tracking-widest text-toned mt-1">Awaiting review</p>
+        </article>
 
-      <div v-else-if="!items.length" class="border border-canvas-700 rounded-3xl p-10 text-center">
-        <p class="font-mono text-xs uppercase tracking-widest text-canvas-400">Queue Empty</p>
-        <p class="text-canvas-200 mt-3">No stories match this filter.</p>
-      </div>
+        <article class="border border-default rounded-2xl p-6 bg-elevated">
+          <p class="text-xs uppercase tracking-widest text-toned">Published</p>
+          <p class="text-4xl md:text-5xl text-primary mt-3">
+            {{ stats.published }}
+          </p>
+          <p class="text-[10px] uppercase tracking-widest text-toned mt-1">Live now</p>
+        </article>
 
-      <div v-else class="grid gap-4">
-        <article
-          v-for="item in items"
-          :key="item.id"
-          class="border border-canvas-700 rounded-3xl p-6 bg-canvas-800/40 flex flex-col md:flex-row gap-6"
-        >
-          <div class="md:w-48 md:h-32 shrink-0 rounded-2xl overflow-hidden bg-canvas-700">
-            <img
-              v-if="item.featuredImage"
-              :src="item.featuredImage"
-              :alt="item.title"
-              class="w-full h-full object-cover"
-            />
-          </div>
+        <article class="border border-default rounded-2xl p-6 bg-elevated">
+          <p class="text-xs uppercase tracking-widest text-toned">Total</p>
+          <p class="text-4xl md:text-5xl text-highlighted mt-3">
+            {{ stats.total }}
+          </p>
+          <p class="text-[10px] uppercase tracking-widest text-toned mt-1">All stories</p>
+        </article>
 
-          <div class="flex-1 min-w-0 space-y-3">
-            <div class="flex items-center gap-2 flex-wrap">
-              <span
-                v-if="item.category"
-                class="font-mono text-xs uppercase tracking-widest text-mint-500"
-              >
-                {{ item.category.name }}
-              </span>
-              <span class="text-canvas-500">·</span>
-              <span
-                class="font-mono text-xs uppercase tracking-widest"
-                :class="item.publishedAt ? 'text-mint-500' : 'text-ultraviolet-400'"
-              >
-                {{ item.publishedAt ? "Published" : "Pending" }}
-              </span>
-            </div>
-
-            <h2 class="text-2xl font-display uppercase leading-tight">
-              {{ item.title }}
-            </h2>
-            <p class="text-canvas-300 line-clamp-2">{{ item.description }}</p>
-            <p class="font-mono text-xs uppercase tracking-widest text-canvas-500">
-              By {{ item.author?.firstName }} {{ item.author?.lastName }} ·
-              {{
-                item.publishedAt
-                  ? dayjs(item.publishedAt).fromNow()
-                  : dayjs(item.createdAt).fromNow()
-              }}
-            </p>
-          </div>
-
-          <div class="flex md:flex-col gap-2 md:w-32">
-            <UButton
-              v-if="!item.publishedAt"
-              color="primary"
-              size="sm"
-              icon="i-lucide-check"
-              label="Publish"
-              @click="publish(item.id)"
-            />
-            <UButton
-              v-else
-              color="neutral"
-              variant="outline"
-              size="sm"
-              icon="i-lucide-eye-off"
-              label="Unpublish"
-              @click="unpublish(item.id)"
-            />
-            <UButton
-              color="error"
-              variant="ghost"
-              size="sm"
-              icon="i-lucide-trash"
-              label="Delete"
-              @click="remove(item.id)"
-            />
-          </div>
+        <article class="border border-default rounded-2xl p-6 bg-elevated">
+          <p class="text-xs uppercase tracking-widest text-toned">Editors</p>
+          <p class="text-4xl md:text-5xl text-highlighted mt-3">
+            {{ stats.editors }}
+          </p>
+          <p class="text-[10px] uppercase tracking-widest text-toned mt-1">Active accounts</p>
         </article>
       </div>
-    </div>
-  </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <NuxtLink
+          to="/admin/news"
+          class="group block border border-default rounded-3xl p-6 bg-elevated hover:border-primary transition-colors"
+        >
+          <div class="flex items-start justify-between gap-4">
+            <div class="min-w-0">
+              <p class="text-xs uppercase tracking-widest text-toned">News Queue</p>
+              <p class="text-2xl md:text-3xl uppercase text-highlighted mt-2 tracking-tight">
+                Review &amp; Publish
+              </p>
+              <p class="text-[10px] uppercase tracking-widest text-toned mt-2">
+                {{ stats.pending }} pending · {{ stats.published }} published
+              </p>
+            </div>
+            <UIcon
+              name="i-lucide-arrow-up-right"
+              class="size-6 shrink-0 text-toned group-hover:text-primary transition-colors"
+            />
+          </div>
+        </NuxtLink>
+
+        <NuxtLink
+          v-if="user?.role === 'admin'"
+          to="/admin/users"
+          class="group block border border-default rounded-3xl p-6 bg-elevated hover:border-primary transition-colors"
+        >
+          <div class="flex items-start justify-between gap-4">
+            <div class="min-w-0">
+              <p class="text-xs uppercase tracking-widest text-toned">User Management</p>
+              <p class="text-2xl md:text-3xl uppercase text-highlighted mt-2 tracking-tight">
+                Accounts &amp; Roles
+              </p>
+              <p class="text-[10px] uppercase tracking-widest text-toned mt-2">
+                {{ stats.editors }} active {{ stats.editors === 1 ? "account" : "accounts" }}
+              </p>
+            </div>
+            <UIcon
+              name="i-lucide-arrow-up-right"
+              class="size-6 shrink-0 text-toned group-hover:text-primary transition-colors"
+            />
+          </div>
+        </NuxtLink>
+
+        <div
+          v-else
+          class="border border-default rounded-3xl p-6 bg-elevated flex items-center justify-between"
+        >
+          <div>
+            <p class="text-xs uppercase tracking-widest text-toned">User Management</p>
+            <p class="text-2xl md:text-3xl uppercase text-toned mt-2 tracking-tight">Admin Only</p>
+            <p class="text-[10px] uppercase tracking-widest text-toned mt-2">
+              Editors cannot manage accounts
+            </p>
+          </div>
+          <UIcon name="i-lucide-lock" class="size-6 text-toned" />
+        </div>
+      </div>
+
+      <section v-if="recent.length" class="space-y-3">
+        <header class="flex items-end justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-widest text-toned">Recent Activity</p>
+            <p class="text-xl uppercase text-highlighted mt-1">Latest Stories</p>
+          </div>
+          <NuxtLink
+            to="/admin/news"
+            class="text-xs uppercase tracking-widest text-toned hover:text-primary transition-colors"
+          >
+            View all →
+          </NuxtLink>
+        </header>
+
+        <ul class="border border-default rounded-2xl divide-y divide-default bg-elevated">
+          <li v-for="item in recent" :key="item.id" class="flex items-center gap-4 p-4">
+            <div class="size-12 shrink-0 rounded-sm bg-accented overflow-hidden">
+              <img
+                v-if="item.featuredImage"
+                :src="item.featuredImage"
+                :alt="item.title"
+                class="w-full h-full object-cover"
+              />
+            </div>
+
+            <div class="flex-1 min-w-0">
+              <p class="text-sm uppercase text-highlighted truncate">
+                {{ item.title }}
+              </p>
+              <p class="text-[10px] uppercase tracking-widest text-toned mt-0.5">
+                <span v-if="item.category" class="text-primary">{{ item.category.name }}</span>
+                <span v-if="item.category"> · </span>
+                {{ dayjs(item.publishedAt ?? item.createdAt).fromNow() }}
+              </p>
+            </div>
+
+            <span
+              class="text-xs uppercase tracking-widest shrink-0"
+              :class="item.publishedAt ? 'text-primary' : 'text-error'"
+            >
+              {{ item.publishedAt ? "Published" : "Pending" }}
+            </span>
+          </li>
+        </ul>
+      </section>
+    </template>
+  </UDashboardPanel>
 </template>
