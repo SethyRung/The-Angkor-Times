@@ -187,7 +187,7 @@ function initials(item: PublicUser) {
         :columns="columns"
         :loading="pending"
         :ui="{
-          root: 'font-mono rounded-sm border border-default',
+          root: 'min-h-max rounded-sm border border-default',
           th: 'text-xs uppercase tracking-widest text-muted',
           td: 'text-sm',
         }"
@@ -247,13 +247,6 @@ function initials(item: PublicUser) {
             <p class="text-sm text-toned">
               Get started by creating the first editor or admin account.
             </p>
-            <UButton
-              icon="i-lucide-plus"
-              label="Add User"
-              color="primary"
-              class="rounded-sm font-mono uppercase tracking-widest text-xs"
-              @click="openCreate"
-            />
           </div>
         </template>
       </UTable>

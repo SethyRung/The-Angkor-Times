@@ -28,10 +28,7 @@ const wordmark = [
 
 <template>
   <div>
-    <section
-      v-if="featuredStory"
-      class="border-b border-default bg-canvas-900 dark:bg-canvas-950 text-canvas-50"
-    >
+    <section v-if="featuredStory" class="border-b border-default text-canvas-50">
       <UContainer class="py-12 md:py-20">
         <pre
           class="text-canvas-50 text-[6px] md:text-[8px] whitespace-pre overflow-x-auto font-mono mb-8"

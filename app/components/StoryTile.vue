@@ -13,7 +13,7 @@ const formattedDate = computed(() => {
 
 <template>
   <NuxtLink :to="`/news/${story.id}`" class="block group">
-    <div class="rounded-sm p-5 min-h-44 flex flex-col gap-2 border border-muted">
+    <div class="h-full p-5 min-h-44 rounded-sm flex flex-col gap-2 border border-muted">
       <div
         class="flex items-center justify-between gap-2 mb-1 font-mono text-[10px] uppercase tracking-widest text-muted"
       >

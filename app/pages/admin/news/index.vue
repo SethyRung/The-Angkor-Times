@@ -233,7 +233,7 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
             ]"
             color="neutral"
             :content="false"
-            :ui="{ list: 'font-mono' }"
+            :ui="{ list: 'font-mono p-0 rounded-sm', indicator: 'rounded-sm' }"
           />
         </template>
       </UDashboardToolbar>
@@ -283,11 +283,10 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
         :data="visibleItems"
         :columns="columns"
         :loading="pending"
-        caption="News queue"
         :ui="{
-          root: 'font-mono rounded-sm border border-default',
-          th: 'text-xs uppercase tracking-widest text-muted',
-          td: 'text-sm',
+          root: 'min-h-max rounded-sm border border-default',
+          separator: 'bg-muted',
+          tbody: 'divide-default',
         }"
       >
         <template #title-cell="{ row }">

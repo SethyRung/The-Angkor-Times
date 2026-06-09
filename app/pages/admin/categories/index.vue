@@ -167,7 +167,7 @@ function actionItems(item: DbCategory): DropdownMenuItem[][] {
         :columns="columns"
         :loading="pending"
         :ui="{
-          root: 'font-mono rounded-sm border border-default',
+          root: 'min-h-max rounded-sm border border-default',
           th: 'text-xs uppercase tracking-widest text-muted',
           td: 'text-sm',
         }"
@@ -202,13 +202,6 @@ function actionItems(item: DbCategory): DropdownMenuItem[][] {
           <div class="py-10 text-center space-y-3">
             <p class="text-xs uppercase tracking-widest text-muted">[-] No Categories</p>
             <p class="text-sm text-toned">Get started by creating the first category.</p>
-            <UButton
-              icon="i-lucide-plus"
-              label="Add Category"
-              color="primary"
-              class="rounded-sm font-mono uppercase tracking-widest text-xs"
-              @click="openCreate"
-            />
           </div>
         </template>
       </UTable>
