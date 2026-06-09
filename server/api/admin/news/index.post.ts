@@ -7,7 +7,6 @@ interface CreateNewsBody {
   featuredImage?: string;
   categoryId: string;
   tagIds?: string[];
-  publish?: boolean;
 }
 
 export default defineEventHandler(async (event) => {
@@ -40,7 +39,7 @@ export default defineEventHandler(async (event) => {
         featuredImage: body.featuredImage ?? null,
         categoryId: body.categoryId,
         authorId: user.userId,
-        publishedAt: body.publish ? new Date() : null,
+        publishedAt: null,
       })
       .returning();
 
