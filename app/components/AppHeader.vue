@@ -5,13 +5,14 @@ const props = defineProps<{
   navItems?: NavigationMenuItem[];
 }>();
 
-const defaultNavItems = computed<NavigationMenuItem[]>(() => [
-  { label: "Technology", to: "/category/technology" },
-  { label: "Business", to: "/category/business" },
-  { label: "Culture", to: "/category/culture" },
-  { label: "Sports", to: "/category/sports" },
-  { label: "Politics", to: "/category/politics" },
-]);
+const { data: categoriesData } = await useFetchApi<ApiResponse<DbCategory[]>>("/api/categories", {
+  key: "header:categories",
+});
+
+const defaultNavItems = computed<NavigationMenuItem[]>(() => {
+  const rows = categoriesData.value?.data ?? [];
+  return rows.map((c) => ({ label: c.name, to: `/category/${c.slug}` }));
+});
 
 const items = computed(() => props.navItems ?? defaultNavItems.value);
 

@@ -10,6 +10,7 @@ const items = computed<NavigationMenuItem[]>(() => {
   ];
   if (user.value?.role === "admin") {
     base.push({ label: "Users", icon: "i-lucide-users", to: "/admin/users" });
+    base.push({ label: "Categories", icon: "i-lucide-tags", to: "/admin/categories" });
   }
   return base;
 });

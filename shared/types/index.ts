@@ -1,6 +1,7 @@
 export * from "./response";
 export * from "./user";
 export * from "./news";
+export * from "./category";
 
 import type {
   users,
