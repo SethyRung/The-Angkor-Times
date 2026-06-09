@@ -1,18 +1,21 @@
-import type { AuthUser } from "~~/shared/types";
+export default defineNuxtPlugin({
+  name: "auth",
+  dependsOn: ["fetch"],
+  async setup() {
+    const user = useUser();
 
-export default defineNuxtPlugin(async () => {
-  const user = useUser();
+    if (user.value) return;
 
-  if (user.value) return;
+    try {
+      const res = await useApi<ApiResponse<AuthUser>>("/api/auth/me");
 
-  try {
-    const res = await $fetch("/api/auth/me", { credentials: "include" });
-    if (isSuccessResponse(res) && res.data) {
-      user.value = res.data as AuthUser;
-    } else {
+      if (isSuccessResponse<AuthUser>(res) && res.data) {
+        user.value = res.data;
+      } else {
+        user.value = null;
+      }
+    } catch {
       user.value = null;
     }
-  } catch {
-    user.value = null;
-  }
+  },
 });

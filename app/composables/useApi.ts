@@ -5,5 +5,6 @@ export function useApi<
   R extends NitroFetchRequest = NitroFetchRequest,
   O extends NitroFetchOptions<R> = NitroFetchOptions<R>,
 >(req: R, opts?: O) {
-  return $fetch<T, R, O>(req, opts);
+  const nuxtApp = useNuxtApp();
+  return nuxtApp.$fetch<T, R, O>(req, opts);
 }
