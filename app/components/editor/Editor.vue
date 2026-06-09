@@ -14,7 +14,9 @@ import { CodeBlockShiki } from "tiptap-extension-code-block-shiki";
 import { ImageUpload } from "./EditorImageUploadExtension";
 import EditorLinkPopover from "./EditorLinkPopover.vue";
 
-const value = ref(``);
+const modelValue = defineModel<string>("", {
+  default: ``,
+});
 
 const customHandlers = {
   imageUpload: {
@@ -331,7 +333,7 @@ const emojiItems: EditorEmojiMenuItem[] = gitHubEmojis.filter(
 <template>
   <UEditor
     v-slot="{ editor, handlers }"
-    v-model="value"
+    v-model="modelValue"
     content-type="markdown"
     :extensions="[
       Emoji,

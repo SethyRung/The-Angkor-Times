@@ -13,16 +13,14 @@ const socials = [
 <template>
   <UFooter
     :ui="{
-      root: 'border-t border-white/10',
+      root: 'border-t border-muted',
       left: 'flex flex-col gap-3 md:items-start',
     }"
   >
     <template #left>
-      <span class="font-display text-lg text-white">{{ siteName }}</span>
+      <span class="text-lg text-highlighted">{{ siteName }}</span>
 
-      <span
-        class="font-mono text-xs uppercase tracking-widest text-canvas-300 text-center md:text-left"
-      >
+      <span class="text-xs uppercase tracking-widest text-muted text-center md:text-left">
         &copy;{{ copyright }} {{ siteName }}. All Rights Reserved.
       </span>
     </template>

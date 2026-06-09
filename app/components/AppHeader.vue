@@ -20,9 +20,8 @@ const items = computed(() => props.navItems ?? defaultNavItems.value);
   <UHeader
     title="The Angkor Times"
     :ui="{
-      root: 'bg-canvas-900 border-b border-white/10',
-      title: 'font-display text-xl md:text-3xl lg:text-4xl tracking-tight text-white leading-none',
-      body: 'bg-canvas-900',
+      root: 'border-b border-muted',
+      title: 'text-xl md:text-3xl lg:text-4xl tracking-tight text-highlighted leading-none',
     }"
   >
     <UNavigationMenu

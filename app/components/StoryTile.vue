@@ -14,12 +14,12 @@ const storyTile = tv({
   },
   variants: {
     variant: {
-      mint: {
-        root: "bg-mint-500 text-black",
+      primary: {
+        root: "bg-primary-500 text-black",
         title: "group-hover:text-[#3860be]",
       },
       ultraviolet: {
-        root: "bg-ultraviolet-500 text-white",
+        root: "bg-ultraviolet-500 text-highlighted",
         title: "group-hover:text-[#7a9de8]",
       },
       yellow: {
@@ -27,7 +27,7 @@ const storyTile = tv({
         title: "group-hover:text-[#3860be]",
       },
       pink: {
-        root: "bg-pink-500 text-white",
+        root: "bg-pink-500 text-highlighted",
         title: "group-hover:text-[#7a9de8]",
       },
       orange: {
@@ -39,7 +39,7 @@ const storyTile = tv({
         title: "group-hover:text-[#3860be]",
       },
       dark: {
-        root: "bg-canvas-700 text-white border border-white/10",
+        root: "bg-default text-highlighted border border-muted",
         title: "group-hover:text-[#7a9de8]",
       },
     },

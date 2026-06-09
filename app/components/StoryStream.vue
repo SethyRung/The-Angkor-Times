@@ -27,31 +27,31 @@ const formatTimestamp = (dateString: string | null) => {
       class="relative pl-8 border-l border-dashed border-ultraviolet-700"
     >
       <span
-        class="absolute left-0 top-2 -translate-x-[calc(100%+12px)] font-mono text-xs uppercase tracking-widest text-canvas-300 whitespace-nowrap hidden sm:block"
+        class="absolute left-0 top-2 -translate-x-[calc(100%+12px)] font-mono text-xs uppercase tracking-widest text-muted whitespace-nowrap hidden sm:block"
       >
         {{ formatTimestamp(story.publishedAt) }}
       </span>
 
       <NuxtLink :to="`/news/${story.id}`" class="block group">
         <div
-          class="rounded-[20px] bg-canvas-900 border border-white/10 p-5 md:p-6 flex flex-col gap-2 transition-colors duration-150 hover:border-mint-500/50"
+          class="rounded-[20px] bg-default border border-muted p-5 md:p-6 flex flex-col gap-2 transition-colors duration-150 hover:border-primary-500/50"
         >
           <div class="flex items-center gap-3">
-            <span class="font-mono text-xs uppercase tracking-widest text-mint-500">
+            <span class="font-mono text-xs uppercase tracking-widest text-primary-500">
               {{ story.category?.name }}
             </span>
-            <span class="sm:hidden font-mono text-xs uppercase tracking-widest text-canvas-300">
+            <span class="sm:hidden font-mono text-xs uppercase tracking-widest text-muted">
               {{ formatTimestamp(story.publishedAt) }}
             </span>
           </div>
 
           <h3
-            class="font-bold text-base md:text-lg leading-snug text-white group-hover:text-[#3860be] transition-colors duration-150"
+            class="font-bold text-base md:text-lg leading-snug text-highlighted group-hover:text-[#3860be] transition-colors duration-150"
           >
             {{ story.title }}
           </h3>
 
-          <p class="text-sm text-canvas-200 line-clamp-2">
+          <p class="text-sm text-toned line-clamp-2">
             {{ story.description }}
           </p>
         </div>
