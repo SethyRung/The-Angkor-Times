@@ -1,54 +1,8 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
-@font-face {
-  font-family: "IoskeleyMono";
-  src: url("/IoskeleyMono/IoskeleyMono-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "IoskeleyMono";
-  src: url("/IoskeleyMono/IoskeleyMono-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "IoskeleyMono";
-  src: url("/IoskeleyMono/IoskeleyMono-Italic.ttf") format("truetype");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "IoskeleyMono";
-  src: url("/IoskeleyMono/IoskeleyMono-BoldItalic.ttf") format("truetype");
-  font-weight: 700;
-  font-style: italic;
-  font-display: swap;
-}
-
 @theme static {
   --font-mono: "IoskeleyMono", monospace;
-}
-
-@theme {
-  --color-mint-50: #ebfff9;
-  --color-mint-100: #d7fff3;
-  --color-mint-200: #afffe7;
-  --color-mint-300: #86ffdb;
-  --color-mint-400: #5cffd5;
-  --color-mint-500: #3cffd0;
-  --color-mint-600: #26d6b0;
-  --color-mint-700: #1fa88b;
-  --color-mint-800: #187a65;
-  --color-mint-900: #114c40;
-  --color-mint-950: #0a2620;
 
   --color-ultraviolet-50: #eee9ff;
   --color-ultraviolet-100: #ddd3ff;
