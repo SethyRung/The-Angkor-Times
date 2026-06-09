@@ -6,81 +6,64 @@ interface CategoryWithCount extends Pick<DbCategory, "id" | "name" | "slug"> {
   latestPublishedAt: string | null;
 }
 
-const tileColors = [
-  "bg-primary-500 text-black",
-  "bg-ultraviolet-500 text-highlighted",
-  "bg-yellow-400 text-black",
-  "bg-pink-500 text-highlighted",
-  "bg-orange-500 text-black",
-  "bg-white text-black",
-];
+const { data, pending } = useFetchApi("/api/categories");
 
-const fetched = useFetchApi("/api/categories");
-const pending = computed(() => fetched.pending.value);
 const categories = computed<CategoryWithCount[]>(() => {
-  const res = fetched.data.value as ApiResponse<CategoryWithCount[]> | null;
+  const res = data.value as ApiResponse<CategoryWithCount[]> | null;
   if (!res || !isSuccessResponse(res)) return [];
   return res.data.filter((c) => c.newsCount > 0);
 });
-
-useHead(() => ({
-  title: "Categories — The Angkor Times",
-  meta: [{ name: "description", content: "Browse all news categories" }],
-}));
 </script>
 
 <template>
-  <div>
-    <UContainer class="py-8 md:py-12">
-      <div class="mb-10">
-        <span class="font-mono text-xs uppercase tracking-widest text-primary-500 mb-4 block">
-          Browse
-        </span>
-        <h1 class="text-4xl sm:text-5xl md:text-6xl text-highlighted leading-none tracking-tight">
-          Categories
-        </h1>
-      </div>
+  <UContainer class="py-10 md:py-16 font-mono max-w-5xl">
+    <SectionHeader label="Browse" />
 
-      <div
-        v-if="pending && !categories.length"
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
-      >
-        <USkeleton v-for="n in 6" :key="n" class="rounded-[20px] min-h-[200px]" />
-      </div>
+    <h1 class="text-3xl sm:text-4xl md:text-5xl text-highlighted leading-none tracking-tight mb-10">
+      Categories
+    </h1>
 
-      <div
-        v-else-if="categories.length"
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
-      >
+    <div
+      v-if="pending && !categories.length"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
+    >
+      <USkeleton v-for="n in 6" :key="n" class="h-32 rounded-sm" />
+    </div>
+
+    <ul
+      v-else-if="categories.length"
+      class="border border-default rounded-sm divide-y divide-default"
+    >
+      <li v-for="(cat, idx) in categories" :key="cat.id" class="group">
         <NuxtLink
-          v-for="(cat, idx) in categories"
-          :key="cat.id"
           :to="`/category/${cat.slug}`"
-          class="block group"
+          class="flex items-center gap-4 px-4 py-4 hover:bg-canvas-100 dark:hover:bg-canvas-900 transition-colors"
         >
-          <div
-            :class="[
-              tileColors[idx % tileColors.length],
-              'rounded-[20px] p-6 md:p-8 flex flex-col justify-between min-h-[200px] transition-colors duration-150',
-            ]"
+          <span class="text-primary-500 text-xs uppercase tracking-widest w-8 shrink-0">
+            {{ String(idx + 1).padStart(2, "0") }}
+          </span>
+          <span
+            class="flex-1 text-base md:text-lg text-highlighted group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors"
           >
-            <h2
-              class="font-bold text-2xl md:text-3xl leading-tight group-hover:text-[#3860be] transition-colors duration-150"
-            >
-              {{ cat.name }}
-            </h2>
-            <div class="flex items-center gap-3 mt-4">
-              <span class="font-mono text-xs uppercase tracking-widest opacity-70">
-                {{ cat.newsCount }} {{ cat.newsCount === 1 ? "story" : "stories" }}
-              </span>
-            </div>
-          </div>
+            {{ cat.name }}
+          </span>
+          <span class="text-xs uppercase tracking-widest text-canvas-500 dark:text-ink-500">
+            {{ cat.newsCount }} {{ cat.newsCount === 1 ? "story" : "stories" }}
+          </span>
+          <span
+            class="text-canvas-500 dark:text-ink-500 text-xs uppercase tracking-widest group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors"
+          >
+            &rarr;
+          </span>
         </NuxtLink>
-      </div>
+      </li>
+    </ul>
 
-      <div v-else class="text-center py-20">
-        <p class="text-toned">No categories with published stories yet.</p>
-      </div>
-    </UContainer>
-  </div>
+    <div
+      v-else
+      class="py-16 text-center text-xs uppercase tracking-widest text-canvas-500 dark:text-ink-500"
+    >
+      [-] No categories with published stories yet
+    </div>
+  </UContainer>
 </template>

@@ -104,3 +104,5 @@
   scrollbar-width: thin;
   scrollbar-color: var(--ui-bg-muted) transparent;
 }
+
+@source "../../../content/**/*";

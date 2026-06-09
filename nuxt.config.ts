@@ -7,7 +7,7 @@ export default defineNuxtConfig({
   compatibilityDate: "2026-01-01",
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
-  modules: ["@nuxt/ui", "@vueuse/nuxt", "@nuxthub/core"],
+  modules: ["@nuxt/ui", "@vueuse/nuxt", "@nuxthub/core", "@nuxt/content"],
   fonts: {
     families: [{ name: "IoskeleyMono", provider: "local" }],
   },
