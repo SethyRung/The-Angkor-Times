@@ -23,26 +23,27 @@ export default defineNuxtConfig({
   dayjs: {
     plugins: ["relativeTime", "utc"],
   },
+  colorMode: {
+    preference: "dark",
+  },
   vite: {
     plugins: [tailwindcss()],
     optimizeDeps: {
       include: [
+        "@nuxt/ui > prosemirror-gapcursor",
+        "@nuxt/ui > prosemirror-model",
+        "@nuxt/ui > prosemirror-state",
+        "@nuxt/ui > prosemirror-transform",
+        "@nuxt/ui > prosemirror-view",
         "dayjs",
         "dayjs/plugin/relativeTime",
         "dayjs/plugin/timezone",
         "dayjs/plugin/updateLocale",
         "dayjs/plugin/utc",
+        "tailwind-variants",
         "zod",
-        "@nuxt/ui > prosemirror-state",
-        "@nuxt/ui > prosemirror-transform",
-        "@nuxt/ui > prosemirror-model",
-        "@nuxt/ui > prosemirror-view",
-        "@nuxt/ui > prosemirror-gapcursor",
       ],
     },
-  },
-  colorMode: {
-    preference: "dark",
   },
   runtimeConfig: {
     admin: {

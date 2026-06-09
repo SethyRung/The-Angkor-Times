@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import type { NewsItem, TileVariant } from "~/types/news";
+import type { NewsItem } from "~/types/news";
 import type { ApiResponse, NewsWithRelations } from "#shared/types";
-
-const tileVariants: TileVariant[] = ["primary", "ultraviolet", "yellow", "pink", "orange", "white"];
 
 const fetched = useFetchApi("/api/news", {
   query: { limit: 20, offset: 0 },
@@ -17,98 +15,110 @@ const stories = computed<NewsItem[]>(() => {
 const featuredStory = computed<NewsItem | null>(() => stories.value[0] ?? null);
 const topStories = computed<NewsItem[]>(() => stories.value.slice(1, 7));
 const streamStories = computed<NewsItem[]>(() => stories.value.slice(7, 15));
-const mostReadStories = computed<NewsItem[]>(() => stories.value.slice(0, 4));
+
+const wordmark = [
+  "██╗   ██╗██████╗ ██████╗  █████╗ ████████╗███████╗",
+  "██║   ██║██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝██╔════╝",
+  "██║   ██║██████╔╝██║  ██║███████║   ██║   █████╗  ",
+  "██║   ██║██╔═══╝ ██║  ██║██╔══██║   ██║   ██╔══╝  ",
+  "╚██████╔╝██║     ██████╔╝██║  ██║   ██║   ███████╗",
+  " ╚═════╝ ╚═╝     ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝",
+];
 </script>
 
 <template>
   <div>
-    <UContainer class="py-8 md:py-12">
-      <div v-if="pending && !featuredStory" class="space-y-6">
-        <USkeleton class="h-6 w-40" />
-        <USkeleton class="h-20 w-full" />
-        <USkeleton class="h-4 w-3/4" />
-      </div>
-      <FeatureHero v-else-if="featuredStory" :story="featuredStory" />
+    <section
+      v-if="featuredStory"
+      class="border-b border-default bg-canvas-900 dark:bg-canvas-950 text-canvas-50"
+    >
+      <UContainer class="py-12 md:py-20">
+        <pre
+          class="text-canvas-50 text-[6px] md:text-[8px] whitespace-pre overflow-x-auto font-mono mb-8"
+          aria-hidden="true"
+          >{{ wordmark.join("\n") }}</pre
+        >
+
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-10 items-end">
+          <div class="space-y-5">
+            <div class="flex items-center gap-3 font-mono text-xs uppercase tracking-widest">
+              <span class="size-2 rounded-full bg-primary-500 animate-pulse" />
+              <span class="text-primary-400"
+                >News &middot; {{ dayjs().format("ddd MMM D, YYYY") }}</span
+              >
+            </div>
+
+            <h1
+              class="text-3xl sm:text-4xl md:text-5xl text-canvas-50 leading-[1.1] tracking-tight"
+            >
+              {{ featuredStory.title }}
+            </h1>
+
+            <p
+              v-if="featuredStory.description"
+              class="text-canvas-300 text-base md:text-lg max-w-2xl"
+            >
+              {{ featuredStory.description }}
+            </p>
+
+            <div class="flex items-center gap-3">
+              <UButton
+                label="Read story"
+                :to="`/news/${featuredStory.id}`"
+                class="rounded-sm font-mono uppercase tracking-widest text-xs"
+              />
+              <UButton
+                label="All stories"
+                variant="outline"
+                to="/category"
+                class="rounded-sm font-mono uppercase tracking-widest text-xs border-canvas-700 text-canvas-100 hover:bg-canvas-800"
+              />
+            </div>
+          </div>
+        </div>
+      </UContainer>
+    </section>
+
+    <UContainer v-if="pending && !featuredStory" class="py-12 md:py-20 space-y-6">
+      <USkeleton class="h-6 w-40" />
+      <USkeleton class="h-16 w-full" />
+      <USkeleton class="h-4 w-3/4" />
     </UContainer>
 
-    <UContainer class="py-8 md:py-12 border-t border-muted">
-      <div class="flex items-center gap-4 mb-8">
-        <span class="text-xs uppercase tracking-widest text-primary-500"> Latest </span>
-        <span class="h-px flex-1 bg-muted" />
-      </div>
+    <UContainer class="py-10 md:py-16 border-b border-default">
+      <SectionHeader label="Latest" :count="topStories.length" />
 
       <div
         v-if="pending && !topStories.length"
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
       >
-        <USkeleton v-for="n in 6" :key="n" class="rounded-[20px] min-h-[280px]" />
+        <USkeleton v-for="n in 6" :key="n" class="h-48 rounded-sm" />
       </div>
 
-      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-        <StoryTile
-          v-for="(story, idx) in topStories"
-          :key="story.id"
-          :story="story"
-          :variant="tileVariants[idx % tileVariants.length]"
-        />
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <StoryTile v-for="story in topStories" :key="story.id" :story="story" />
       </div>
     </UContainer>
 
-    <UContainer class="py-8 md:py-12 border-t border-muted">
-      <div class="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8 md:gap-12">
-        <div>
-          <div class="flex items-center gap-4 mb-8">
-            <span class="text-xs uppercase tracking-widest text-primary-500"> StoryStream </span>
-            <span class="h-px flex-1 bg-muted" />
-          </div>
-
-          <div class="hidden sm:block ml-24">
-            <StoryStream :stories="streamStories" />
-          </div>
-          <div class="sm:hidden">
-            <StoryStream :stories="streamStories" />
-          </div>
-        </div>
-
-        <aside class="hidden lg:flex flex-col gap-6">
-          <div class="rounded-[20px] bg-ultraviolet-500 p-6 flex flex-col gap-3 min-h-[200px]">
-            <span class="text-xs uppercase tracking-widest text-highlighted/70"> Newsletter </span>
-            <h3 class="text-2xl text-highlighted leading-tight">
-              Get the stories that matter, delivered.
-            </h3>
-            <p class="text-sm text-highlighted/80">
-              Sign up for our daily digest — every story, every morning.
-            </p>
-            <UButton
-              label="Subscribe"
-              color="neutral"
-              variant="solid"
-              class="uppercase tracking-widest text-xs mt-2 self-start"
-            />
-          </div>
-
-          <div class="rounded-[20px] bg-primary-500 p-6 flex flex-col gap-3 min-h-[200px]">
-            <span class="text-xs uppercase tracking-widest text-black/70"> Most Read </span>
-            <ol class="flex flex-col gap-3 mt-1">
-              <li
-                v-for="(story, idx) in mostReadStories"
-                :key="story.id"
-                class="flex gap-3 items-start group cursor-pointer"
-              >
-                <span class="text-2xl text-black/40 leading-none mt-0.5 w-6 shrink-0">
-                  {{ String(idx + 1).padStart(2, "0") }}
-                </span>
-                <NuxtLink
-                  :to="`/news/${story.id}`"
-                  class="text-sm font-bold text-black leading-snug group-hover:text-[#3860be] transition-colors"
-                >
-                  {{ story.title }}
-                </NuxtLink>
-              </li>
-            </ol>
-          </div>
-        </aside>
+    <UContainer class="py-10 md:py-16 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-10">
+      <div>
+        <SectionHeader label="Story Stream" :count="streamStories.length" />
+        <StoryStream :stories="streamStories" />
       </div>
+
+      <aside>
+        <div class="p-5 rounded-sm border border-muted">
+          <div class="flex items-center gap-2 text-xs uppercase tracking-widest text-muted mb-3">
+            <span>Newsletter</span>
+          </div>
+
+          <h3 class="text-lg leading-snug text-highlighted">The day, delivered to your inbox.</h3>
+          <p class="text-sm text-muted mt-2 leading-relaxed">
+            Every morning, the desk compiles the top stories. No filler, no fluff.
+          </p>
+          <UButton label="Subscribe" size="xs" class="rounded-sm uppercase mt-4" block />
+        </div>
+      </aside>
     </UContainer>
   </div>
 </template>

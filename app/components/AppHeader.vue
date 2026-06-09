@@ -14,25 +14,60 @@ const defaultNavItems = computed<NavigationMenuItem[]>(() => [
 ]);
 
 const items = computed(() => props.navItems ?? defaultNavItems.value);
+
+const colorMode = useColorMode();
+
+const wordmark = [
+  "█████╗ ███╗   ██╗ ██████╗  ██████╗ ██████╗ ",
+  "██╔══██╗████╗  ██║██╔════╝ ██╔═══██╗██╔══██╗",
+  "███████║██╔██╗ ██║██║  ███╗██║   ██║██████╔╝",
+  "██╔══██║██║╚██╗██║██║   ██║██║   ██║██╔══██╗",
+  "██║  ██║██║ ╚████║╚██████╔╝╚██████╔╝██║  ██║",
+  "╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝",
+  "  T H E   A N G K O R   T I M E S           ",
+];
 </script>
 
 <template>
   <UHeader
-    title="The Angkor Times"
     :ui="{
-      root: 'border-b border-muted',
-      title: 'text-xl md:text-3xl lg:text-4xl tracking-tight text-highlighted leading-none',
+      root: 'border-b border-muted bg-default/90 backdrop-blur',
+      right: 'flex items-center gap-1',
     }"
   >
+    <template #title>
+      <NuxtLink to="/" class="flex items-center gap-3 min-w-0">
+        <pre class="block text-[4px] md:text-[6px] text-highlighted whitespace-pre font-mono">{{
+          wordmark.join("\n")
+        }}</pre>
+      </NuxtLink>
+    </template>
+
     <UNavigationMenu
       :items="items"
       variant="link"
       color="neutral"
-      :ui="{ link: 'font-mono text-xs uppercase tracking-widest' }"
+      :ui="{
+        link: 'font-mono uppercase',
+      }"
     />
 
     <template #right>
-      <UButton icon="i-lucide-search" color="neutral" variant="ghost" aria-label="Search" />
+      <UButton
+        icon="i-lucide-search"
+        color="neutral"
+        variant="ghost"
+        aria-label="Search"
+        class="rounded-sm"
+      />
+      <UButton
+        :icon="colorMode.value === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon'"
+        color="neutral"
+        variant="ghost"
+        aria-label="Toggle color mode"
+        class="rounded-sm"
+        @click="colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'"
+      />
     </template>
 
     <template #body>
@@ -41,8 +76,9 @@ const items = computed(() => props.navItems ?? defaultNavItems.value);
         orientation="vertical"
         variant="link"
         color="neutral"
-        :ui="{ link: 'font-mono text-sm uppercase tracking-widest' }"
-        class="-mx-2.5"
+        :ui="{
+          link: 'font-mono uppercase py-2.5',
+        }"
       />
     </template>
   </UHeader>

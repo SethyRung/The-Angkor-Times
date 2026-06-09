@@ -1,8 +1,17 @@
 export default defineAppConfig({
   ui: {
     colors: {
-      primary: "teal",
-      neutral: "canvas",
+      secondary: "uv",
+      success: "success",
+      info: "info",
+      warning: "warning",
+      error: "error",
+      neutral: "ink",
+    },
+    button: {
+      defaultVariants: {
+        color: "neutral",
+      },
     },
   },
 });

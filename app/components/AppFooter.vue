@@ -3,41 +3,30 @@ const copyright = dayjs().year();
 const siteName = useRuntimeConfig().public.siteName || "The Angkor Times";
 
 const socials = [
-  { icon: "i-simple-icons-github", to: "https://github.com/SethyRung/The-Angkor-Times" },
-  { icon: "i-simple-icons-x", to: "https://x.com" },
-  { icon: "i-simple-icons-facebook", to: "https://facebook.com" },
-  { icon: "i-lucide-rss", to: "/rss" },
+  { label: "GitHub", to: "https://github.com/SethyRung/The-Angkor-Times" },
+  { label: "X", to: "https://x.com" },
 ];
 </script>
 
 <template>
-  <UFooter
-    :ui="{
-      root: 'border-t border-muted',
-      left: 'flex flex-col gap-3 md:items-start',
-    }"
-  >
-    <template #left>
-      <span class="text-lg text-highlighted">{{ siteName }}</span>
+  <footer class="border-t border-default font-mono text-toned text-xs uppercase tracking-widest">
+    <UContainer class="py-8">
+      <div class="mt-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+        <span> &copy;{{ copyright }} {{ siteName }}. All Rights Reserved. </span>
 
-      <span class="text-xs uppercase tracking-widest text-muted text-center md:text-left">
-        &copy;{{ copyright }} {{ siteName }}. All Rights Reserved.
-      </span>
-    </template>
-
-    <template #right>
-      <div class="flex items-center gap-1">
-        <UButton
-          v-for="social in socials"
-          :key="social.icon"
-          :icon="social.icon"
-          color="neutral"
-          variant="ghost"
-          size="sm"
-          :to="social.to"
-          target="_blank"
-        />
+        <div class="flex flex-wrap items-center gap-4">
+          <a
+            v-for="social in socials"
+            :key="social.label"
+            :href="social.to"
+            target="_blank"
+            rel="noopener"
+            class="hover:text-highlighted transition-colors"
+          >
+            [+] {{ social.label }}
+          </a>
+        </div>
       </div>
-    </template>
-  </UFooter>
+    </UContainer>
+  </footer>
 </template>

@@ -1,52 +1,9 @@
 <script setup lang="ts">
-import { tv } from "tailwind-variants";
-import type { NewsItem, TileVariant } from "~/types/news";
+import type { NewsItem } from "~/types/news";
 
 const props = defineProps<{
   story: NewsItem;
-  variant?: TileVariant;
 }>();
-
-const storyTile = tv({
-  slots: {
-    root: "rounded-[20px] p-6 md:p-8 flex flex-col gap-3 min-h-[280px] transition-colors duration-150",
-    title: "font-bold text-xl md:text-2xl leading-tight flex-1 transition-colors duration-150",
-  },
-  variants: {
-    variant: {
-      primary: {
-        root: "bg-primary-500 text-black",
-        title: "group-hover:text-[#3860be]",
-      },
-      ultraviolet: {
-        root: "bg-ultraviolet-500 text-highlighted",
-        title: "group-hover:text-[#7a9de8]",
-      },
-      yellow: {
-        root: "bg-yellow-400 text-black",
-        title: "group-hover:text-[#3860be]",
-      },
-      pink: {
-        root: "bg-pink-500 text-highlighted",
-        title: "group-hover:text-[#7a9de8]",
-      },
-      orange: {
-        root: "bg-orange-500 text-black",
-        title: "group-hover:text-[#3860be]",
-      },
-      white: {
-        root: "bg-white text-black",
-        title: "group-hover:text-[#3860be]",
-      },
-      dark: {
-        root: "bg-default text-highlighted border border-muted",
-        title: "group-hover:text-[#7a9de8]",
-      },
-    },
-  },
-});
-
-const ui = computed(() => storyTile({ variant: props.variant || "dark" }));
 
 const formattedDate = computed(() => {
   if (!props.story.publishedAt) return "";
@@ -56,21 +13,21 @@ const formattedDate = computed(() => {
 
 <template>
   <NuxtLink :to="`/news/${story.id}`" class="block group">
-    <div :class="ui.root()">
-      <div class="flex items-center justify-between gap-2 mb-1">
-        <span class="font-mono text-xs uppercase tracking-widest opacity-70">
+    <div class="rounded-sm p-5 min-h-44 flex flex-col gap-2 border border-muted">
+      <div
+        class="flex items-center justify-between gap-2 mb-1 font-mono text-[10px] uppercase tracking-widest text-muted"
+      >
+        <span>
           {{ story.category?.name }}
         </span>
-        <span v-if="formattedDate" class="font-mono text-xs uppercase tracking-widest opacity-50">
-          {{ formattedDate }}
-        </span>
+        <span v-if="formattedDate">{{ formattedDate }}</span>
       </div>
 
-      <h3 :class="ui.title()">
+      <h3 class="md:text-lg leading-snug flex-1 group-hover:text-muted">
         {{ story.title }}
       </h3>
 
-      <p class="text-sm leading-relaxed opacity-80 line-clamp-2">
+      <p class="text-xs leading-relaxed text-muted line-clamp-2">
         {{ story.description }}
       </p>
     </div>

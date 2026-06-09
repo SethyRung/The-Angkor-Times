@@ -1,372 +1,561 @@
-# Design System Inspired by The Verge
+---
+version: alpha
+name: OpenCode-design-analysis
+description: |
+  A terminal-native marketing system rendered entirely in Berkeley Mono — every word on the page, from the hero headline down to the footer fine print, is monospaced. The page itself reads like a manpage or a static-site README: warm cream canvas (`#fdfcfc`), nearly-black ink (`#201d1d`), 4px-radius rectangles for the few interactive elements, and bracketed `[+]`/`[-]` ASCII markers used as bullets. The brand's only "visual moment" is a single dark hero card that mocks up the OpenCode TUI itself — black background, monospaced terminal output, ASCII pipe characters, and a wordmark rendered as block-pixel ASCII. Every section sits as a hairline-bordered text block on the cream canvas with no shadows, no gradients, no decorative imagery, and no non-monospaced character anywhere in the system.
 
-## 1. Visual Theme & Atmosphere
+colors:
+  primary: "#201d1d"
+  on-primary: "#fdfcfc"
+  ink: "#201d1d"
+  ink-deep: "#0f0000"
+  charcoal: "#302c2c"
+  body: "#424245"
+  mute: "#646262"
+  stone: "#6e6e73"
+  ash: "#9a9898"
+  canvas: "#fdfcfc"
+  surface-soft: "#f8f7f7"
+  surface-card: "#f1eeee"
+  surface-dark: "#201d1d"
+  surface-dark-elevated: "#302c2c"
+  hairline: "rgba(15,0,0,0.12)"
+  hairline-strong: "#646262"
+  on-dark: "#fdfcfc"
+  on-dark-mute: "#9a9898"
+  accent: "#007aff"
+  accent-hover: "#0056b3"
+  accent-active: "#004085"
+  warning: "#ff9f0a"
+  warning-hover: "#cc7f08"
+  warning-active: "#995f06"
+  danger: "#ff3b30"
+  danger-hover: "#d70015"
+  danger-active: "#a50011"
+  success: "#30d158"
 
-The Verge's 2024 redesign feels like somebody wired a Condé Nast magazine to a chiptune soundboard. The canvas is almost-black (`#131313`), the headlines are built from a brutally heavy display face (Manuka) that runs up to 107px, and the whole page is peppered with acid-mint `#3cffd0` and ultraviolet `#5200ff` that behave less like brand colors and more like hazard tape. Story tiles are not quiet gray cards — they're saturated, full-bleed color blocks (yellow, pink, orange, blue, purple) that feel like pasted-up rave flyers arranged into a timeline. The mood is "developer console meets club night meets tech tabloid": serious enough to cover a congressional hearing, loud enough to review a synthesizer.
+typography:
+  display-xl:
+    fontFamily: Berkeley Mono
+    fontSize: 38px
+    fontWeight: 700
+    lineHeight: 1.5
+    letterSpacing: 0
+  heading-md:
+    fontFamily: Berkeley Mono
+    fontSize: 16px
+    fontWeight: 700
+    lineHeight: 1.5
+    letterSpacing: 0
+  body-md:
+    fontFamily: Berkeley Mono
+    fontSize: 16px
+    fontWeight: 400
+    lineHeight: 1.5
+    letterSpacing: 0
+  body-strong:
+    fontFamily: Berkeley Mono
+    fontSize: 16px
+    fontWeight: 500
+    lineHeight: 1.5
+    letterSpacing: 0
+  body-tight:
+    fontFamily: Berkeley Mono
+    fontSize: 16px
+    fontWeight: 500
+    lineHeight: 1
+    letterSpacing: 0
+  link-md:
+    fontFamily: Berkeley Mono
+    fontSize: 16px
+    fontWeight: 400
+    lineHeight: 1.5
+    letterSpacing: 0
+  button-md:
+    fontFamily: Berkeley Mono
+    fontSize: 16px
+    fontWeight: 500
+    lineHeight: 2
+    letterSpacing: 0
+  caption-md:
+    fontFamily: Berkeley Mono
+    fontSize: 14px
+    fontWeight: 400
+    lineHeight: 2
+    letterSpacing: 0
 
-What makes this system unmistakable is the **StoryStream** timeline: a vertical feed where every post is a rounded rectangle — often 20–40px radius — filled edge-to-edge with color, framed by a thin border, and marked by a mono-uppercase timestamp on its left rail. Stories don't float on a grid; they stack on a dashed vertical rule like commits in a git log. Above that, a massive **"The Verge" wordmark** dominates the masthead in Manuka at hero scale, letting the reader know before any headline loads that this is editorial territory, not a template.
+rounded:
+  none: 0px
+  sm: 4px
+  full: 9999px
 
-There is no "light mode" on the homepage — the dark canvas is the product, and the only time the palette inverts is when a single story tile takes a mint or yellow fill. The depth is almost entirely flat: **hairline 1px borders** (`#ffffff`, `#3cffd0`, or `#5200ff`) do the work that shadows would do on a Material-flavored site. Every container is either `#131313` with a 1px outline, a fully saturated accent block, or a slate-gray `#2d2d2d` secondary surface.
+spacing:
+  xxs: 1px
+  xs: 4px
+  sm: 8px
+  md: 12px
+  lg: 16px
+  xl: 24px
+  xxl: 32px
+  section: 96px
+
+components:
+  button-primary:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.on-primary}"
+    typography: "{typography.button-md}"
+    rounded: "{rounded.sm}"
+    padding: 4px 20px
+    height: 36px
+  button-primary-active:
+    backgroundColor: "{colors.ink-deep}"
+    textColor: "{colors.on-primary}"
+    typography: "{typography.button-md}"
+    rounded: "{rounded.sm}"
+  button-secondary:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    typography: "{typography.button-md}"
+    rounded: "{rounded.sm}"
+    padding: 4px 20px
+  button-tab:
+    backgroundColor: "transparent"
+    textColor: "{colors.mute}"
+    typography: "{typography.button-md}"
+    rounded: "{rounded.none}"
+    padding: 8px 16px
+  button-tab-active:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink}"
+    typography: "{typography.button-md}"
+    rounded: "{rounded.none}"
+  button-disabled:
+    backgroundColor: "{colors.surface-card}"
+    textColor: "{colors.ash}"
+    rounded: "{rounded.sm}"
+  badge-news:
+    backgroundColor: "{colors.surface-dark}"
+    textColor: "{colors.on-dark}"
+    typography: "{typography.caption-md}"
+    rounded: "{rounded.sm}"
+    padding: 2px 8px
+  text-input:
+    backgroundColor: "{colors.surface-soft}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.sm}"
+    padding: 8px 12px
+    height: 40px
+  text-input-focused:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.sm}"
+  textarea:
+    backgroundColor: "{colors.surface-soft}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.sm}"
+    padding: 12px
+  install-snippet:
+    backgroundColor: "{colors.surface-card}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.sm}"
+    padding: 12px 16px
+  hero-tui-mockup:
+    backgroundColor: "{colors.surface-dark}"
+    textColor: "{colors.on-dark}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.none}"
+    padding: 64px 32px
+  tui-prompt-row:
+    backgroundColor: "{colors.surface-dark-elevated}"
+    textColor: "{colors.on-dark}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.sm}"
+    padding: 8px 12px
+  list-row:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.body}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.none}"
+    padding: 8px 0px
+  faq-row:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.none}"
+    padding: 12px 0px
+  testimonial-row:
+    backgroundColor: "{colors.surface-soft}"
+    textColor: "{colors.body}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.sm}"
+    padding: 16px 20px
+  chart-tile:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.body}"
+    typography: "{typography.caption-md}"
+    rounded: "{rounded.none}"
+    padding: 16px
+  primary-nav:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-strong}"
+    rounded: "{rounded.none}"
+    height: 56px
+  footer-section:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.body}"
+    typography: "{typography.caption-md}"
+    rounded: "{rounded.none}"
+    padding: 32px 0px
+  link-inline:
+    textColor: "{colors.ink}"
+    typography: "{typography.link-md}"
+  badge-section-label:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink}"
+    typography: "{typography.heading-md}"
+    rounded: "{rounded.none}"
+---
+
+## Overview
+
+OpenCode's marketing site is rendered entirely in Berkeley Mono — every word on the page, from the 38px hero headline down to the 14px footer fine print, sits in the same monospaced face. The visual identity comes from that single typographic decision: the page reads like a manpage or a static-site README, complete with bracketed `[+]` / `[-]` / `[x]` ASCII markers used in place of icons or bullets, and a wordmark rendered as block-pixel ASCII art at the top of the nav. There is no sans-serif anywhere, no display face, no italics, no decorative ornament — the system is one font and one weight away from being a 1990s `whatis` page rendered at modern resolutions.
+
+The chrome is austere: warm cream canvas (`{colors.canvas}` — `#fdfcfc` with a faint blush), nearly-black ink (`{colors.ink}` — `#201d1d`), and a 4-tier neutral gray ladder for body, metadata, and disabled text. Cards don't exist as raised surfaces — sections are just hairline-bordered text blocks (`{colors.hairline}` 1px) sitting directly on the canvas with `{spacing.section}` (96px) air between them. The single "visual" moment in the entire system is a full-bleed dark hero card (`{colors.surface-dark}` — true near-black) that mocks up the OpenCode TUI itself: a terminal frame with `tab` / `ctrl-p` keybinding hints, a "Build" command line, and the OpenCode wordmark rendered as a pixel-block ASCII title.
+
+The semantic palette is unusual for a brand-marketing site: it ships the full Apple Human Interface Guidelines accent ramp — `{colors.accent}` (Apple Blue `#007aff`), `{colors.danger}` (`#ff3b30`), `{colors.warning}` (`#ff9f0a`), `{colors.success}` (`#30d158`) plus their hover/active deepenings — even though the marketing surfaces themselves only use these colors in the dark hero TUI mockup as syntax-highlight stand-ins. The wider palette belongs to the in-product TUI; the marketing pages mostly stay in monochrome.
 
 **Key Characteristics:**
 
-- Near-black editorial canvas (`#131313`) as the default surface — no light mode on the homepage
-- Acid-mint `#3cffd0` + ultraviolet `#5200ff` as hazard-tape accents, never quiet background wash
-- Massive Manuka display headlines up to 107px — the single loudest type move in mainstream tech media
-- Rounded pill-card everything: 20/24/30/40px corner radii, never square
-- Fully saturated color-block story tiles (mint, purple, yellow, pink, orange, electric blue) on a dark page
-- Timeline "StoryStream" feed with mono uppercase timestamps rather than a traditional magazine grid
-- Flat depth — 1px borders in white, mint, purple do the work that shadows would do elsewhere
+- 100% Berkeley Mono typography across every text role — no sans-serif fallback anywhere in the chrome
+- Warm cream `{colors.canvas}` (#fdfcfc) as the only body background — no surface alternation across sections
+- Single dark surface (`{colors.surface-dark}` — #201d1d) reserved exclusively for the hero TUI mockup
+- 4px radius (`{rounded.sm}`) on every interactive element; sections themselves are sharp rectangles bordered in 1px hairline
+- ASCII bracket markers (`[+]`, `[-]`, `[x]`) used as bullet glyphs in feature lists and FAQ rows
+- Block-pixel ASCII wordmark in the primary nav and inside the hero TUI — the brand identity is its own ASCII art
+- 96px `{spacing.section}` rhythm between every section, with no decorative dividers; only thin 1px `{colors.hairline}` rules separate content blocks
 
-## 2. Color Palette & Roles
+## Colors
 
-### Primary (Brand Hazards)
+> **Source pages:** `/` (home), `/zen`, `/enterprise`. The chrome palette is identical across all three.
 
-- **Jelly Mint** (`#3cffd0`): The Verge's signature acid-mint accent. Used as CTA button fill, link underlines, active tab borders, and high-attention story-tile backgrounds. Treat it as the visual equivalent of neon safety paint — applied sparingly to the most important element on screen.
-- **Verge Ultraviolet** (`#5200ff`): The complementary brand hazard. Used for secondary color-block tiles, promotional spans, and the occasional outlined button. Often applied at 0.9 alpha to soften its cathode intensity.
+### Brand & Accent
 
-### Secondary & Accent
+- **Ink** (`{colors.primary}` / `{colors.ink}` — `#201d1d`): the brand's only "color." Headlines, body text, primary CTA fill, nav links, and every solid icon. Treats nearly-black as the brand color rather than pure black to keep type readable on the warm cream canvas.
+- **Ink Deep** (`{colors.ink-deep}` — `#0f0000`): pressed-state for the primary CTA. Carries a faint red undertone matching the canvas's warm cast.
+- **Cream** (`{colors.canvas}` — `#fdfcfc`): the brand's signature warm white. Used for every page body, every card surface, the on-primary text color, and the ASCII wordmark fill on dark.
 
-- **Console Mint Border** (`#309875`): A darker variant of the jelly mint used on card outlines and button borders where pure mint would over-saturate.
-- **Deep Link Blue** (`#3860be`): The link _hover_ color — the one moment blue appears on the site. It replaces mint/white/black on hover across every link style.
-- **Focus Cyan** (`#1eaedb`): Reserved for button focus rings. Never shown outside a keyboard-focus state.
-- **Purple Rule** (`#3d00bf`): A darker ultraviolet variant used as the vertical border on StoryStream `<li>` items.
+### Surface
 
-### Surface & Background
+- **Canvas Cream** (`{colors.canvas}` — `#fdfcfc`): every page body, every card.
+- **Soft Surface** (`{colors.surface-soft}` — `#f8f7f7`): text-input default background, testimonial row fill, alternating row tint.
+- **Surface Card** (`{colors.surface-card}` — `#f1eeee`): install-snippet pill, disabled button fill, slightly-elevated section row.
+- **Surface Dark** (`{colors.surface-dark}` — `#201d1d`): the hero TUI mockup background and the dark CTA pill on the home page. Identical to `{colors.ink}` — the brand uses one near-black for both text and dark surfaces.
+- **Surface Dark Elevated** (`{colors.surface-dark-elevated}` — `#302c2c`): the prompt-row inside the hero TUI mockup, one notch lighter than the dark surface itself.
+- **Hairline** (`{colors.hairline}` — `rgba(15,0,0,0.12)`): 1px section divider. The translucent warm tint matches the cream canvas's undertone.
+- **Hairline Strong** (`{colors.hairline-strong}` — `#646262`): tab strip's bottom rule and stronger inline divider.
 
-- **Canvas Black** (`#131313`): The default dark surface for the entire homepage. Almost-but-not-quite pure black — has just enough warmth to feel like a printed newsprint negative rather than an OLED void.
-- **Surface Slate** (`#2d2d2d`): Secondary card background, used when a story tile doesn't need to be a saturated color block.
-- **Image Frame** (`#313131`): The 1px border that wraps inline imagery.
-- **Hazard White** (`#ffffff`): Used as story-tile fill, button border, and primary text. When white appears as a large block, it's an editorial decision — a "spotlight" on that tile.
-- **Absolute Black** (`#000000`): Reserved for text on the mint/yellow/white tiles — the only place it appears.
+### Text
 
-### Neutrals & Text
+- **Ink** (`{colors.ink}` — `#201d1d`): headlines, body text, primary nav links, button text on light surfaces.
+- **Charcoal** (`{colors.charcoal}` — `#302c2c`): subtly softer body where pure ink is too heavy.
+- **Body** (`{colors.body}` — `#424245`): default paragraph text and FAQ answers.
+- **Mute** (`{colors.mute}` — `#646262`): tab labels (default state), metadata, footer link text, in-list secondary annotations.
+- **Stone** (`{colors.stone}` — `#6e6e73`): least-emphasis utility text, breadcrumb separators.
+- **Ash** (`{colors.ash}` — `#9a9898`): disabled text and secondary annotation in dark TUI mockup, also TUI mockup secondary color.
 
-- **Primary Text** (`#ffffff`): Headlines and display text on the canvas.
-- **Secondary Text** (`#949494`): Bylines, timestamps, photo credits. The mid-gray that anchors the metadata layer.
-- **Muted Text** (`#e9e9e9`): Button text on dark slate buttons. Slightly off-white to reduce screen glare.
-- **Inverted Text** (`#131313`): Used only on accent tiles (mint, yellow, white) to keep contrast legible.
+### Semantic
 
-### Semantic & Accent
+The full Apple Human Interface Guidelines semantic ramp ships with the system. On marketing pages these colors appear primarily inside the hero TUI mockup as syntax-highlight stand-ins; in the in-product TUI they carry their conventional meaning.
 
-- **Focus Ring** (`#1eaedb`): Keyboard focus only.
-- **Overlay Black** (`rgba(0, 0, 0, 0.33)`): Subtle 1px ring used as the quiet shadow alternative on stacked cards.
-- **Dim Gray** (`#8c8c8c`): Active/pressed button background — the "pressed down" state.
+- **Accent** (`{colors.accent}` — `#007aff`): primary informational signal, in-product link color, TUI command highlight.
+- **Accent Hover** (`{colors.accent-hover}` — `#0056b3`): pressed informational link.
+- **Accent Active** (`{colors.accent-active}` — `#004085`): deeply-pressed informational state.
+- **Danger** (`{colors.danger}` — `#ff3b30`): destructive confirmation, error state.
+- **Danger Hover** (`{colors.danger-hover}` — `#d70015`): pressed destructive.
+- **Danger Active** (`{colors.danger-active}` — `#a50011`): deeply-pressed destructive.
+- **Warning** (`{colors.warning}` — `#ff9f0a`): caution callouts.
+- **Warning Hover** (`{colors.warning-hover}` — `#cc7f08`): pressed caution.
+- **Warning Active** (`{colors.warning-active}` — `#995f06`): deeply-pressed caution.
+- **Success** (`{colors.success}` — `#30d158`): positive confirmation, in-TUI success indicator.
 
-### Gradient System
-
-The Verge uses **zero decorative gradients**. The only gradient-like treatment is the transition from a saturated accent story tile (mint/purple/yellow) back to the `#131313` canvas between rows. Color is applied in solid blocks, not as washes. This is a deliberate choice — the site's hazard-tape visual identity would dissolve if anything faded.
-
-## 3. Typography Rules
+## Typography
 
 ### Font Family
 
-- **Manuka** (Klim Type Foundry) — fallback: Impact, Helvetica. The signature display face for The Verge wordmark and feature headlines. A heavy-weight (900) industrial sans-serif with a condensed, almost-athletic stance. Runs at 60–107px on the homepage, never smaller.
-- **PolySans** (PanGram Pangram / Nikolas Wrobel) — fallback: Helvetica, Arial. The UI and secondary headline workhorse. Covers weights 300 / 500 / 700 across the system — everything from kicker captions to body decks.
-- **PolySans Mono** — fallback: Courier New, Courier. The monospaced sibling, used exclusively for ALL-CAPS labels: kickers, timestamps, category tags, button labels. This mono-uppercase usage is the second-most-identifiable Verge detail after Manuka.
-- **FK Roman Standard** (Florian Karsten) — fallback: Georgia. A serif used sparingly for specific body/caption treatments (article excerpts, certain review pulls). Adds a "print-magazine" counterpoint to the PolySans stack.
-- **Roboto** — fallback: `-apple-system`, `system-ui`. Utility UI font for widgets and legacy modules.
+**Berkeley Mono** is the proprietary monospaced face used across every text role in the system. It carries weights 400 (regular), 500 (medium), and 700 (bold) and falls back through a long monospace stack — IBM Plex Mono → ui-monospace → SFMono-Regular → Menlo → Monaco → Consolas → Liberation Mono → Courier New.
+
+The single-font decision is the brand. There is no display face, no body sans, no italic alternative, and no fallback to a proportional font anywhere — even the legal copyright row uses Berkeley Mono at 14px. This is the most aggressive typographic restraint of any site in the marketing-tools category: OpenCode's identity is "the marketing page is a man page."
 
 ### Hierarchy
 
-| Role                    | Font              | Size            | Weight  | Line Height | Letter Spacing | Notes                                                       |
-| ----------------------- | ----------------- | --------------- | ------- | ----------- | -------------- | ----------------------------------------------------------- |
-| Hero Wordmark / Display | Manuka            | 107px / 6.69rem | 900     | 0.80        | 1.07px         | The top-of-page "The Verge" logo and feature headlines      |
-| Secondary Display       | Manuka            | 90px / 5.63rem  | 900     | 0.80        | —              | Section-level feature headlines                             |
-| Tertiary Display        | Manuka            | 60px / 3.75rem  | 900     | 0.80        | —              | Inline feature callouts                                     |
-| Large Headline          | PolySans          | 34px / 2.13rem  | 700     | 1.00        | —              | Section and module headlines                                |
-| Heading Wide            | PolySans          | 32px / 2.00rem  | 400     | 1.10        | 0.32px         | Sub-heroes, promotional units                               |
-| Heading Medium          | PolySans          | 24px / 1.50rem  | 700     | 1.00        | —              | Story tile headlines in the main feed                       |
-| Heading Small           | PolySans          | 20px / 1.25rem  | 700     | 1.00        | —              | Compact tile headlines                                      |
-| Light Capitalized Label | PolySans          | 19px / 1.19rem  | 300     | 1.20        | 1.9px          | Thin-weight capitalized eyebrows — a distinctive Verge move |
-| All-Caps Label XL       | PolySans          | 18px / 1.13rem  | 400     | 1.10        | 1.8px          | UPPERCASE section kickers                                   |
-| Bold Body               | PolySans          | 16px / 1.00rem  | 700     | 1.00        | —              | Emphasis within decks                                       |
-| Body Relaxed            | PolySans          | 16px / 1.00rem  | 500     | 1.60        | —              | Long-form reading body                                      |
-| Inline Label            | PolySans          | 15px / 0.94rem  | 400     | 1.20        | 0.15px         | UI labels and secondary headlines                           |
-| Body Compact            | PolySans          | 13px / 0.81rem  | 400     | 1.60        | —              | Secondary captions and decks                                |
-| Eyebrow All-Caps        | PolySans          | 12px / 0.75rem  | 400     | 1.30        | 1.8px          | UPPERCASE kicker above tile headlines                       |
-| Tag Label               | PolySans          | 12px / 0.75rem  | 400     | 1.20        | 0.72px         | UPPERCASE category tag                                      |
-| Caption Micro           | PolySans          | 11px / 0.69rem  | 400     | 1.20        | 1.1px          | UPPERCASE bylines                                           |
-| Meta Nano               | PolySans          | 10px / 0.63rem  | 500     | 1.40        | 1.5px          | UPPERCASE timestamp microtext                               |
-| Mono Button Label       | PolySans Mono     | 12px / 0.75rem  | 600     | 2.00        | 1.5px          | UPPERCASE button text, very open leading                    |
-| Mono Timestamp          | PolySans Mono     | 11px / 0.69rem  | 500/600 | 1.20        | 1.1–1.8px      | UPPERCASE StoryStream timestamps                            |
-| Serif Body              | FK Roman Standard | 16px / 1.00rem  | 400     | 1.30        | -0.16px        | Review decks, print-voice excerpts                          |
-| Serif Caption           | FK Roman Standard | 20px / 1.25rem  | 400     | 1.20        | —              | Magazine-style pull quotes                                  |
+| Token                      | Size | Weight | Line Height | Letter Spacing | Use                                                                   |
+| -------------------------- | ---- | ------ | ----------- | -------------- | --------------------------------------------------------------------- |
+| `{typography.display-xl}`  | 38px | 700    | 1.5         | 0              | Hero headline ("The open source AI coding agent")                     |
+| `{typography.heading-md}`  | 16px | 700    | 1.5         | 0              | Section label ("What is OpenCode?", "FAQ", "Built for privacy first") |
+| `{typography.body-md}`     | 16px | 400    | 1.5         | 0              | Body copy, paragraph text, list-row text, install-snippet code        |
+| `{typography.body-strong}` | 16px | 500    | 1.5         | 0              | Inline emphasis, primary nav link, tab-label active                   |
+| `{typography.body-tight}`  | 16px | 500    | 1           | 0              | Compact label rendered without breathing room                         |
+| `{typography.link-md}`     | 16px | 400    | 1.5         | 0              | Inline anchor link in body prose                                      |
+| `{typography.button-md}`   | 16px | 500    | 2           | 0              | Every button label across the system                                  |
+| `{typography.caption-md}`  | 14px | 400    | 2           | 0              | Footer link text, badge label, copyright row, chart caption           |
 
 ### Principles
 
-- **Manuka is always the hero, never the UI.** If you see Manuka below 60px you're looking at a bug. It exists to _shout the brand_, not to label a button.
-- **PolySans is the workhorse, PolySans Mono is its uniformed sibling.** Mono is used exclusively for UPPERCASE labels, timestamps, tags, and certain buttons. Lowercase mono doesn't exist in this system.
-- **Thin-weight (300) capitalized headlines** are a signature Verge move. The 19–20px weight-300 with 1.9px tracking creates a "fashion magazine whisper" that contrasts with the 107px Manuka shout above it. This whisper-vs-shout contrast is the typographic fingerprint.
-- **Letter-spacing has two registers**: positive (0.72–1.9px) for ALL-CAPS mono and sans labels, negative (`-0.16px`) for the rare serif appearances, barely-positive (0.32px, 1.07px) for massive display. Plain 0 letter-spacing is rare.
-- **FK Roman Standard is the editorial exception**, not the rule. Reserve it for long-form print-voice moments — reviews, critic pulls, masthead essays. Never use it in UI.
-- **Line heights are tight** (0.80–1.30) for every display and label, relaxed (1.60–2.00) only for reading body and mono button labels. The leading jump is intentional — it gives the page a "telegraph ticker" rhythm.
+The hierarchy is built almost entirely from size and weight contrast on a single face. The display headline (38px / 700) and the heading-md label (16px / 700) share a weight; the difference is just size. Body and link share size, weight, and line-height — only context distinguishes them. Buttons get a deliberately tall line-height (2.0) so labels feel calmly spaced inside the 4px-radius rectangle.
 
 ### Note on Font Substitutes
 
-The 0.80 line-height on Manuka display (107px, 90px, 60px) assumes the **proprietary Manuka face from Klim Type Foundry**, which has aggressively tight vertical metrics designed for athletic stance at large sizes. If you substitute with wide-metric open-source condensed displays like **Anton**, **Oswald**, **Bebas Neue**, or **Archivo Black**, loosen display line-heights by approximately **+0.10 to +0.15** to prevent ascender/descender collisions (e.g., 0.80 → 0.95). PolySans substitutes (Space Grotesk, DM Sans, Hanken Grotesk) work at the token values without adjustment — their metrics are close enough. PolySans Mono substitutes (Space Mono, JetBrains Mono) and FK Roman substitutes (Newsreader, Literata) also work without adjustment.
+Berkeley Mono is a paid commercial font. Open-source substitutes that approximate its metrics within ~3% at body sizes:
 
-## 4. Component Stylings
+- **JetBrains Mono** — closest match for stroke contrast and x-height; pair at weights 400 / 500 / 700.
+- **IBM Plex Mono** — official secondary fallback in the documented font stack; slightly more open counters but matches line-height behavior.
+- **Geist Mono** — modern alternative with similar geometric construction.
 
-### Buttons
+When substituting, line-height behavior is preserved by keeping `lineHeight: 1.5` for body and `lineHeight: 2` for buttons — adjusting weight is rarely needed.
 
-**Primary — Jelly Mint Pill**
-
-- Background: `#3cffd0` (Jelly Mint)
-- Text: `#000000` (Absolute Black), PolySans 16px / 700 or PolySans Mono 12px / 600 UPPERCASE
-- Border: none (pure fill)
-- Border radius: `24px` — fully rounded pill
-- Padding: `10px 24px`
-- Outline: `none` at rest
-- Hover: background shifts to `rgba(255, 255, 255, 0.2)` (translucent white), text stays black, adds a 1px `#c2c2c2` ring shadow
-- Active: background `rgba(140, 140, 140, 0.87)`, opacity `0.5`, ring shadow `#8c8c8c`
-- Focus: background `#1eaedb`, white text, 1px solid `#0500ff` border, translucent white focus ring
-- Transition: ~180ms ease on background and shadow
-
-**Secondary — Dark Slate Pill**
-
-- Background: `#2d2d2d` (Surface Slate)
-- Text: `#e9e9e9` (Muted Text), PolySans 16px / 400
-- Border: none
-- Border radius: `24px`
-- Padding: `10px 24px`
-- Outline: `rgb(233, 233, 233) none 0px`
-- Hover: same translucent white invert as primary — `rgba(255, 255, 255, 0.2)` bg, black text, 1px `#c2c2c2` ring
-- Focus: same cyan focus treatment as primary
-
-**Tertiary — Outlined Mint**
-
-- Background: transparent
-- Text: `#3cffd0`, PolySans Mono 12px / 600 UPPERCASE, 1.5px tracking
-- Border: `1px solid #3cffd0`
-- Border radius: `40px` — larger pill for secondary outline style
-- Padding: ~`10px 20px`
-- Hover: inverts to mint fill, black text
-- Transition: 150ms ease
-
-**Outlined Ultraviolet (Promotional)**
-
-- Background: transparent
-- Text: `#5200ff` or `#ffffff`
-- Border: `1px solid #5200ff`
-- Border radius: `30px`
-- Used for "Subscribe" or "Join the Stream" style promotional callouts
-
-**Pill Tag (Non-interactive)**
-
-- Background: saturated accent (`#3cffd0`, `#5200ff`, yellow, etc.)
-- Text: black or white depending on background luminance
-- Border radius: `20px` (tighter radius than buttons — this is the _text pill_)
-- Font: PolySans Mono 11px / 600 UPPERCASE, 1.8px tracking
-- Padding: ~`4px 10px`
-
-### Cards & Containers
-
-**StoryStream Tile**
-
-- Background: either `#131313` + 1px white border, OR a saturated accent fill (mint, purple, yellow, pink, orange, white)
-- Border radius: `20px` (standard) or `24px` (feature)
-- Border: `1px solid #ffffff` (on dark) or `0px 0px 1px solid #3cffd0` (on mint) or nothing (on saturated fill)
-- Padding: ~24–32px interior
-- Hover: no lift, no scale — the headline text color transitions from white to `#3860be` (deep link blue)
-- Transition: 150ms ease on color only
-
-**Feature Card (Top Story)**
-
-- Background: `#131313` with 1px hairline border, OR full-bleed color accent
-- Border radius: `24px`
-- Padding: 32px+
-- Image inside: clipped to match the outer radius (`3px` or `4px` inner radius when nested)
-- Hover: text color shift only; the image remains static
-
-**StoryStream Rail (Timeline)**
-
-- A vertical dashed or solid rule (1px `#3d00bf` or `#ffffff`) runs along the left edge of each item, marking the timeline spine
-- Timestamps sit on the left rail in PolySans Mono 11px / 500 / UPPERCASE / 1.1px tracking
-- Each entry is a pill-cornered rectangle separated from its neighbors by 12–16px vertical gap
-
-### Inputs & Forms
-
-- **Default**: `#131313` background, 1px solid `#ffffff` or `#949494` border, `2px` border radius (tight, newspaper-form feel), PolySans 15px text in `#ffffff`, placeholder in `#949494`.
-- **Focus**: border transitions to `#3cffd0` (jelly mint) with optional `1px solid #5200ff` inner ring on deep focus. No glow.
-- **Error**: border turns `#5200ff` (ultraviolet — used as error/alert accent here, not the usual red).
-- **Transition**: ~150ms ease on border-color.
-
-### Navigation
-
-- **Top nav**: thin `#131313` bar with the Verge wordmark (Manuka) left-aligned, a search icon and a few UPPERCASE mono category links (12–14px, PolySans Mono, 1.5–1.8px tracking), and a single mint-pill CTA (usually "Subscribe") pinned right.
-- **Wordmark**: massive on first scroll — the homepage treats the "The Verge" logo as a hero element, not a 32px corner logo.
-- **Hover**: every link transitions from `#ffffff` to `#3860be` (deep link blue). No underline — it's a color-only response.
-- **Active section**: marked by a 1px mint underline (inset box-shadow `0px -1px 0px 0px inset #3cffd0`)
-- **Mobile**: the wordmark shrinks, category nav collapses into a hamburger drawer. Inside the drawer, links are mono-uppercase and stack with 16–20px gaps.
-
-### Image Treatment
-
-- **Aspect ratios**: 16:9 dominates for hero and feature images, 4:3 for mid-feed, 1:1 for thumbnails and author avatars.
-- **Corners**: always rounded to match the parent card — `3px`, `4px`, or inherit `20px` / `24px` from the tile.
-- **Frame**: 1px `#313131` or `#ffffff` hairline around photography, giving a "contained Polaroid" feel.
-- **Full-bleed**: only within the color-block tiles, where the image runs to the padded edge of the accent fill.
-- **Hover**: static — no zoom, no scale, no opacity shift. The headline below is the only interactive response.
-- **Lazy loading**: `loading="lazy"` on everything below the first fold; eager on the masthead hero only.
-
-### StoryStream Timeline Item (Distinctive)
-
-- Vertical rail line (1px `#3d00bf` or `#ffffff` on `#131313`)
-- Mono timestamp on the left in PolySans Mono 11px / UPPERCASE
-- Pill-cornered body card (20px radius) with kicker, headline, and optional deck
-- Stacked vertically with 12–16px gap, the rail continuing between them
-- Often interleaved with full-bleed accent tiles that "break" the timeline rhythm for emphasis
-
-## 5. Layout Principles
+## Layout
 
 ### Spacing System
 
-- **Base unit**: 8px.
-- **Scale**: 1, 2, 4, 5, 6, 8, 9, 10, 12, 14, 15, 16, 20, 24, 25px.
-- **Section padding**: 32–64px vertical between major feed sections. StoryStream items themselves are tighter — 12–16px gaps.
-- **Card padding**: 20–32px interior. Feature cards expand to 40–48px.
-- **Inline spacing**: kickers sit ~6–10px above headlines; headlines sit ~10–14px above decks; timestamps sit ~6–8px below decks.
-- **Micro-scale**: The 2/4/5/6/9/10px values are used inside buttons, pills, and tight label clusters, not in the editorial grid.
+- **Base unit:** 8px (with finer 1/2/4px steps available for tight inline gaps).
+- **Tokens (front matter):** `{spacing.xxs}` (1px) · `{spacing.xs}` (4px) · `{spacing.sm}` (8px) · `{spacing.md}` (12px) · `{spacing.lg}` (16px) · `{spacing.xl}` (24px) · `{spacing.xxl}` (32px) · `{spacing.section}` (96px).
+- **Universal section rhythm:** every page in the set uses `{spacing.section}` (96px) as the vertical gap between major content blocks. This is the largest spacing token in the system and is the dominant layout cue across the home, `/zen`, and `/enterprise` pages.
+- **Section internal padding:** content rows inside a section sit at `{spacing.lg}` (16px) vertical with no horizontal padding — text starts flush at the section's left edge.
 
 ### Grid & Container
 
-- **Max width**: ~1280–1300px (dembrandt detected breakpoints at 1200/1280/1300).
-- **Column patterns**: a 12-column underlying grid that resolves into 3-column hero + 1-column StoryStream rail + feature panels. The homepage feels freeform because color-block tiles frequently span 2–3 columns on a whim.
-- **Container padding**: 24px mobile / 48px desktop on the outer edges.
-- **Gutters**: 16–24px between columns, tighter (8–12px) inside StoryStream items.
+- **Max width:** ~960px content column for body sections; the dark hero TUI mockup is full-bleed within an outer ~1100px content frame.
+- **Two-column split:** `/enterprise` pairs a left text block (~360px wide) with a right-aligned form column (~480px wide). The home page is single-column reading.
+- **Footer:** 5-up horizontal link row (GitHub / Docs / Changelog / Discord / X) at desktop, collapsing to 2-up at tablet and 1-up at mobile.
 
 ### Whitespace Philosophy
 
-The Verge treats whitespace like a club DJ treats silence — as a dramatic reset between loud moments. The canvas is so dark and the accents are so saturated that even 32px of empty `#131313` between two tiles acts as a palette cleanser. The page is not airy like Apple or Stripe; it's **paced**, with loud hazard-color blocks interrupting stretches of near-black. Whitespace carries the rhythm, not the elegance.
+Whitespace is structural and generous. Sections sit 96px apart with no decorative dividers between them — the `{colors.hairline}` 1px rule is the only signal of separation. Inside a section, content is left-flush against the column edge with no internal indentation; bullets use ASCII bracket prefixes (`[+]` / `[-]`) instead of indent-based layout. The result is a page that feels like a printed code listing rather than a styled marketing layout.
 
-### Border Radius Scale
+## Elevation & Depth
 
-- **2px** — inputs, small badges (feels like a typewriter tag)
-- **3px** — inline images (just enough to soften against the canvas)
-- **4px** — nested card images and small button variants
-- **20px** — standard pill cards and color-block tiles
-- **24px** — feature tile radius and primary button pill
-- **30px** — large promotional buttons
-- **40px** — outlined CTA pills (the loudest pill in the system)
-- **50%** — avatar circles, icon buttons, and certain round badges
+| Level               | Treatment                                             | Use                                                                                          |
+| ------------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| 0 — Flat            | No border, no shadow                                  | Default for body sections, list rows, hero text block, footer                                |
+| 1 — Hairline rule   | 1px solid `{colors.hairline}` (translucent warm tint) | Section dividers, between major content blocks                                               |
+| 2 — Hairline strong | 1px solid `{colors.hairline-strong}`                  | Tab strip bottom rule, in-list emphasized divider                                            |
+| 3 — Inverted dark   | `{colors.surface-dark}` fill                          | Hero TUI mockup, dark CTA pill — the system's only "elevated" surface uses color, not shadow |
 
-Eight discrete radius values — a **lot** for a single site. This is deliberate: the rhythm between 2px typewriter tags, 20px pill cards, and 40px outlined buttons creates a "nested scale" feel where every component announces its hierarchy through its corners.
-
-## 6. Depth & Elevation
-
-| Level | Treatment                                                         | Use                                                      |
-| ----- | ----------------------------------------------------------------- | -------------------------------------------------------- |
-| 0     | No border, no shadow                                              | Default `#131313` canvas text                            |
-| 1     | `rgba(0,0,0,0) 0px 0px 0px 0px inset` (placeholder)               | Reset state for interactive elements                     |
-| 2     | `1px solid #ffffff` or `#313131` hairline                         | Image frames and quiet card outlines                     |
-| 3     | `1px solid #3cffd0` hairline                                      | Active button outlines, focused story tiles              |
-| 4     | `1px solid #5200ff` hairline                                      | Promotional/alternate state outlines                     |
-| 5     | `rgba(0, 0, 0, 0.33) 0px 0px 0px 1px`                             | The single "atmospheric" ring — applied to layered cards |
-| 6     | `0px -1px 0px 0px inset` (mint/black/white)                       | Active tab underline — a signature Verge move            |
-| 7     | Saturated accent fill (`#3cffd0`, `#5200ff`, white, yellow, pink) | Story-tile elevation via color, not shadow               |
-
-The Verge's depth philosophy is **color-as-elevation**. When something needs to stand out, it doesn't get a shadow — it gets a mint fill or a 1px hazard-color border. There are 14 shadow entries in the extracted tokens, but all of them are either inset underlines (0px -1px inset) or near-transparent 1px rings — none of them are traditional elevation shadows. The `#131313` canvas stays perfectly flat throughout, and hierarchy is carried by color saturation.
+There are no drop shadows in the system. Nothing lifts, nothing floats. The only way an element registers as "above" another is the dark surface used in the hero mockup.
 
 ### Decorative Depth
 
-- **1px inset underline** on active tabs/nav links (mint, black, or white depending on context)
-- **Subtle `rgba(0, 0, 0, 0.33)` 1px ring** on stacked cards — the only effect that faintly resembles a shadow
-- **No gradients, no glows, no atmospheric blurs** anywhere. The hazard-tape aesthetic would break if anything faded softly.
+Depth comes from typography density and the single dark TUI mockup, not from CSS effects:
 
-## 7. Do's and Don'ts
+- **ASCII block-pixel wordmark** — the OpenCode brand name rendered as a 5-row block of monospaced character cells, used in the primary nav and as the centerpiece of the hero TUI mockup.
+- **Hero TUI mockup** — full-bleed `{colors.surface-dark}` rectangle containing a faux terminal interface: ASCII wordmark, a `tui-prompt-row` showing a Build command line, and `tab switch agent` / `ctrl-p commands` keybinding hints in `{colors.ash}` at the bottom edge.
+- **Chart tiles** — three thin-line ASCII charts inside the home page's "open source AI coding agent" stat block, with abstract dotted/sparse-line plots in `{colors.body}` against the cream canvas. Captions sit beneath in `{typography.caption-md}` (`Fig 1. 150K GitHub Stars`, `Fig 2. 850 Contributors`, `Fig 3. 6.5M Monthly Devs`).
+
+## Shapes
+
+### Border Radius Scale
+
+| Token            | Value  | Use                                                                                                       |
+| ---------------- | ------ | --------------------------------------------------------------------------------------------------------- |
+| `{rounded.none}` | 0px    | Sections, hero TUI mockup, primary nav, footer, list rows — every container that isn't a button           |
+| `{rounded.sm}`   | 4px    | Every interactive element — primary CTA, secondary CTA, text inputs, install snippet, badges, prompt rows |
+| `{rounded.full}` | 9999px | Avatar circles in testimonials                                                                            |
+
+The radius vocabulary is two values: 4px for interactive elements and 0px for everything else. Avatar circles in testimonial rows are the only fully-rounded element in the system.
+
+### Photography Geometry
+
+There is no photography. Visual elements are limited to:
+
+- **ASCII block-pixel wordmark** in the nav and hero TUI mockup.
+- **Inline ASCII charts** inside the stat-block section — abstract sparse-line and dotted plots without specific data points.
+- **Avatar dots** (~32px) inside testimonial rows on `/zen` — flat colored circles in `{rounded.full}`.
+- **In-product icons** (kbd, A+, ⊕, ↻, K, Z) rendered as small monospaced character glyphs, not bitmaps or SVG.
+
+## Components
+
+> **No hover states documented** per system policy. Each spec covers Default and Active/Pressed only.
+
+### Buttons
+
+**`button-primary`** — the universal OpenCode CTA
+
+- Background `{colors.primary}`, text `{colors.on-primary}`, type `{typography.button-md}`, padding `4px 20px`, height ~36px, rounded `{rounded.sm}` (4px).
+- Used for "Download" (top nav), "Get started with Zen", "Send" (enterprise contact form), "Subscribe" (newsletter footer), "Read docs →".
+- Pressed state lives in `button-primary-active` — background drops to `{colors.ink-deep}`.
+
+**`button-secondary`** — outlined alternative
+
+- Background `{colors.canvas}`, text `{colors.ink}`, 1px solid `{colors.hairline-strong}` border, type `{typography.button-md}`, padding `4px 20px`, rounded `{rounded.sm}`.
+- Lower-emphasis CTA — appears beside the primary fill where two actions are paired.
+
+**`button-tab`** + **`button-tab-active`** — install-tab strip
+
+- Default: transparent background, text `{colors.mute}`, type `{typography.button-md}`, padding `8px 16px`, rounded `{rounded.none}`.
+- Active: same surface, text `{colors.ink}`, with a 2px `{colors.ash}` bottom underline indicating selection.
+- Used in the install-method tab strip on the home page (`curl` / `npm` / `bun` / `brew` / `yay`).
+
+**`button-disabled`**
+
+- Background `{colors.surface-card}`, text `{colors.ash}`, rounded `{rounded.sm}`.
+
+### Badges & Chips
+
+**`badge-news`** — small dark chip in the news/announcement strip
+
+- Background `{colors.surface-dark}`, text `{colors.on-dark}`, type `{typography.caption-md}`, padding `2px 8px`, rounded `{rounded.sm}`.
+- Sits inline with body copy as a "News" / "Beta" / "Live now" tag on the home page above the hero headline.
+
+**`badge-section-label`** — bracketed section header
+
+- Background transparent, text `{colors.ink}`, type `{typography.heading-md}`, rounded `{rounded.none}`.
+- Renders as a bare `**Heading**` line above a 1px `{colors.hairline}` rule with no chip background — but the way the text reads ("[+]", "[x]", `What is OpenCode?`) makes it function as a label component.
+
+### Inputs & Forms
+
+**`text-input`** + **`text-input-focused`**
+
+- Default: background `{colors.surface-soft}`, text `{colors.ink}`, 1px solid `{colors.hairline}`, type `{typography.body-md}`, padding `8px 12px`, height ~40px, rounded `{rounded.sm}`.
+- Focused: background flips to `{colors.canvas}`, border becomes 1px solid `{colors.ink}` (the canvas's flat focus signal — no halo, no glow).
+- Used for every contact-form field on `/enterprise` (Full name, Role, Company, Company email, Phone number) and the newsletter email field at the home page footer.
+
+**`textarea`**
+
+- Background `{colors.surface-soft}`, text `{colors.ink}`, 1px solid `{colors.hairline}`, type `{typography.body-md}`, padding `12px`, rounded `{rounded.sm}`.
+- "What problem are you trying to solve?" multi-line textarea on `/enterprise`.
+
+**`install-snippet`** — the home page's signature install code block
+
+- Background `{colors.surface-card}` (`#f1eeee`), text `{colors.ink}` rendered in `{typography.body-md}` (already monospaced — Berkeley Mono), padding `12px 16px`, rounded `{rounded.sm}`.
+- Contains the literal `curl -fsSL https://opencode.ai/install | bash` command with a small copy-icon at the right edge. Sits below the install-method tab strip.
+
+### Cards & Containers
+
+**`hero-tui-mockup`** — the home page's signature TUI preview
+
+- Container: full-bleed `{colors.surface-dark}` (~near-black), padding `64px 32px`, rounded `{rounded.none}`.
+- Contents (top → bottom): ASCII block-pixel "OPENCODE" wordmark centered in `{colors.on-dark}`; a `{component.tui-prompt-row}` showing a "Build" command line with model selector text; an `tab switch agent  ctrl-p commands` keybinding hint row at the bottom in `{colors.ash}`.
+
+**`tui-prompt-row`** — the inset command line inside the TUI mockup
+
+- Background `{colors.surface-dark-elevated}` (`#302c2c`), text `{colors.on-dark}` in `{typography.body-md}`, padding `8px 12px`, rounded `{rounded.sm}`.
+- Renders an inline command (`Build  Claude Opus 4.5  OpenCode Zen`) with a leading vertical pipe and the model name styled as a bracketed token.
+
+**`list-row`** — feature/benefit row with ASCII bracket bullet
+
+- Background `{colors.canvas}`, text `{colors.body}` in `{typography.body-md}`, padding `8px 0`.
+- Each row begins with a `[+]` / `[-]` / `[x]` ASCII marker followed by a bold label and a regular description: e.g., `[+] LSP enabled    Automatically loads the right LSPs for the IDE`. The bracket marker is part of the text content, not a separate icon.
+
+**`faq-row`** — FAQ entry with bracket toggle
+
+- Background `{colors.canvas}`, text `{colors.ink}` in `{typography.body-md}`, padding `12px 0`, with a 1px `{colors.hairline}` bottom rule.
+- Each row leads with `+` / `−` ASCII markers indicating expand/collapse state. Always rendered as plain text rows — no chevron icons, no animated accordion chrome.
+
+**`testimonial-row`** — `/zen` peer-quote row
+
+- Background `{colors.surface-soft}`, text `{colors.body}` in `{typography.body-md}`, padding `16px 20px`, rounded `{rounded.sm}`.
+- Layout: a 32px avatar circle (`{rounded.full}`) at left, name + role + company in `{typography.body-strong}` on the first line, quote in `{typography.body-md}` `{colors.body}` on the second line.
+
+**`chart-tile`** — the stat-block sparse-line chart
+
+- Background `{colors.canvas}`, text `{colors.body}` in `{typography.caption-md}`, rounded `{rounded.none}`, padding `16px`.
+- Contains an inline SVG/CSS-drawn ASCII-style sparse-line plot (dotted, abstract — never specific data points) with a `Fig N. <stat label>` caption beneath in `{colors.mute}`.
+
+### Navigation
+
+**`primary-nav`**
+
+- Background `{colors.canvas}`, text `{colors.ink}` in `{typography.body-strong}`, height ~56px, rounded `{rounded.none}`, with a 1px `{colors.hairline}` bottom rule.
+- Layout (desktop): block-pixel ASCII OpenCode wordmark at left (~120×24px), nav links cluster center-right ("GitHub [150K] · Docs · Zen · Go · Enterprise"), `{component.button-primary}` "Download" CTA at the far right with a small download glyph.
+
+**Top Nav (Mobile)**
+
+- ASCII wordmark stays at left, nav links collapse into a hamburger drawer at the right. The Download CTA remains visible at every breakpoint.
+
+### Footer
+
+**`footer-section`**
+
+- Background `{colors.canvas}`, text `{colors.body}` in `{typography.caption-md}`, padding `32px 0`, with a 1px `{colors.hairline}` top rule.
+- Top row: 5-column horizontal link grid (GitHub [150K] · Docs · Changelog · Discord · X), each rendered as a centered cell separated by 1px `{colors.hairline}` vertical rules.
+- Bottom row: `©2026 Anomaly` copyright at left, `Brand · Privacy · Terms · English ▼` utility cluster at right, all in `{typography.caption-md}` `{colors.mute}`.
+
+### Inline
+
+**`link-inline`** — body-prose anchor link
+
+- `{colors.ink}` text with underline. The brand's only link affordance — even links inside body paragraphs use ink color rather than `{colors.accent}` blue. Apple Blue is reserved for the in-product TUI.
+
+## Do's and Don'ts
 
 ### Do
 
-- **Do** use `#131313` as the canvas for every view. There is no light mode.
-- **Do** use Jelly Mint (`#3cffd0`) and Verge Ultraviolet (`#5200ff`) as hazard accents — buttons, borders, active states, and saturated color-block tiles.
-- **Do** use Manuka exclusively at 60px+ for hero headlines. Treat anything smaller as a bug.
-- **Do** round everything: 20px for cards, 24px for feature cards, 30–40px for pill buttons.
-- **Do** use PolySans Mono for UPPERCASE labels, timestamps, kickers, and button text. Lowercase mono doesn't exist here.
-- **Do** apply 1.5–1.9px letter-spacing to every ALL-CAPS label — this is a Verge signature.
-- **Do** use saturated color-block tiles (mint, purple, yellow, pink, orange, white) to elevate a story — never a drop shadow.
-- **Do** use `#3860be` (deep link blue) as the hover color on every link, regardless of base color.
-- **Do** apply the StoryStream timeline rail (1px dashed/solid `#3d00bf` or white) on feed views.
-- **Do** use thin-weight (300) PolySans at 19–20px with 1.9px tracking for "fashion-whisper" capitalized eyebrows — the contrast with the 107px Manuka shout is the whole voice.
+- Render every text role in Berkeley Mono. The single-font decision is the entire identity.
+- Keep `{colors.canvas}` (`#fdfcfc`) as the only body background. Don't introduce gray section bands.
+- Use ASCII bracket markers (`[+]`, `[-]`, `[x]`, `+`, `−`) as bullets, toggles, and section glyphs. They are the brand's only iconography.
+- Anchor the dark `{component.hero-tui-mockup}` exactly once per landing page as the hero centerpiece. Never use the dark surface for body content.
+- Reserve `{colors.accent}` (Apple Blue) and the rest of the semantic ramp for in-TUI states; marketing chrome stays monochrome.
+- Use `{rounded.sm}` (4px) on every interactive element and `{rounded.none}` (0px) on every container.
+- Stack content sections at `{spacing.section}` (96px) rhythm with only 1px `{colors.hairline}` rules between them.
 
 ### Don't
 
-- **Don't** use a light background. The dark canvas is the product.
-- **Don't** add `box-shadow` for elevation. Use 1px borders or saturated accent fills instead.
-- **Don't** use square corners. Every interactive and content container is rounded.
-- **Don't** use Manuka for UI, buttons, or body copy. It's strictly display.
-- **Don't** use lowercase mono. PolySans Mono is always UPPERCASE.
-- **Don't** let mint and ultraviolet appear as background washes — they're hazard accents, not canvas tints.
-- **Don't** use gradients anywhere. The system is solid color blocks only.
-- **Don't** introduce new accent colors outside the declared mint / purple / yellow / pink / orange tile palette.
-- **Don't** pair Manuka with FK Roman Standard in the same headline cluster — Manuka is the only display shout, serif pulls are reserved for body moments.
-- **Don't** use `#3cffd0` text on a `#131313` background at under 16px — the contrast vibrates at small sizes.
+- Don't introduce a sans-serif body font, a display face, or an italic style. Berkeley Mono carries everything.
+- Don't add drop shadows, gradients, or atmospheric backgrounds. The system is flat-on-cream.
+- Don't replace the ASCII bracket markers with SVG icons. The brackets are the icons.
+- Don't use the semantic accent ramp (`{colors.accent}`, `{colors.warning}`, `{colors.danger}`, `{colors.success}`) on marketing CTAs. They belong to the in-product TUI.
+- Don't pad cards with 24px+ internal padding. List rows sit at 8px vertical; FAQ rows at 12px.
+- Don't render the OpenCode wordmark as a vector logo. It is always block-pixel ASCII.
+- Don't fill the hero TUI mockup with photography or illustration. It is text-only and always shows a faux terminal command line.
 
-## 8. Responsive Behavior
+## Responsive Behavior
 
 ### Breakpoints
 
-| Name          | Width       | Key Changes                                                                                         |
-| ------------- | ----------- | --------------------------------------------------------------------------------------------------- |
-| Small Mobile  | <400px      | Single column, Manuka hero scales down to ~48–54px, StoryStream rail collapses to inline timestamps |
-| Mobile        | 400–549px   | Single column, color-block tiles stack full-width, nav is a hamburger drawer                        |
-| Large Mobile  | 550–767px   | Still single column but padding opens up, tile radii stay at 20px                                   |
-| Tablet        | 768–1023px  | 2-column StoryStream with feature card spanning, wordmark shrinks ~50%                              |
-| Small Desktop | 1024–1179px | Full 3–4 column editorial grid, mint pill CTA restored to nav                                       |
-| Desktop       | 1180–1299px | Max padding, Manuka wordmark at full hero scale                                                     |
-| Large Desktop | ≥1300px     | Container caps at ~1280–1300px, whitespace expands at the margins, no further scaling               |
-
-The dembrandt sweep detected 26 intermediate breakpoints (1300 → 1280 → 1200 → 1181 → 1180 → 1179 → 1024 → 1023 → 901 → 900 → 897 → 896 → 890 → 769 → 768 → 620 → 605 → 600 → 550 → 549 → 530 → 426 → 425 → 400 → 320). The Verge tunes its grid at virtually every major device boundary — an unusually aggressive responsive strategy.
+| Name          | Width   | Key Changes                                                                         |
+| ------------- | ------- | ----------------------------------------------------------------------------------- |
+| desktop-large | 1280px+ | Default — 960px content column, 5-up footer link grid                               |
+| desktop       | 1024px  | Same layout; nav remains horizontal                                                 |
+| tablet        | 850px   | Footer collapses to 2-up grid; `/enterprise` two-column form stacks                 |
+| tablet-narrow | 768px   | Primary nav becomes hamburger drawer; Download CTA stays visible                    |
+| mobile        | 640px   | Single-column everything; hero display drops 38px → ~28px; section padding tightens |
 
 ### Touch Targets
 
-- Primary pill buttons are ~44px minimum height (10px vertical padding + 16px text + 2px border) — meets WCAG AA.
-- Mono uppercase nav links are smaller (~28–32px tall) — for derivative work, pad to 44px on mobile.
-- Circle icon buttons are 40–44px circles, touch-friendly.
+All interactive elements meet WCAG AA at the ~36–40px height range. `{component.button-primary}` sits at ~36px with 20px horizontal padding. `{component.text-input}` and `{component.textarea}` sit at ~40px. `{component.button-tab}` rows in the install-method strip sit at ~32–36px depending on label length but extend to a full 44px tappable cell via inline padding. Footer links use `{typography.caption-md}` (14px) but receive ~28px line-height (caption-md is 2.0) plus 8px vertical padding for a comfortable ~44px tappable row.
 
 ### Collapsing Strategy
 
-- **Nav**: wordmark scales from hero (Manuka 60–107px) to ~24–32px on mobile. Category links collapse to a hamburger drawer below 900px.
-- **Grid**: 4-col → 3-col → 2-col → 1-col. Feature cards that span 2 columns on desktop reflow to full-width single-column on mobile.
-- **Spacing**: section padding tightens from 64px → 32px → 20px. Tile interior padding tightens from 32px → 20px.
-- **Type**: Manuka hero scales from 107px to ~48–54px on mobile. PolySans headlines scale from 34px → 24px. Mono labels stay pinned at 11–12px (they don't shrink further or they become unreadable).
-- **Color tiles**: accent story blocks never lose saturation on mobile — they just reflow to full width.
+- **Primary nav:** desktop horizontal cluster → tablet-narrow hamburger drawer at 768px. The dark "Download" CTA stays visible at all widths.
+- **Hero TUI mockup:** maintains its full-bleed dark surface at every breakpoint; the ASCII wordmark scales proportionally and the keybinding-hint row may wrap to two lines on narrow screens.
+- **Install snippet + tab strip:** desktop fixed-width pill → mobile full-width pill with horizontal scroll on the tab strip if labels overflow.
+- **Footer:** 5-up horizontal link grid → 2-up at tablet → 1-up at mobile (each link becomes a full-width row).
+- **`/enterprise` two-column layout:** desktop 50/50 → tablet stacks to single-column with the form below the text block.
+- **Section padding:** `{spacing.section}` (96px) desktop → 64px tablet → 48px mobile.
+- **Hero headline:** `{typography.display-xl}` (38px) at desktop, scaling to ~28px at mobile, line-height holding at 1.5.
 
 ### Image Behavior
 
-- Responsive raster via `srcset`, aspect ratios preserved.
-- No art-direction swaps — same crop scales across all viewports.
-- `loading="lazy"` on everything below the fold, `eager` on the masthead hero.
-- Images inside color-block tiles inherit the tile's inner radius (4px or 20px nested).
+There are no raster images in the system aside from the favicon and OG share image. Every visual element — wordmarks, charts, icons — is rendered as type or inline SVG and scales without aspect-ratio considerations.
 
-## 9. Agent Prompt Guide
+## Iteration Guide
 
-### Quick Color Reference
+1. Focus on ONE component at a time. Pull its YAML entry and verify every property resolves.
+2. Reference component names and tokens directly (`{colors.ink}`, `{component.hero-tui-mockup}`, `{rounded.sm}`) — do not paraphrase.
+3. Run `npx @google/design.md lint DESIGN.md` after edits — `broken-ref`, `contrast-ratio`, and `orphaned-tokens` warnings flag issues automatically.
+4. Add new variants as separate component entries (`-active`, `-disabled`) — do not bury them inside prose.
+5. Default body to `{typography.body-md}`; reach for `{typography.body-strong}` for emphasis; reserve `{typography.display-xl}` strictly for the page-top hero headline.
+6. Keep `{colors.surface-dark}` scarce — at most one full-bleed dark mockup per page. The dark surface is a narrative device, not a chrome treatment.
+7. When introducing a new component, ask whether it can be expressed with the existing ASCII-bracket + 4px-radius + Berkeley-Mono vocabulary before adding new tokens. The system's strength is that it almost never needs new ones.
 
-- **Primary CTA**: "Jelly Mint (`#3cffd0`)"
-- **Background (Canvas)**: "Canvas Black (`#131313`)"
-- **Accent (Secondary Hazard)**: "Verge Ultraviolet (`#5200ff`)"
-- **Heading Text**: "Hazard White (`#ffffff`)"
-- **Body Text**: "Hazard White (`#ffffff`)" (primary) or "Muted Text (`#e9e9e9`)"
-- **Secondary Text / Metadata**: "Secondary Text (`#949494`)"
-- **Card Border**: "Hazard White (`#ffffff`)" hairline on dark, "Console Mint Border (`#309875`)" on mint variants
-- **Link Hover**: "Deep Link Blue (`#3860be`)"
+## Known Gaps
 
-### Example Component Prompts
-
-1. _"Create a StoryStream timeline item on a `#131313` canvas: a 20px-radius rectangle with a 1px solid `#ffffff` border, a PolySans Mono 11px / 600 / UPPERCASE / 1.1px tracking timestamp on the left rail, a 12px PolySans UPPERCASE kicker in mint (`#3cffd0`), and a 24px / 700 PolySans headline in white below. No shadow, no lift — hover only shifts the headline color to `#3860be`."_
-2. _"Design a primary subscribe button with a Jelly Mint (`#3cffd0`) fill, black text in PolySans Mono 12px / 600 / UPPERCASE / 1.5px tracking, 24px border radius, 10px × 24px padding. Hover state shifts to `rgba(255, 255, 255, 0.2)` background with a 1px `#c2c2c2` ring shadow, 180ms ease."_
-3. _"Build a feature hero with a 107px Manuka 900 headline in white with 1.07px letter-spacing and 0.80 line-height, a thin-weight 300 PolySans 20px capitalized kicker above with 1.9px tracking, on a `#131313` canvas with 64px vertical padding."_
-4. _"Create a color-block accent tile filled with Verge Ultraviolet (`#5200ff`) at 0.9 alpha, 24px border radius, white text, a PolySans Mono 11px UPPERCASE category label with 1.5px tracking at the top, and a 32px PolySans 400 capitalized headline with 0.32px tracking below."_
-5. _"Design a dark slate secondary button with a `#2d2d2d` background, `#e9e9e9` PolySans 16px text, 24px radius pill shape, 10px × 24px padding. Hover matches the primary button — translucent white `rgba(255, 255, 255, 0.2)` bg with black text."_
-
-### Iteration Guide
-
-When refining existing screens generated with this design system:
-
-1. **Audit the canvas.** If you see a light background anywhere on the homepage, flatten it to `#131313`. There is no light mode.
-2. **Audit corners.** Every rectangle should land on 2/3/4/20/24/30/40px or 50%. Square corners break the voice.
-3. **Audit shadows.** Strip every `box-shadow` that isn't a 1px inset underline or a 1px hazard-color border. The Verge uses color for elevation, not shadow.
-4. **Audit type roles.** Manuka only ≥60px. PolySans Mono only UPPERCASE. PolySans 300 at 19–20px should have 1.9px tracking. FK Roman only for body/magazine moments, never UI.
-5. **Audit accent usage.** Mint and ultraviolet should appear as hazard accents — buttons, 1px borders, active underlines, saturated tile fills. If they're appearing as background washes or gradient fades, correct to solid blocks.
-6. **Audit labels.** Every kicker, timestamp, category tag, and button label should be ALL CAPS with 1.1–1.9px letter-spacing. Missing tracking = missing voice.
-7. **Audit link hover.** Every link, regardless of its base color, should hover to `#3860be` deep link blue with no underline. Any other hover color is drift.
+- **Mobile screenshots not captured** — responsive behavior synthesizes OpenCode's mobile pattern (hamburger drawer, single-column, footer accordion) from desktop evidence and the breakpoint stack.
+- **Hover states not documented** by system policy.
+- **In-product TUI screenshots** beyond the marketing hero mockup are not in the captured set; the actual `opencode` terminal interface (full keybindings, panels, status bar) is not documented here.
+- **`/go` page** not extracted — the marketing page for the Go SDK likely shares the same chrome but introduces code-sample blocks not documented above.
+- **Form validation state styling** (success / error inline messages) not present in the captured surfaces.

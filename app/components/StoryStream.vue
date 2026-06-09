@@ -5,57 +5,49 @@ defineProps<{
   stories: NewsItem[];
 }>();
 
-const formatTimestamp = (dateString: string | null) => {
+const formattedDate = (dateString: string | null) => {
   if (!dateString) return "";
-  const date = dayjs(dateString);
-  const now = dayjs();
-  const diffHrs = now.diff(date, "hour");
-  const diffDays = now.diff(date, "day");
-
-  if (diffHrs < 1) return "NOW";
-  if (diffHrs < 24) return `${diffHrs}H AGO`;
-  if (diffDays < 7) return `${diffDays}D AGO`;
-  return date.format("MMM D").toUpperCase();
+  return dayjs(dateString).format("MMM D");
 };
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
-    <div
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-3 font-mono">
+    <NuxtLink
       v-for="story in stories"
       :key="story.id"
-      class="relative pl-8 border-l border-dashed border-ultraviolet-700"
+      :to="`/news/${story.id}`"
+      class="block group"
     >
-      <span
-        class="absolute left-0 top-2 -translate-x-[calc(100%+12px)] font-mono text-xs uppercase tracking-widest text-muted whitespace-nowrap hidden sm:block"
-      >
-        {{ formatTimestamp(story.publishedAt) }}
-      </span>
-
-      <NuxtLink :to="`/news/${story.id}`" class="block group">
+      <div class="rounded-sm p-5 min-h-44 flex flex-col gap-2 border border-default">
         <div
-          class="rounded-[20px] bg-default border border-muted p-5 md:p-6 flex flex-col gap-2 transition-colors duration-150 hover:border-primary-500/50"
+          class="flex items-center justify-between gap-2 mb-1 font-mono text-[10px] uppercase tracking-widest text-toned"
         >
-          <div class="flex items-center gap-3">
-            <span class="font-mono text-xs uppercase tracking-widest text-primary-500">
-              {{ story.category?.name }}
-            </span>
-            <span class="sm:hidden font-mono text-xs uppercase tracking-widest text-muted">
-              {{ formatTimestamp(story.publishedAt) }}
-            </span>
-          </div>
-
-          <h3
-            class="font-bold text-base md:text-lg leading-snug text-highlighted group-hover:text-[#3860be] transition-colors duration-150"
-          >
-            {{ story.title }}
-          </h3>
-
-          <p class="text-sm text-toned line-clamp-2">
-            {{ story.description }}
-          </p>
+          <span>
+            {{ story.category?.name }}
+          </span>
+          <span v-if="formattedDate(story.publishedAt)">{{
+            formattedDate(story.publishedAt)
+          }}</span>
         </div>
-      </NuxtLink>
+
+        <h3
+          class="text-base md:text-lg leading-snug flex-1 text-highlighted group-hover:text-muted"
+        >
+          {{ story.title }}
+        </h3>
+
+        <p class="text-xs leading-relaxed text-toned line-clamp-2">
+          {{ story.description }}
+        </p>
+      </div>
+    </NuxtLink>
+
+    <div
+      v-if="!stories.length"
+      class="col-span-full py-8 text-center text-xs uppercase tracking-widest text-toned"
+    >
+      [-] No stories in this stream
     </div>
   </div>
 </template>
