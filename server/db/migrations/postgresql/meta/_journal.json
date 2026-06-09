@@ -15,6 +15,13 @@
       "when": 1780848040350,
       "tag": "0001_polite_moon_knight",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1780894780971,
+      "tag": "0002_drop_author_role",
+      "breakpoints": true
     }
   ]
 }
