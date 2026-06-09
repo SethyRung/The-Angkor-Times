@@ -49,7 +49,7 @@ export default defineEventHandler(async (event) => {
         passwordHash,
         firstName: body.firstName,
         lastName: body.lastName,
-        role: "author",
+        role: "editor",
       })
       .returning();
 
@@ -81,17 +81,19 @@ export default defineEventHandler(async (event) => {
       expiresAt: expiresInToDate(config.jwt.refresh.expiresIn),
     });
 
-    setCookie(event, "access_token", accessToken, {
+    const isProduction = process.env.NODE_ENV === "production";
+
+    setCookie(event, CookieName.AccessToken, accessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: isProduction,
       sameSite: "lax",
       path: "/",
       maxAge: expiresInToSeconds(config.jwt.access.expiresIn),
     });
 
-    setCookie(event, "refresh_token", refresh, {
+    setCookie(event, CookieName.RefreshToken, refresh, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: isProduction,
       sameSite: "lax",
       path: "/",
       maxAge: expiresInToSeconds(config.jwt.refresh.expiresIn),

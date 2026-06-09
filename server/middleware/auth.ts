@@ -1,46 +1,51 @@
+import type { AccessTokenPayload } from "#shared/types";
 import { createResponse } from "../utils/response";
-import { isPublicRoute, verifyToken, isEditorOrAdmin } from "../utils/auth";
+import { isPublicRoute, verifyToken, isEditorOrAdmin, isAdmin } from "../utils/auth";
 import { refreshToken } from "../utils/refreshToken";
 
 export default defineEventHandler(async (event) => {
-  const path = getRequestURL(event).pathname;
-  const method = event.method;
+  const url = getRequestURL(event).pathname;
 
-  if (!path.startsWith("/api/") || isPublicRoute(path, method)) {
+  if (!url.startsWith("/api/") || url.startsWith("/api/_") || isPublicRoute(url, event.method)) {
     return;
   }
 
   const config = useRuntimeConfig();
-  const accessToken = getCookie(event, "access_token");
-
-  let payload: AccessTokenPayload | null = null;
-
-  if (accessToken) {
-    payload = verifyToken<AccessTokenPayload>(accessToken, config.jwt.access);
-  }
+  const token = getCookie(event, CookieName.AccessToken);
+  const payload = verifyToken<AccessTokenPayload>(token ?? "", config.jwt.access);
 
   if (!payload) {
     const refreshed = await refreshToken(event);
-    if (isSuccessResponse(refreshed)) {
-      const newAccess = getCookie(event, "access_token");
-      if (newAccess) {
-        payload = verifyToken<AccessTokenPayload>(newAccess, config.jwt.access);
-      }
+
+    if (!isSuccessResponse(refreshed)) {
+      deleteCookie(event, CookieName.AccessToken);
+      deleteCookie(event, CookieName.RefreshToken);
+      return createResponse(
+        { code: ApiResponseCode.Unauthorized, message: "Invalid or expired token" },
+        null,
+      );
     }
+
+    const { user } = refreshed.data;
+    event.context.user = {
+      userId: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role,
+    };
+  } else {
+    event.context.user = payload;
   }
 
-  if (!payload) {
-    deleteCookie(event, "access_token");
-    deleteCookie(event, "refresh_token");
+  if (url.startsWith("/api/admin/users") && !isAdmin(event.context.user.role)) {
     return createResponse(
-      { code: ApiResponseCode.Unauthorized, message: "Authentication required" },
+      { code: ApiResponseCode.Forbidden, message: "Admin access required" },
       null,
     );
   }
 
-  event.context.user = payload;
-
-  if (path.startsWith("/api/admin/") && !isEditorOrAdmin(payload.role)) {
+  if (url.startsWith("/api/admin/") && !isEditorOrAdmin(event.context.user.role)) {
     return createResponse(
       { code: ApiResponseCode.Forbidden, message: "Admin or editor access required" },
       null,

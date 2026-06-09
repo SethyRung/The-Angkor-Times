@@ -1,104 +1,111 @@
+import type { H3Event } from "h3";
 import { db, schema } from "@nuxthub/db";
-import { and, eq } from "drizzle-orm";
+import { eq, and, gt, isNull } from "drizzle-orm";
 import { createResponse } from "./response";
-import { generateTokens, verifyToken, expiresInToSeconds } from "./auth";
+import { generateTokens, verifyToken, expiresInToDate, expiresInToSeconds } from "./auth";
 
-interface RefreshTokenPayload {
-  userId: string;
-  type: string;
-}
+export async function refreshToken(event: H3Event) {
+  const config = useRuntimeConfig();
+  const token = getCookie(event, CookieName.RefreshToken);
 
-export async function refreshToken(event: any): Promise<ApiResponse<{ accessToken: string }>> {
+  if (!token) {
+    return createResponse(
+      { code: ApiResponseCode.Unauthorized, message: "No refresh token" },
+      null,
+    );
+  }
+
   try {
-    const config = useRuntimeConfig();
-    const cookieRefresh = getCookie(event, "refresh_token");
+    const payload = verifyToken<{ userId: string; type: string }>(token, config.jwt.refresh);
 
-    if (!cookieRefresh) {
-      return createResponse(
-        { code: ApiResponseCode.Unauthorized, message: "No refresh token" },
-        null,
-      );
-    }
-
-    const payload = verifyToken<RefreshTokenPayload>(cookieRefresh, config.jwt.refresh);
     if (!payload) {
       return createResponse(
-        { code: ApiResponseCode.Unauthorized, message: "Invalid refresh token" },
+        { code: ApiResponseCode.ValidationError, message: "Invalid or expired refresh token" },
         null,
       );
     }
 
-    const storedToken = await db
-      .select()
-      .from(schema.refreshTokens)
-      .where(
-        and(
-          eq(schema.refreshTokens.userId, payload.userId),
-          eq(schema.refreshTokens.token, cookieRefresh),
-        ),
-      )
-      .limit(1);
+    const storedToken = await db.query.refreshTokens.findFirst({
+      where: and(
+        eq(schema.refreshTokens.token, token),
+        gt(schema.refreshTokens.expiresAt, new Date()),
+        isNull(schema.refreshTokens.revokedAt),
+      ),
+    });
 
-    if (!storedToken.length) {
+    if (!storedToken) {
       return createResponse(
-        { code: ApiResponseCode.Unauthorized, message: "Refresh token not recognized" },
+        { code: ApiResponseCode.NotFound, message: "Refresh token not found or revoked" },
         null,
       );
     }
 
-    const token = storedToken[0]!;
-    if (token.revokedAt) {
-      return createResponse(
-        { code: ApiResponseCode.Unauthorized, message: "Refresh token revoked" },
-        null,
-      );
-    }
-    if (new Date(token.expiresAt) < new Date()) {
-      return createResponse(
-        { code: ApiResponseCode.Unauthorized, message: "Refresh token expired" },
-        null,
-      );
+    const user = await db.query.users.findFirst({
+      where: eq(schema.users.id, payload.userId),
+    });
+
+    if (!user) {
+      return createResponse({ code: ApiResponseCode.NotFound, message: "User not found" }, null);
     }
 
-    const user = await db
-      .select()
-      .from(schema.users)
-      .where(eq(schema.users.id, payload.userId))
-      .limit(1);
+    await db
+      .update(schema.refreshTokens)
+      .set({ revokedAt: new Date() })
+      .where(eq(schema.refreshTokens.id, storedToken.id));
 
-    if (!user.length) {
-      return createResponse(
-        { code: ApiResponseCode.Unauthorized, message: "User not found" },
-        null,
-      );
-    }
-
-    const u = user[0]!;
-    const accessToken = generateTokens(
+    const newAccessToken = generateTokens(
       {
-        userId: u.id,
-        email: u.email,
-        firstName: u.firstName,
-        lastName: u.lastName,
-        role: u.role,
+        userId: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
       },
       config.jwt.access,
     );
 
-    setCookie(event, "access_token", accessToken, {
+    const newRefreshToken = generateTokens(
+      { userId: user.id, type: "refresh" },
+      config.jwt.refresh,
+    );
+
+    await db.insert(schema.refreshTokens).values({
+      token: newRefreshToken,
+      userId: user.id,
+      expiresAt: expiresInToDate(config.jwt.refresh.expiresIn),
+    });
+
+    const isProduction = process.env.NODE_ENV === "production";
+
+    setCookie(event, CookieName.AccessToken, newAccessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: isProduction,
       sameSite: "lax",
       path: "/",
       maxAge: expiresInToSeconds(config.jwt.access.expiresIn),
     });
 
+    setCookie(event, CookieName.RefreshToken, newRefreshToken, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: "lax",
+      path: "/",
+      maxAge: expiresInToSeconds(config.jwt.refresh.expiresIn),
+    });
+
     return createResponse(
-      { code: ApiResponseCode.Success, message: "Token refreshed" },
-      { accessToken },
+      { code: ApiResponseCode.Success, message: "Token refreshed successfully" },
+      {
+        user: {
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          role: user.role,
+        },
+      },
     );
-  } catch (e) {
-    console.error("[refreshToken]", e);
+  } catch {
     return createResponse(
       { code: ApiResponseCode.InternalError, message: "Failed to refresh token" },
       null,
