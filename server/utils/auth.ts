@@ -14,7 +14,7 @@ const PUBLIC_ROUTES: { pattern: RegExp; methods: string[] }[] = [
   { pattern: /^\/api\/news$/, methods: ["GET"] },
   { pattern: /^\/api\/news\/[a-f0-9-]+$/, methods: ["GET"] },
   { pattern: /^\/api\/categories$/, methods: ["GET"] },
-  { pattern: /^\/api\/categories\/[a-f0-9-]+$/, methods: ["GET"] },
+  { pattern: /^\/api\/categories\/[a-z0-9-]+$/, methods: ["GET"] },
   { pattern: /^\/api\/navigation$/, methods: ["GET"] },
   { pattern: /^\/api\/tags$/, methods: ["GET"] },
   { pattern: /^\/api\/_nuxt_icon\/.*$/, methods: ["GET"] },
