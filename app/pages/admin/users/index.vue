@@ -8,6 +8,14 @@ definePageMeta({
   middleware: ["admin"],
 });
 
+useSeoMeta({
+  title: "Users — The Angkor Times",
+  description: "Manage editor and admin accounts for The Angkor Times.",
+  ogTitle: "Users — The Angkor Times",
+  ogDescription: "Manage editor and admin accounts for The Angkor Times.",
+  ogType: "website",
+});
+
 const user = useUser();
 
 const { data, pending, refresh } = await useFetchApi<ApiResponse<PublicUser[]>>(

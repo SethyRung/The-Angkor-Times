@@ -27,6 +27,14 @@ const stories = computed<NewsItem[]>(() => {
   if (!res || !isSuccessResponse(res)) return [];
   return res.data;
 });
+
+useSeoMeta({
+  title: () => `${categoryName.value || slug} — The Angkor Times`,
+  description: () => `Stories in ${categoryName.value || slug} — The Angkor Times.`,
+  ogTitle: () => `${categoryName.value || slug} — The Angkor Times`,
+  ogDescription: () => `Stories in ${categoryName.value || slug} — The Angkor Times.`,
+  ogType: "website",
+});
 </script>
 
 <template>

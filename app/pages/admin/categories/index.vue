@@ -8,6 +8,14 @@ definePageMeta({
   middleware: ["admin"],
 });
 
+useSeoMeta({
+  title: "Categories — The Angkor Times",
+  description: "Create, edit, and remove story categories for The Angkor Times.",
+  ogTitle: "Categories — The Angkor Times",
+  ogDescription: "Create, edit, and remove story categories for The Angkor Times.",
+  ogType: "website",
+});
+
 const { data, pending, refresh } = await useFetchApi<ApiResponse<DbCategory[]>>(
   "/api/admin/categories",
   { key: "admin:categories" },

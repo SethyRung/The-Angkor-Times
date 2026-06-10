@@ -5,6 +5,14 @@ import type { AuthUser } from "#shared/types";
 
 definePageMeta({ layout: false });
 
+useSeoMeta({
+  title: "Sign In — The Angkor Times",
+  description: "Editor sign-in for The Angkor Times admin console.",
+  ogTitle: "Sign In — The Angkor Times",
+  ogDescription: "Editor sign-in for The Angkor Times admin console.",
+  ogType: "website",
+});
+
 const route = useRoute();
 const router = useRouter();
 const user = useUser();

@@ -13,6 +13,14 @@ const categories = computed<CategoryWithCount[]>(() => {
   if (!res || !isSuccessResponse(res)) return [];
   return res.data.filter((c) => c.newsCount > 0);
 });
+
+useSeoMeta({
+  title: "Categories — The Angkor Times",
+  description: "Browse all story categories on The Angkor Times.",
+  ogTitle: "Categories — The Angkor Times",
+  ogDescription: "Browse all story categories on The Angkor Times.",
+  ogType: "website",
+});
 </script>
 
 <template>

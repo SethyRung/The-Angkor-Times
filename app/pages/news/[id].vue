@@ -28,16 +28,14 @@ const formattedTime = computed(() => {
   return dayjs(story.value.publishedAt).format("HH:mm");
 });
 
-useHead(() => ({
-  title: story.value ? `${story.value.title} — The Angkor Times` : "Loading...",
-  meta: [
-    { name: "description", content: story.value?.description ?? "" },
-    { property: "og:title", content: story.value?.title ?? "" },
-    { property: "og:description", content: story.value?.description ?? "" },
-    { property: "og:image", content: story.value?.featuredImage ?? "" },
-    { property: "og:type", content: "article" },
-  ],
-}));
+useSeoMeta({
+  title: () => (story.value ? `${story.value.title} — The Angkor Times` : "Loading..."),
+  description: () => story.value?.description ?? "",
+  ogTitle: () => story.value?.title ?? "",
+  ogDescription: () => story.value?.description ?? "",
+  ogImage: () => story.value?.featuredImage ?? "",
+  ogType: "article",
+});
 </script>
 
 <template>

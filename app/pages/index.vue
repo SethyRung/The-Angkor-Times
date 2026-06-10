@@ -24,6 +24,16 @@ const wordmark = [
   "╚██████╔╝██║     ██████╔╝██║  ██║   ██║   ███████╗",
   " ╚═════╝ ╚═╝     ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝",
 ];
+
+useSeoMeta({
+  title: "The Angkor Times",
+  description:
+    "The Angkor Times — a news desk with an admin-approval workflow. Top stories, curated categories, and the story stream.",
+  ogTitle: "The Angkor Times",
+  ogDescription:
+    "The Angkor Times — a news desk with an admin-approval workflow. Top stories, curated categories, and the story stream.",
+  ogType: "website",
+});
 </script>
 
 <template>

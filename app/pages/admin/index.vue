@@ -4,6 +4,14 @@ definePageMeta({
   middleware: ["admin"],
 });
 
+useSeoMeta({
+  title: "Dashboard — The Angkor Times",
+  description: "Editorial dashboard for The Angkor Times.",
+  ogTitle: "Dashboard — The Angkor Times",
+  ogDescription: "Editorial dashboard for The Angkor Times.",
+  ogType: "website",
+});
+
 const user = useUser();
 
 const { data } = await useFetchApi<ApiResponse<DashboardStats>>("/api/admin/stats");

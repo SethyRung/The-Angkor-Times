@@ -7,6 +7,14 @@ definePageMeta({
   middleware: ["admin"],
 });
 
+useSeoMeta({
+  title: "News Queue — The Angkor Times",
+  description: "Review, publish, and manage story submissions for The Angkor Times.",
+  ogTitle: "News Queue — The Angkor Times",
+  ogDescription: "Review, publish, and manage story submissions for The Angkor Times.",
+  ogType: "website",
+});
+
 const filter = ref<"all" | "pending" | "published">("pending");
 const search = ref("");
 
