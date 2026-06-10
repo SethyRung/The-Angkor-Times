@@ -285,8 +285,7 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
         :loading="pending"
         :ui="{
           root: 'min-h-max rounded-sm border border-default',
-          separator: 'bg-muted',
-          tbody: 'divide-default',
+          th: 'text-muted',
         }"
       >
         <template #title-cell="{ row }">

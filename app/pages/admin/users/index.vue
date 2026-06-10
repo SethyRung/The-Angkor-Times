@@ -188,8 +188,7 @@ function initials(item: PublicUser) {
         :loading="pending"
         :ui="{
           root: 'min-h-max rounded-sm border border-default',
-          th: 'text-xs uppercase tracking-widest text-muted',
-          td: 'text-sm',
+          th: 'text-muted',
         }"
       >
         <template #user-cell="{ row }">

@@ -38,7 +38,7 @@ const wordmark = [
   >
     <template #title>
       <NuxtLink to="/" class="flex items-center gap-3 min-w-0">
-        <pre class="block text-[4px] md:text-[6px] text-highlighted whitespace-pre font-mono">{{
+        <pre class="block text-[4px] text-highlighted whitespace-pre font-mono">{{
           wordmark.join("\n")
         }}</pre>
       </NuxtLink>

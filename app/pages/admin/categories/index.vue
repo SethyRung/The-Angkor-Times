@@ -110,26 +110,6 @@ async function confirmDelete() {
     deleting.value = false;
   }
 }
-
-function actionItems(item: DbCategory): DropdownMenuItem[][] {
-  return [
-    [
-      {
-        label: "Edit",
-        icon: "i-lucide-pencil",
-        onSelect: () => openEdit(item),
-      },
-    ],
-    [
-      {
-        label: "Delete",
-        icon: "i-lucide-trash",
-        color: "error",
-        onSelect: () => askDelete(item),
-      },
-    ],
-  ];
-}
 </script>
 
 <template>
@@ -168,33 +148,40 @@ function actionItems(item: DbCategory): DropdownMenuItem[][] {
         :loading="pending"
         :ui="{
           root: 'min-h-max rounded-sm border border-default',
-          th: 'text-xs uppercase tracking-widest text-muted',
-          td: 'text-sm',
+          th: 'text-muted',
         }"
       >
         <template #name-cell="{ row }">
-          <span class="text-sm text-highlighted">{{ row.original.name }}</span>
+          <span class="text-highlighted">{{ row.original.name }}</span>
         </template>
 
         <template #slug-cell="{ row }">
-          <span class="text-xs uppercase tracking-widest text-toned">{{ row.original.slug }}</span>
+          <span class="text-xs text-toned">{{ row.original.slug }}</span>
         </template>
 
         <template #created-cell="{ row }">
-          <span class="text-[10px] uppercase tracking-widest text-muted">
+          <span class="text-xs uppercase text-muted">
             {{ dayjs(row.original.createdAt).fromNow() }}
           </span>
         </template>
 
         <template #actions-cell="{ row }">
-          <UDropdownMenu :items="actionItems(row.original)">
-            <UButton
-              icon="i-lucide-ellipsis"
-              color="neutral"
-              variant="ghost"
-              aria-label="Actions"
-              class="rounded-sm"
-            />
+          <UDropdownMenu
+            :items="[
+              {
+                label: 'Edit',
+                icon: 'i-lucide-pencil',
+                onSelect: () => openEdit(row.original),
+              },
+              {
+                label: 'Delete',
+                icon: 'i-lucide-trash',
+                color: 'error',
+                onSelect: () => askDelete(row.original),
+              },
+            ]"
+          >
+            <UButton icon="i-lucide-ellipsis" variant="ghost" />
           </UDropdownMenu>
         </template>
 
