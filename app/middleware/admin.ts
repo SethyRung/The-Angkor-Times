@@ -1,17 +1,8 @@
 export default defineNuxtRouteMiddleware(async (to) => {
-  const user = useUser();
+  const { user, loggedIn, waitForSession } = useUserSession();
 
-  if (user.value && (user.value.role === "admin" || user.value.role === "editor")) {
-    return;
-  }
-
-  try {
-    const res = await useApi<ApiResponse<AuthUser>>("/api/auth/me");
-    if (isSuccessResponse<AuthUser>(res) && res.data) {
-      user.value = res.data;
-    }
-  } catch {
-    // fall through
+  if (!loggedIn.value) {
+    await waitForSession();
   }
 
   if (!user.value || (user.value.role !== "admin" && user.value.role !== "editor")) {

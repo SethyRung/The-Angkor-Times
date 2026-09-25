@@ -18,7 +18,7 @@ useSeoMeta({
   ogType: "website",
 });
 
-const user = useUser();
+const { user } = useUserSession();
 
 const { data, pending, refresh } = await useFetchApi<ApiResponse<PublicUser[]>>(
   "/api/admin/users",

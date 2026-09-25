@@ -19,8 +19,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const row = rows[0]!;
-    const { passwordHash: _passwordHash, ...publicUser } = row;
-    const data: PublicUser = publicUser;
+    const data: PublicUser = row;
 
     return createResponse({ code: ApiResponseCode.Success, message: "OK" }, data);
   } catch (e) {

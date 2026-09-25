@@ -1,8 +1,8 @@
-import type { AccessTokenPayload } from "#shared/types/db";
+import type { EventContextUser } from "#shared/types";
 
 declare module "h3" {
   interface H3EventContext {
-    user: AccessTokenPayload;
+    user: EventContextUser;
   }
 }
 

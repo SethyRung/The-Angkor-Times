@@ -1,6 +1,6 @@
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
-import { hashPassword } from "~~/server/utils/auth";
+import { APIError } from "better-auth/api";
 import type { PublicUser } from "./index.get";
 
 const VALID_ROLES = ["admin", "editor"] as const;
@@ -79,14 +79,32 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    const update: Record<string, unknown> = { updatedAt: new Date() };
-    if (body.email !== undefined) update.email = body.email;
-    if (body.firstName !== undefined) update.firstName = body.firstName;
-    if (body.lastName !== undefined) update.lastName = body.lastName;
-    if (body.role !== undefined) update.role = body.role;
     if (body.password !== undefined && body.password.length > 0) {
-      update.passwordHash = await hashPassword(body.password);
+      const auth = serverAuth(event);
+      await auth.api.setUserPassword({
+        body: { userId: id, newPassword: body.password },
+        headers: event.headers,
+      });
     }
+
+    const existing = await db.select().from(schema.users).where(eq(schema.users.id, id)).limit(1);
+
+    if (!existing.length) {
+      return createResponse({ code: ApiResponseCode.NotFound, message: "User not found" }, null);
+    }
+
+    const current = existing[0]!;
+    const firstName = body.firstName !== undefined ? body.firstName : current.firstName;
+    const lastName = body.lastName !== undefined ? body.lastName : current.lastName;
+
+    const update: Record<string, unknown> = {
+      updatedAt: new Date(),
+      firstName,
+      lastName,
+      name: [firstName, lastName].filter(Boolean).join(" ") || current.name,
+    };
+    if (body.email !== undefined) update.email = body.email;
+    if (body.role !== undefined) update.role = body.role;
 
     const updated = await db
       .update(schema.users)
@@ -98,12 +116,13 @@ export default defineEventHandler(async (event) => {
       return createResponse({ code: ApiResponseCode.NotFound, message: "User not found" }, null);
     }
 
-    const row = updated[0]!;
-    const { passwordHash: _passwordHash, ...publicUser } = row;
-    const data: PublicUser = publicUser;
+    const data: PublicUser = updated[0]!;
 
     return createResponse({ code: ApiResponseCode.Success, message: "User updated" }, data);
   } catch (e) {
+    if (e instanceof APIError) {
+      return createResponse({ code: ApiResponseCode.ValidationError, message: e.message }, null);
+    }
     console.error("[admin/users PUT]", e);
     return createResponse(
       { code: ApiResponseCode.InternalError, message: "Failed to update user" },

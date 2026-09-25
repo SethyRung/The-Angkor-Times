@@ -1,5 +1,6 @@
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
+import { hashPassword } from "better-auth/crypto";
 
 export default defineTask({
   meta: {
@@ -26,17 +27,34 @@ export default defineTask({
     if (existing.length) {
       await db
         .update(schema.users)
-        .set({ passwordHash, role: "admin" })
+        .set({ role: "admin", emailVerified: true })
         .where(eq(schema.users.id, existing[0]!.id));
+      await db
+        .update(schema.accounts)
+        .set({ password: passwordHash })
+        .where(eq(schema.accounts.userId, existing[0]!.id));
       return { result: "updated", email };
     }
 
-    await db.insert(schema.users).values({
-      email,
-      passwordHash,
-      firstName: "Site",
-      lastName: "Admin",
-      role: "admin",
+    const inserted = await db
+      .insert(schema.users)
+      .values({
+        email,
+        name: "Site Admin",
+        firstName: "Site",
+        lastName: "Admin",
+        role: "admin",
+        emailVerified: true,
+      })
+      .returning();
+
+    const user = inserted[0]!;
+
+    await db.insert(schema.accounts).values({
+      accountId: user.id,
+      providerId: "credential",
+      userId: user.id,
+      password: passwordHash,
     });
 
     return { result: "created", email };

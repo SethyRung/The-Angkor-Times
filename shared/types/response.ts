@@ -1,8 +1,3 @@
-export enum CookieName {
-  AccessToken = "access_token",
-  RefreshToken = "refresh_token",
-}
-
 export enum ApiResponseCode {
   Success = "SUCCESS",
   Error = "ERROR",

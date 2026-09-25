@@ -1,15 +1,6 @@
 import { pgTable, uuid, varchar, text, integer, timestamp, index } from "drizzle-orm/pg-core";
 
-export const users = pgTable("users", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  email: varchar("email", { length: 255 }).notNull().unique(),
-  passwordHash: varchar("password_hash", { length: 255 }).notNull(),
-  firstName: varchar("first_name", { length: 100 }),
-  lastName: varchar("last_name", { length: 100 }),
-  role: varchar("role", { length: 20 }).notNull().default("editor"),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
+import { users } from "../../.nuxt/better-auth/schema.postgresql";
 
 export const categories = pgTable("categories", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -69,24 +60,4 @@ export const navigation = pgTable(
     createdAt: timestamp("created_at").defaultNow(),
   },
   (table) => [index("idx_navigation_order").on(table.order)],
-);
-
-export const refreshTokens = pgTable(
-  "refresh_tokens",
-  {
-    id: uuid("id").primaryKey().defaultRandom(),
-    token: varchar("token", { length: 500 }).notNull().unique(),
-    userId: uuid("user_id")
-      .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
-    expiresAt: timestamp("expires_at").notNull(),
-    createdAt: timestamp("created_at").defaultNow(),
-    revokedAt: timestamp("revoked_at"),
-  },
-  (table) => [
-    index("idx_refresh_tokens_user").on(table.userId),
-    index("idx_refresh_tokens_token").on(table.token),
-    index("idx_refresh_tokens_expires").on(table.expiresAt),
-    index("idx_refresh_tokens_revoked").on(table.revokedAt),
-  ],
 );

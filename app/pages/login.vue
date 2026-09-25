@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import * as z from "zod";
 import type { FormSubmitEvent } from "@nuxt/ui";
-import type { AuthUser } from "#shared/types";
 
 definePageMeta({ layout: false });
 
@@ -13,9 +12,7 @@ useSeoMeta({
   ogType: "website",
 });
 
-const route = useRoute();
-const router = useRouter();
-const user = useUser();
+const authClient = useAuthClient();
 
 const schema = z.object({
   email: z.email("Enter a valid email address."),
@@ -29,23 +26,15 @@ const submitting = ref(false);
 const errorMessage = ref<string | null>(null);
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
+  if (!authClient) return;
   submitting.value = true;
   errorMessage.value = null;
-  try {
-    const res = await $fetch("/api/auth/login", {
-      method: "POST",
-      body: { email: event.data.email, password: event.data.password },
-    });
-    if (isSuccessResponse(res) && res.data) {
-      user.value = res.data as AuthUser;
-      const redirect = (route.query.redirect as string) || "/admin";
-      await router.push(redirect);
-    } else {
-      errorMessage.value = res?.status?.message ?? "Login failed.";
-    }
-  } catch (e: any) {
-    errorMessage.value = e?.data?.status?.message ?? "Login failed.";
-  } finally {
+  const { error } = await authClient.signIn.email({
+    email: event.data.email,
+    password: event.data.password,
+  });
+  if (error) {
+    errorMessage.value = error.message ?? "Login failed.";
     submitting.value = false;
   }
 }

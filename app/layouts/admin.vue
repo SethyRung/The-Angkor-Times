@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from "@nuxt/ui";
 
-const user = useUser();
+const { user, signOut } = useUserSession();
 
 const items = computed<NavigationMenuItem[]>(() => {
   const base: NavigationMenuItem[] = [
@@ -16,9 +16,7 @@ const items = computed<NavigationMenuItem[]>(() => {
 });
 
 async function onLogout() {
-  await useApi("/api/auth/logout", { method: "POST", credentials: "include" });
-  user.value = null;
-  await navigateTo("/login");
+  await signOut();
 }
 </script>
 

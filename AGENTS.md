@@ -75,15 +75,19 @@ export default defineEventHandler(async (event) => {
 
 ## Server
 
-- **`server/middleware/auth.ts`** gates every non-public `/api/**` route: it verifies the access-token JWT (`CookieName` enum, `shared/types/response.ts`), rotates both tokens via `server/utils/refreshToken.ts` on expiry, and rejects with `Unauthorized`/`Forbidden`. Two-tier roles: `/api/admin/users` is admin-only; other `/api/admin/*` routes are editor+admin. Public allowlist: `isPublicRoute` in `server/utils/auth.ts`.
-- **JWT config** is `runtimeConfig.jwt.access` / `.refresh` in `nuxt.config.ts`, fed by the `NUXT_JWT_*` env vars.
-- **First admin**: Nitro task `db/bootstrap-admin` — `nuxthub run db/bootstrap-admin` on a fresh DB (credentials from `NUXT_ADMIN_*`). No seed task.
+- **Auth is `@nuxtjs/better-auth`** (session cookies, no JWTs). Server config: `server/auth.config.ts` — email+password, the admin plugin (`defaultRole: "editor"`, `adminRoles: ["admin"]`), `firstName`/`lastName` additionalFields, uuid ids, and a hook that rejects sign-up (accounts are created by an admin). Better-auth mounts `/api/auth/**` itself.
+- **`server/middleware/auth.ts`** gates every non-public `/api/**` route: it reads the session via the module's `getUserSession(event)`, sets `event.context.user` (typed in `server/types/auth.d.ts`), and rejects with `Unauthorized`/`Forbidden` envelopes. Two-tier roles: `/api/admin/users` is admin-only; other `/api/admin/*` routes are editor+admin. Public allowlist: `isPublicRoute` in `server/utils/auth.ts`.
+- **Auth schema is module-generated**: `.nuxt/better-auth/schema.postgresql.ts` (users/sessions/accounts/verifications) — `server/db/schema.ts` holds only app tables and imports `users` from it for the `news.author_id` FK. Never redefine auth tables in `server/db/schema.ts` (duplicate exports collide in the hub schema bundle).
+- **Admin user management** (`server/api/admin/users/*`) calls `serverAuth(event).api.*` (createUser, setUserPassword) so password hashing stays better-auth-native; profile fields go through direct drizzle updates.
+- **Secret**: `NUXT_BETTER_AUTH_SECRET` in `.env`.
+- **First admin**: Nitro task `db:bootstrap-admin` — `nuxthub run db:bootstrap-admin` on a fresh DB (credentials from `NUXT_ADMIN_*`; inserts user + credential account rows with `hashPassword` from `better-auth/crypto`). No seed task.
 
 ## Client
 
+- **Session state**: `useUserSession()` from the module — `{ user, session, loggedIn, signOut, fetchSession }`. The old `useUser()` composable and `app/plugins/auth.ts` are gone; the module registers its own session plugins.
+- **Auth actions**: `useAuthClient()` → `authClient.signIn.email({ email, password })` etc. Sign-in auto-navigates to the `redirect` query or `redirects.authenticated` (`/admin`); sign-out goes to `redirects.logout`.
+- **`app/middleware/admin.ts`** — named route middleware (not global): requires `admin`/`editor`, else redirects to `/login?redirect=`.
 - **`app/plugins/fetch.ts`** — `$fetch` with cookie forwarding; `useApi` resolves to it.
-- **`app/plugins/auth.ts`** — populates `useUser()` from `/api/auth/me`; depends on `fetch`.
-- **`app/middleware/admin.ts`** — named route middleware (not global): requires `admin`/`editor`, else redirects to `/login`.
 
 ## Dates
 

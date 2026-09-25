@@ -14,7 +14,7 @@ useSeoMeta({
   ogType: "website",
 });
 
-const user = useUser();
+const { user } = useUserSession();
 
 const { data } = await useFetchApi<ApiResponse<DashboardStats>>("/api/admin/stats");
 

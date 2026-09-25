@@ -1,6 +1,4 @@
-import { db, schema } from "@nuxthub/db";
-import { eq } from "drizzle-orm";
-import { hashPassword } from "~~/server/utils/auth";
+import { APIError } from "better-auth/api";
 import type { PublicUser } from "./index.get";
 
 const VALID_ROLES = ["admin", "editor"] as const;
@@ -49,45 +47,37 @@ export default defineEventHandler(async (event) => {
       );
     }
 
-    const existing = await db
-      .select({ id: schema.users.id })
-      .from(schema.users)
-      .where(eq(schema.users.email, body.email))
-      .limit(1);
+    const firstName = body.firstName ?? null;
+    const lastName = body.lastName ?? null;
+    const name = [firstName, lastName].filter(Boolean).join(" ") || body.email;
 
-    if (existing.length) {
-      return createResponse(
-        { code: ApiResponseCode.ValidationError, message: "Email already registered" },
-        null,
-      );
-    }
-
-    const passwordHash = await hashPassword(body.password);
-
-    const inserted = await db
-      .insert(schema.users)
-      .values({
+    const auth = serverAuth(event);
+    const user = await auth.api.createUser({
+      body: {
         email: body.email,
-        passwordHash,
-        firstName: body.firstName ?? null,
-        lastName: body.lastName ?? null,
+        password: body.password,
+        name,
         role: body.role,
-      })
-      .returning();
+        data: { firstName, lastName },
+      },
+      headers: event.headers,
+    });
 
-    if (!inserted.length) {
-      return createResponse(
-        { code: ApiResponseCode.InternalError, message: "Failed to create user" },
-        null,
-      );
-    }
-
-    const row = inserted[0]!;
-    const { passwordHash: _passwordHash, ...publicUser } = row;
-    const data: PublicUser = publicUser;
+    const data: PublicUser = {
+      ...user.user,
+      firstName,
+      lastName,
+      role: user.user.role ?? null,
+      image: user.user.image ?? null,
+      banReason: user.user.banReason ?? null,
+      banExpires: user.user.banExpires ?? null,
+    };
 
     return createResponse({ code: ApiResponseCode.Success, message: "User created" }, data);
   } catch (e) {
+    if (e instanceof APIError) {
+      return createResponse({ code: ApiResponseCode.ValidationError, message: e.message }, null);
+    }
     console.error("[admin/users POST]", e);
     return createResponse(
       { code: ApiResponseCode.InternalError, message: "Failed to create user" },

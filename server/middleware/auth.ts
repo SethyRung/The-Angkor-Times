@@ -1,42 +1,36 @@
-import type { AccessTokenPayload } from "#shared/types";
+import type { UserRole } from "#shared/types";
 import { createResponse } from "../utils/response";
-import { isPublicRoute, verifyToken, isEditorOrAdmin, isAdmin } from "../utils/auth";
-import { refreshToken } from "../utils/refreshToken";
+import { isPublicRoute, isEditorOrAdmin, isAdmin } from "../utils/auth";
 
 export default defineEventHandler(async (event) => {
   const url = getRequestURL(event).pathname;
 
-  if (!url.startsWith("/api/") || url.startsWith("/api/_") || isPublicRoute(url, event.method)) {
+  if (
+    !url.startsWith("/api/") ||
+    url.startsWith("/api/_") ||
+    url.startsWith("/api/auth") ||
+    isPublicRoute(url, event.method)
+  ) {
     return;
   }
 
-  const config = useRuntimeConfig();
-  const token = getCookie(event, CookieName.AccessToken);
-  const payload = verifyToken<AccessTokenPayload>(token ?? "", config.jwt.access);
+  const session = await getUserSession(event);
 
-  if (!payload) {
-    const refreshed = await refreshToken(event);
-
-    if (!isSuccessResponse(refreshed)) {
-      deleteCookie(event, CookieName.AccessToken);
-      deleteCookie(event, CookieName.RefreshToken);
-      return createResponse(
-        { code: ApiResponseCode.Unauthorized, message: "Invalid or expired token" },
-        null,
-      );
-    }
-
-    const { user } = refreshed.data;
-    event.context.user = {
-      userId: user.id,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      role: user.role,
-    };
-  } else {
-    event.context.user = payload;
+  if (!session?.user) {
+    return createResponse(
+      { code: ApiResponseCode.Unauthorized, message: "Authentication required" },
+      null,
+    );
   }
+
+  const { user } = session;
+  event.context.user = {
+    userId: user.id,
+    email: user.email,
+    firstName: user.firstName ?? null,
+    lastName: user.lastName ?? null,
+    role: (user.role ?? "editor") as UserRole,
+  };
 
   if (url.startsWith("/api/admin/users") && !isAdmin(event.context.user.role)) {
     return createResponse(
