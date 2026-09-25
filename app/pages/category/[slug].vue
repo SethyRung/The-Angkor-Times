@@ -10,7 +10,7 @@ interface CategoryWithCount extends Pick<DbCategory, "id" | "name" | "slug"> {
 const route = useRoute();
 const slug = route.params.slug as string;
 
-const { data: catRes } = useFetchApi("/api/categories");
+const { data: catRes } = useFetch<ApiResponse<CategoryWithCount[]>>("/api/categories");
 const categoryName = computed(() => {
   const res = catRes.value as ApiResponse<CategoryWithCount[]> | null;
   if (!res || !isSuccessResponse(res)) return "";
@@ -18,7 +18,7 @@ const categoryName = computed(() => {
   return cat?.name ?? "";
 });
 
-const { data, pending } = useFetchApi("/api/news", {
+const { data, pending } = useFetch<ApiResponse<NewsWithRelations[]>>("/api/news", {
   query: { category: slug, limit: 20, offset: 0 },
 });
 

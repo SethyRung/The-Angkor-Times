@@ -65,7 +65,7 @@ async function onFileUpload(value: File | null | undefined) {
     const formData = new FormData();
     formData.append("files", value);
 
-    const result = await useApi("/api/admin/upload", {
+    const result = await $fetch("/api/admin/upload", {
       method: "POST",
       body: formData,
     });

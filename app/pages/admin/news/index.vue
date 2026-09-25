@@ -20,12 +20,12 @@ useSeoMeta({
 const filter = ref<"all" | "pending" | "published">("pending");
 const search = ref("");
 
-const { data, pending, refresh } = await useFetchApi<ApiResponse<NewsWithRelations[]>>(
+const { data, pending, refresh } = await useFetch<ApiResponse<NewsWithRelations[]>>(
   "/api/admin/news",
   { query: { status: "all", limit: 200 }, key: "admin:news" },
 );
 
-const { data: categoriesData } = await useFetchApi<ApiResponse<NewsCategory[]>>(
+const { data: categoriesData } = await useFetch<ApiResponse<NewsCategory[]>>(
   "/api/admin/categories",
   { key: "admin:categories" },
 );
@@ -111,12 +111,12 @@ async function onNewsSubmit(data: NewsFormSchema) {
     };
 
     const res = editing.value
-      ? await useApi<ApiResponse<NewsWithRelations>>(`/api/admin/news/${editing.value.id}`, {
+      ? await $fetch<ApiResponse<NewsWithRelations>>(`/api/admin/news/${editing.value.id}`, {
           method: "PUT",
           body,
           credentials: "include",
         })
-      : await useApi<ApiResponse<NewsWithRelations>>("/api/admin/news", {
+      : await $fetch<ApiResponse<NewsWithRelations>>("/api/admin/news", {
           method: "POST",
           body,
           credentials: "include",
@@ -137,7 +137,7 @@ async function onNewsSubmit(data: NewsFormSchema) {
 }
 
 async function publish(id: string) {
-  await useApi(`/api/admin/news/${id}`, {
+  await $fetch(`/api/admin/news/${id}`, {
     method: "PUT",
     body: { publish: true },
   });
@@ -145,7 +145,7 @@ async function publish(id: string) {
 }
 
 async function unpublish(id: string) {
-  await useApi(`/api/admin/news/${id}`, {
+  await $fetch(`/api/admin/news/${id}`, {
     method: "PUT",
     body: { unpublish: true },
   });
@@ -156,7 +156,7 @@ async function confirmDelete() {
   if (!pendingDelete.value) return;
   deleting.value = true;
   try {
-    const res = await useApi<ApiResponse<null>>(`/api/admin/news/${pendingDelete.value.id}`, {
+    const res = await $fetch<ApiResponse<null>>(`/api/admin/news/${pendingDelete.value.id}`, {
       method: "DELETE",
       credentials: "include",
     });

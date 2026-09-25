@@ -40,7 +40,7 @@ Env names live in `.env.example` and are read directly in `nuxt.config.ts` and `
 ## Architecture
 
 - **Nuxt 4 layout** (`future.compatibilityVersion: 4`): `app/`, `server/`, `shared/` — no root-level pages/components/composables.
-- **Auto-imports are on**: `app/composables/*` (`useFetchApi`, `useApi`, `useUser`), `app/components/*` by path, `server/utils/*`, `shared/types` (`isSuccessResponse`, `ApiResponseCode`, `CookieName`), `shared/utils`. Convention: import `shared/` helpers explicitly, as in the Dates section below.
+- **Auto-imports are on**: `app/components/*` by path, `server/utils/*`, `shared/types` (`isSuccessResponse`, `ApiResponseCode`), `shared/utils`. Convention: import `shared/` helpers explicitly, as in the Dates section below. Built-in Nuxt composables (`useFetch`, `$fetch`, `navigateTo`, `useRoute`, `useRouter`, etc.) are auto-imported.
 - **`shared/` is imported via the `#shared` alias** (`#shared/types`, `#shared/utils/date`); writing `shared/types/...` fails typecheck.
 - **`app/types/` is not auto-imported** — `import type { NewsItem } from "~/types/news"`.
 - **`useSeoMeta` takes no getter functions** — reactive SEO meta goes through `useHead(() => ({ ... }))`.
@@ -68,7 +68,7 @@ export default defineEventHandler(async (event) => {
 
 - Schema lives in `server/db/schema.ts` — new tables export from there so `@nuxthub/db` picks them up. Migrations live in `server/db/migrations/postgresql/`, generated and applied with `bun run db:generate` / `bun run db:migrate`.
 - Every API route returns `createResponse(status, data, meta?)` — the `ApiResponse<T>` envelope from `shared/types/response.ts`.
-- Client side: `useFetchApi<ApiResponse<T>>()` for SSR, `useApi()` otherwise. Gate every read with `isSuccessResponse(res)`; on failure `res.data` is null and `res.status.message` has the reason.
+- Client side: use native `useFetch<ApiResponse<T>>("/api/...")` for SSR data loading, and native `$fetch<ApiResponse<T>>("/api/...")` for event handlers / actions. Gate every read with `isSuccessResponse(res)`; on failure `res.data` is null and `res.status.message` has the reason.
 - **`publishedAt` is the status**: NULL = pending, non-NULL = published. Public endpoints filter `isNotNull(schema.news.publishedAt)`. There is no status enum.
 - **`news` has no slug column** — routes use UUIDs: `/news/${id}`.
 - `.data/` is the Nuxt Hub working folder — gitignored, no secrets in it.
@@ -87,7 +87,6 @@ export default defineEventHandler(async (event) => {
 - **Session state**: `useUserSession()` from the module — `{ user, session, loggedIn, signOut, fetchSession }`. The old `useUser()` composable and `app/plugins/auth.ts` are gone; the module registers its own session plugins.
 - **Auth actions**: `useAuthClient()` → `authClient.signIn.email({ email, password })` etc. Sign-in auto-navigates to the `redirect` query or `redirects.authenticated` (`/admin`); sign-out goes to `redirects.logout`.
 - **`app/middleware/admin.ts`** — named route middleware (not global): requires `admin`/`editor`, else redirects to `/login?redirect=`.
-- **`app/plugins/fetch.ts`** — `$fetch` with cookie forwarding; `useApi` resolves to it.
 
 ## Dates
 

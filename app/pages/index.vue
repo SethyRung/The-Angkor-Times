@@ -4,7 +4,7 @@ import type { ApiResponse, NewsWithRelations } from "#shared/types";
 
 import { now } from "#shared/utils/date";
 
-const fetched = useFetchApi("/api/news", {
+const fetched = useFetch<ApiResponse<NewsWithRelations[]>>("/api/news", {
   query: { limit: 20, offset: 0 },
 });
 const pending = computed(() => fetched.pending.value);

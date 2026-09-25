@@ -6,7 +6,7 @@ import { toDayJS } from "#shared/utils/date";
 const route = useRoute();
 const id = route.params.id as string;
 
-const { data } = useFetchApi<ApiResponse<NewsWithRelations>>(`/api/news/${id}`);
+const { data } = useFetch<ApiResponse<NewsWithRelations>>(`/api/news/${id}`);
 
 const story = computed<NewsWithRelations | null>(() => {
   const res = data.value as ApiResponse<NewsWithRelations> | null;

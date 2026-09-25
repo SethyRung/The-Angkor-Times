@@ -18,7 +18,7 @@ useSeoMeta({
   ogType: "website",
 });
 
-const { data, pending, refresh } = await useFetchApi<ApiResponse<DbCategory[]>>(
+const { data, pending, refresh } = await useFetch<ApiResponse<DbCategory[]>>(
   "/api/admin/categories",
   { key: "admin:categories" },
 );
@@ -68,7 +68,7 @@ async function onCategorySubmit(data: CategoryFormSchema) {
     };
 
     if (editing.value) {
-      const res = await useApi<ApiResponse<DbCategory>>(
+      const res = await $fetch<ApiResponse<DbCategory>>(
         `/api/admin/categories/${editing.value.id}`,
         {
           method: "PUT",
@@ -81,7 +81,7 @@ async function onCategorySubmit(data: CategoryFormSchema) {
         return;
       }
     } else {
-      const res = await useApi<ApiResponse<DbCategory>>("/api/admin/categories", {
+      const res = await $fetch<ApiResponse<DbCategory>>("/api/admin/categories", {
         method: "POST",
         body,
         credentials: "include",
@@ -105,7 +105,7 @@ async function confirmDelete() {
   if (!pendingDelete.value) return;
   deleting.value = true;
   try {
-    const res = await useApi<ApiResponse<null>>(`/api/admin/categories/${pendingDelete.value.id}`, {
+    const res = await $fetch<ApiResponse<null>>(`/api/admin/categories/${pendingDelete.value.id}`, {
       method: "DELETE",
       credentials: "include",
     });

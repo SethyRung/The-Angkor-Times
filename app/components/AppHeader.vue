@@ -5,7 +5,7 @@ const props = defineProps<{
   navItems?: NavigationMenuItem[];
 }>();
 
-const { data: categoriesData } = await useFetchApi<ApiResponse<DbCategory[]>>("/api/categories", {
+const { data: categoriesData } = await useFetch<ApiResponse<DbCategory[]>>("/api/categories", {
   key: "header:categories",
 });
 

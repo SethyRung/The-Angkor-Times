@@ -6,7 +6,7 @@ interface CategoryWithCount extends Pick<DbCategory, "id" | "name" | "slug"> {
   latestPublishedAt: string | null;
 }
 
-const { data, pending } = useFetchApi("/api/categories");
+const { data, pending } = useFetch<ApiResponse<CategoryWithCount[]>>("/api/categories");
 
 const categories = computed<CategoryWithCount[]>(() => {
   const res = data.value as ApiResponse<CategoryWithCount[]> | null;

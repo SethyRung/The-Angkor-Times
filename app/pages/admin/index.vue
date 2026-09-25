@@ -16,7 +16,7 @@ useSeoMeta({
 
 const { user } = useUserSession();
 
-const { data } = await useFetchApi<ApiResponse<DashboardStats>>("/api/admin/stats");
+const { data } = await useFetch<ApiResponse<DashboardStats>>("/api/admin/stats");
 
 const payload = computed<DashboardStats>(
   () =>

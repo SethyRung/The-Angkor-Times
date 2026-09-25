@@ -20,10 +20,9 @@ useSeoMeta({
 
 const { user } = useUserSession();
 
-const { data, pending, refresh } = await useFetchApi<ApiResponse<PublicUser[]>>(
-  "/api/admin/users",
-  { key: "admin:users" },
-);
+const { data, pending, refresh } = await useFetch<ApiResponse<PublicUser[]>>("/api/admin/users", {
+  key: "admin:users",
+});
 
 const items = computed<PublicUser[]>(() => data.value?.data ?? []);
 
@@ -74,7 +73,7 @@ async function onUserSubmit(data: UserFormSchema) {
 
     if (editing.value) {
       if (data.password) body.password = data.password;
-      const res = await useApi<ApiResponse<PublicUser>>(`/api/admin/users/${editing.value.id}`, {
+      const res = await $fetch<ApiResponse<PublicUser>>(`/api/admin/users/${editing.value.id}`, {
         method: "PUT",
         body,
         credentials: "include",
@@ -89,7 +88,7 @@ async function onUserSubmit(data: UserFormSchema) {
         return;
       }
       body.password = data.password;
-      const res = await useApi<ApiResponse<PublicUser>>("/api/admin/users", {
+      const res = await $fetch<ApiResponse<PublicUser>>("/api/admin/users", {
         method: "POST",
         body,
         credentials: "include",
@@ -113,7 +112,7 @@ async function confirmDelete() {
   if (!pendingDelete.value) return;
   deleting.value = true;
   try {
-    const res = await useApi<ApiResponse<null>>(`/api/admin/users/${pendingDelete.value.id}`, {
+    const res = await $fetch<ApiResponse<null>>(`/api/admin/users/${pendingDelete.value.id}`, {
       method: "DELETE",
       credentials: "include",
     });
