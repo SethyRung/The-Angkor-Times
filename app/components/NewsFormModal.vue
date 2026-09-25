@@ -71,7 +71,7 @@ async function onFileUpload(value: File | null | undefined) {
     });
 
     if (result) {
-      state.featuredImage = result.url ?? "";
+      state.featuredImage = result[0]?.url ?? "";
     }
   } catch (err: any) {
     toast.add({

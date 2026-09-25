@@ -3,7 +3,7 @@ export default defineEventHandler(async (event) => {
     formKey: "files",
     multiple: false,
     ensure: {
-      maxSize: "5MB",
+      maxSize: "8MB",
       types: ["image"],
     },
     put: {
