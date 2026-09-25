@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const copyright = dayjs().year();
+import { now } from "#shared/utils/date";
+
+const copyright = now().year();
 const siteName = useRuntimeConfig().public.siteName || "The Angkor Times";
 
 const socials = [

@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import type { NewsItem } from "~/types/news";
 
+import { toDayJS } from "#shared/utils/date";
+
 defineProps<{
   stories: NewsItem[];
 }>();
 
 const formattedDate = (dateString: string | null) => {
   if (!dateString) return "";
-  return dayjs(dateString).format("MMM D");
+  return toDayJS(dateString).format("MMM D");
 };
 </script>
 

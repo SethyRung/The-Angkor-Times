@@ -2,6 +2,8 @@
 import type { DropdownMenuItem, TableColumn } from "@nuxt/ui";
 import type { NewsFormSchema, NewsCategory } from "#shared/types";
 
+import { toDayJS } from "#shared/utils/date";
+
 definePageMeta({
   layout: "admin",
   middleware: ["admin"],
@@ -352,7 +354,7 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
 
         <template #date-cell="{ row }">
           <span class="text-[10px] uppercase tracking-widest text-muted">
-            {{ dayjs(row.original.publishedAt ?? row.original.createdAt).fromNow() }}
+            {{ toDayJS(row.original.publishedAt ?? row.original.createdAt).fromNow() }}
           </span>
         </template>
 

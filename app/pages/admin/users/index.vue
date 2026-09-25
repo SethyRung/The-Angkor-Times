@@ -3,6 +3,8 @@ import type { DropdownMenuItem, TableColumn } from "@nuxt/ui";
 import type { PublicUser } from "~~/server/api/admin/users/index.get";
 import type { UserFormSchema } from "#shared/types";
 
+import { toDayJS } from "#shared/utils/date";
+
 definePageMeta({
   layout: "admin",
   middleware: ["admin"],
@@ -232,7 +234,7 @@ function initials(item: PublicUser) {
 
         <template #joined-cell="{ row }">
           <span class="text-[10px] uppercase tracking-widest text-muted">
-            {{ dayjs(row.original.createdAt).fromNow() }}
+            {{ toDayJS(row.original.createdAt).fromNow() }}
           </span>
         </template>
 

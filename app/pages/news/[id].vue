@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { ApiResponse, NewsWithRelations } from "#shared/types";
 
+import { toDayJS } from "#shared/utils/date";
+
 const route = useRoute();
 const id = route.params.id as string;
 
@@ -20,12 +22,12 @@ const authorName = computed(() => {
 
 const formattedDate = computed(() => {
   if (!story.value?.publishedAt) return "";
-  return dayjs(story.value.publishedAt).format("MMM D, YYYY");
+  return toDayJS(story.value.publishedAt).format("MMM D, YYYY");
 });
 
 const formattedTime = computed(() => {
   if (!story.value?.publishedAt) return "";
-  return dayjs(story.value.publishedAt).format("HH:mm");
+  return toDayJS(story.value.publishedAt).format("HH:mm");
 });
 
 useSeoMeta({

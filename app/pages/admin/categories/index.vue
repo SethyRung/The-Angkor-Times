@@ -3,6 +3,8 @@ import type { DropdownMenuItem, TableColumn } from "@nuxt/ui";
 import type { DbCategory } from "#shared/types";
 import type { CategoryFormSchema } from "#shared/types";
 
+import { toDayJS } from "#shared/utils/date";
+
 definePageMeta({
   layout: "admin",
   middleware: ["admin"],
@@ -169,7 +171,7 @@ async function confirmDelete() {
 
         <template #created-cell="{ row }">
           <span class="text-xs uppercase text-muted">
-            {{ dayjs(row.original.createdAt).fromNow() }}
+            {{ toDayJS(row.original.createdAt).fromNow() }}
           </span>
         </template>
 

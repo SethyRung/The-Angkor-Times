@@ -2,6 +2,8 @@
 import type { NewsItem } from "~/types/news";
 import type { ApiResponse, NewsWithRelations } from "#shared/types";
 
+import { now } from "#shared/utils/date";
+
 const fetched = useFetchApi("/api/news", {
   query: { limit: 20, offset: 0 },
 });
@@ -43,15 +45,14 @@ useSeoMeta({
         <pre
           class="text-canvas-50 text-[6px] md:text-[8px] whitespace-pre overflow-x-auto font-mono mb-8"
           aria-hidden="true"
-          >{{ wordmark.join("\n") }}</pre
-        >
+          >{{ wordmark.join("\n") }}</pre>
 
         <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-10 items-end">
           <div class="space-y-5">
             <div class="flex items-center gap-3 font-mono text-xs uppercase tracking-widest">
               <span class="size-2 rounded-full bg-primary-500 animate-pulse" />
               <span class="text-primary-400"
-                >News &middot; {{ dayjs().format("ddd MMM D, YYYY") }}</span
+                >News &middot; {{ now().format("ddd MMM D, YYYY") }}</span
               >
             </div>
 

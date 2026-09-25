@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { now, toDayJS } from "#shared/utils/date";
+
 definePageMeta({
   layout: "admin",
   middleware: ["admin"],
@@ -53,7 +55,7 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
     <template #body>
       <header class="space-y-2 mb-2">
         <p class="text-xs uppercase tracking-widest text-muted">
-          [+] Editorial Console &middot; {{ dayjs().format("ddd, MMM D") }}
+          [+] Editorial Console &middot; {{ now().format("ddd, MMM D") }}
         </p>
         <h1 class="text-2xl md:text-3xl uppercase tracking-tight text-highlighted leading-none">
           Welcome back, {{ user?.firstName }}
@@ -198,7 +200,7 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
               <p class="text-[10px] uppercase tracking-widest text-muted mt-0.5">
                 <span v-if="item.category" class="text-primary">[+] {{ item.category.name }}</span>
                 <span v-if="item.category"> &middot; </span>
-                {{ dayjs(item.publishedAt ?? item.createdAt).fromNow() }}
+                {{ toDayJS(item.publishedAt ?? item.createdAt).fromNow() }}
               </p>
             </div>
 
