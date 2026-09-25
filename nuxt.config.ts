@@ -7,7 +7,7 @@ export default defineNuxtConfig({
   compatibilityDate: "2026-01-01",
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
-  modules: ["@nuxt/ui", "@vueuse/nuxt", "@nuxthub/core", "@nuxt/content"],
+  modules: ["@nuxt/ui", "@vueuse/nuxt", "@nuxthub/core"],
   fonts: {
     families: [{ name: "IoskeleyMono", provider: "local" }],
   },
@@ -20,29 +20,10 @@ export default defineNuxtConfig({
       driver: "vercel-blob",
     },
   },
-  dayjs: {
-    plugins: ["relativeTime", "utc"],
-  },
-  colorMode: {
-    preference: "dark",
-  },
   vite: {
     plugins: [tailwindcss()],
     optimizeDeps: {
-      include: [
-        "@nuxt/ui > prosemirror-gapcursor",
-        "@nuxt/ui > prosemirror-model",
-        "@nuxt/ui > prosemirror-state",
-        "@nuxt/ui > prosemirror-transform",
-        "@nuxt/ui > prosemirror-view",
-        "dayjs",
-        "dayjs/plugin/relativeTime",
-        "dayjs/plugin/timezone",
-        "dayjs/plugin/updateLocale",
-        "dayjs/plugin/utc",
-        "tailwind-variants",
-        "zod",
-      ],
+      include: [],
     },
   },
   runtimeConfig: {
