@@ -7,7 +7,7 @@ export default defineNuxtConfig({
   compatibilityDate: "2026-01-01",
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
-  modules: ["@nuxt/ui", "@vueuse/nuxt", "@nuxthub/core", "@nuxtjs/better-auth"],
+  modules: ["@nuxt/ui", "@vueuse/nuxt", "@nuxthub/core", "@nuxtjs/better-auth", "@comark/nuxt"],
   auth: {
     schema: {
       usePlural: true,

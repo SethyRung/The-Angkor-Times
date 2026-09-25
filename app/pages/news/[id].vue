@@ -86,7 +86,11 @@ useSeoMeta({
       />
     </div>
 
-    <MDC v-if="story.content" :value="story.content" />
+    <Markdown
+      v-if="story.content"
+      :value="story.content"
+      class="article-content font-serif text-toned leading-relaxed space-y-4 md:text-lg"
+    />
 
     <div v-if="story.tags?.length" class="mt-10 pt-6 border-t border-default">
       <span class="text-xs uppercase tracking-widest mb-3 block"> [+] Tags </span>

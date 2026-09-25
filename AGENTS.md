@@ -106,7 +106,7 @@ Import `dayjs` itself only inside the util — it owns plugin setup. Chain dayjs
 - **v4, not v3** — online docs and the Nuxt UI MCP may serve v3 content. Cross-check slot names and default classes against `.nuxt/ui/<component>.ts`.
 - **Pro components are included** — `UHeader`, `UFooter`, `UPage`, `UPageHero`, `UBlogPost`, `UAuthForm`, etc. No separate pro package.
 - **Zod 4 syntax**: `import * as z from "zod"`, `z.email()` — not `z.string().email()`. `app/pages/login.vue` is the canonical form pattern (`FormSubmitEvent<Schema>` for the submit payload).
-- **Editor**: tiptap, `app/components/editor/Editor.vue`. Content is HTML in `news.content`, rendered with `v-html` on the detail page.
+- **Content rendering**: `@comark/nuxt` (`<Markdown :value="story.content" />`). Content is HTML/Markdown in `news.content`, rendered with Comark's native `<Markdown>` component which resolves Nuxt UI prose components automatically.
 
 ## Design
 
