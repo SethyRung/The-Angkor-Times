@@ -20,9 +20,6 @@ export default defineNuxtConfig({
       logout: "/",
     },
   },
-  fonts: {
-    families: [{ name: "IoskeleyMono", provider: "local" }],
-  },
   hub: {
     db: {
       dialect: "postgresql",
