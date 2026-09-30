@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import { tv } from "tailwind-variants";
+
 import type { DbCategory } from "#shared/types";
 import { now } from "#shared/utils/date";
 
@@ -6,23 +10,55 @@ const props = defineProps<{
   categories: DbCategory[];
 }>();
 
-const columnHeadingClass = "flex items-center gap-2 border-b border-default pb-2";
-const columnTitleClass =
-  "font-sans text-[11px] font-semibold tracking-widest text-highlighted uppercase";
-const linkRowClass =
-  "flex items-center justify-between text-toned transition-colors hover:text-primary";
-const linkArrowClass = "font-mono text-[10px] text-dimmed";
+const footer = tv({
+  slots: {
+    columnHeading: "relative flex items-center gap-2 pb-2",
+    columnTitle: "font-sans text-[11px] font-semibold tracking-widest text-highlighted uppercase",
+    linkRow:
+      "group flex items-center justify-between text-toned transition-colors duration-150 hover:text-primary",
+    linkArrow:
+      "inline-block font-mono text-[10px] text-dimmed transition-transform duration-150 group-hover:translate-x-1 group-focus-visible:translate-x-1",
+    collapse:
+      "grid transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none",
+    stamp:
+      "inline-block font-sans text-xs font-semibold text-primary uppercase transition-[letter-spacing,opacity] duration-500 ease-out motion-reduce:transition-none",
+  },
+  variants: {
+    open: {
+      true: { collapse: "grid-rows-[1fr]" },
+      false: { collapse: "grid-rows-[0fr]" },
+    },
+    delayed: {
+      true: { collapse: "delay-150 motion-reduce:delay-0" },
+    },
+    stamped: {
+      true: { stamp: "tracking-wider opacity-100" },
+      false: { stamp: "tracking-[0em] opacity-0" },
+    },
+  },
+  defaultVariants: {
+    open: false,
+    delayed: false,
+    stamped: false,
+  },
+});
+
+const { columnHeading, columnTitle, linkRow, linkArrow } = footer();
 
 const copyright = now().year();
-const currentTime = computed(() => now().format("HH:mm:ss [ICT]"));
+const prefersReducedMotion = usePreferredReducedMotion();
+const isMounted = useMounted();
+const columnsRef = useTemplateRef("columns");
+const clockReadout = useTemplateRef("clockReadout");
+
+const clockHours = ref(now().format("HH:mm"));
+const clockSeconds = ref(now().format("ss"));
+const liveClock = ref(false);
 
 const email = ref("");
 const subscribed = ref(false);
-
-function handleSubscribe() {
-  if (!email.value || !email.value.includes("@")) return;
-  subscribed.value = true;
-}
+const stamped = ref(false);
+const liveMessage = ref("");
 
 const socials = [
   { label: "GitHub", to: "https://github.com/SethyRung/The-Angkor-Times" },
@@ -42,6 +78,248 @@ const deskLinks = computed(() => [
   { label: "Front Page", to: "/" },
   ...props.categories.map((c) => ({ label: c.name, to: `/category/${c.slug}` })),
 ]);
+
+type ClockCell = {
+  cell: HTMLElement;
+  face: HTMLElement;
+  glyph: string;
+  roll: boolean;
+};
+
+let clockTimer: number | undefined;
+let stampTimer: number | undefined;
+let rulesTrigger: ScrollTrigger | undefined;
+let rulesGeneration = 0;
+let clockGeneration = 0;
+let clockOn = false;
+let clockCells: ClockCell[] = [];
+
+function readClock() {
+  const time = now();
+  clockHours.value = time.format("HH:mm");
+  clockSeconds.value = time.format("ss");
+}
+
+function liveStamp() {
+  return `${clockHours.value}:${clockSeconds.value} ICT`;
+}
+
+function killClockTweens() {
+  const root = clockReadout.value;
+  if (!root) return;
+  gsap.killTweensOf(root.querySelectorAll(".clock-face"));
+}
+
+function makeCell(glyph: string, roll: boolean): ClockCell {
+  const cell = document.createElement("span");
+  if (!roll) {
+    cell.className = "clock-mark";
+    cell.textContent = glyph;
+    return { cell, face: cell, glyph, roll };
+  }
+  cell.className = "clock-cell";
+  const face = document.createElement("span");
+  face.className = "clock-face";
+  face.textContent = glyph;
+  cell.appendChild(face);
+  return { cell, face, glyph, roll };
+}
+
+function buildReadout(stamp: string) {
+  const root = clockReadout.value;
+  if (!root) return;
+  killClockTweens();
+  root.replaceChildren();
+  const head = stamp.slice(0, 8);
+  clockCells = [...head].map((glyph) => {
+    const slot = makeCell(glyph, /\d/.test(glyph));
+    root.appendChild(slot.cell);
+    return slot;
+  });
+  const suffix = document.createElement("span");
+  suffix.className = "clock-mark";
+  suffix.textContent = stamp.slice(8);
+  root.appendChild(suffix);
+}
+
+function rollDigit(slot: ClockCell, next: string) {
+  gsap.killTweensOf(slot.cell.querySelectorAll(".clock-face"));
+  [...slot.cell.querySelectorAll(".clock-face")].slice(0, -1).forEach((el) => el.remove());
+  gsap.set(slot.face, { y: 0, force3D: false });
+
+  const distance = Math.round(slot.cell.getBoundingClientRect().height) || 12;
+  const incoming = document.createElement("span");
+  incoming.className = "clock-face";
+  incoming.textContent = next;
+  slot.cell.appendChild(incoming);
+
+  const outgoing = slot.face;
+  slot.face = incoming;
+  slot.glyph = next;
+  const strip = { y: 0 };
+
+  const settle = () => {
+    if (slot.face !== incoming) return;
+    if (outgoing.isConnected) outgoing.remove();
+    gsap.set(incoming, { clearProps: "all" });
+  };
+
+  gsap.set(strip, { y: 0 });
+  gsap.to(strip, {
+    y: -distance,
+    duration: 0.28,
+    ease: "power2.inOut",
+    onUpdate: () => {
+      const y = Math.round(strip.y);
+      gsap.set(outgoing, { y, force3D: false });
+      gsap.set(incoming, { y: y + distance, force3D: false });
+    },
+    onComplete: settle,
+  });
+  window.setTimeout(settle, 320);
+}
+
+function syncReadout(stamp: string, animate: boolean) {
+  const head = stamp.slice(0, 8);
+  if (!clockReadout.value || clockCells.length !== head.length) {
+    buildReadout(stamp);
+    return;
+  }
+  for (let i = 0; i < head.length; i++) {
+    const next = head[i] ?? "";
+    const slot = clockCells[i];
+    if (!slot || slot.glyph === next) continue;
+    if (!animate || !slot.roll) {
+      slot.glyph = next;
+      slot.face.textContent = next;
+      continue;
+    }
+    rollDigit(slot, next);
+  }
+}
+
+function stopClock() {
+  clockOn = false;
+  clockGeneration += 1;
+  if (import.meta.client) {
+    window.clearTimeout(clockTimer);
+    clockTimer = undefined;
+    killClockTweens();
+  }
+  clockCells = [];
+  liveClock.value = false;
+}
+
+function scheduleTick() {
+  if (!clockOn) return;
+  const delay = 1000 - (Date.now() % 1000);
+  clockTimer = window.setTimeout(() => {
+    if (!clockOn) return;
+    readClock();
+    syncReadout(liveStamp(), true);
+    scheduleTick();
+  }, delay);
+}
+
+async function startClock() {
+  stopClock();
+  const generation = ++clockGeneration;
+  clockOn = true;
+  readClock();
+  liveClock.value = true;
+  await nextTick();
+  if (generation !== clockGeneration) return;
+  syncReadout(liveStamp(), false);
+  scheduleTick();
+}
+
+function ruleEls() {
+  return columnsRef.value?.querySelectorAll<HTMLElement>("[data-rule]") ?? [];
+}
+
+function killRulesTrigger() {
+  rulesTrigger?.kill();
+  rulesTrigger = undefined;
+  const rules = ruleEls();
+  if (rules.length) gsap.killTweensOf(rules);
+}
+
+function stopRules() {
+  rulesGeneration += 1;
+  killRulesTrigger();
+}
+
+function showRules() {
+  const rules = ruleEls();
+  if (!rules.length) return;
+  gsap.set(rules, { clearProps: "transform" });
+}
+
+async function armRules() {
+  const generation = ++rulesGeneration;
+  killRulesTrigger();
+  await nextTick();
+  if (generation !== rulesGeneration) return;
+
+  const root = columnsRef.value;
+  const rules = ruleEls();
+  if (!root || !rules.length) return;
+
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.set(rules, { scaleX: 0, transformOrigin: "left center" });
+
+  rulesTrigger = ScrollTrigger.create({
+    trigger: root,
+    start: "top 85%",
+    once: true,
+    onEnter: () => {
+      gsap.to(rules, {
+        scaleX: 1,
+        duration: 0.4,
+        stagger: 0.06,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
+    },
+  });
+}
+
+function handleSubscribe() {
+  if (!email.value || !email.value.includes("@")) return;
+  subscribed.value = true;
+  liveMessage.value =
+    "Subscribed to The Morning Wire. First dispatch will arrive tomorrow at 06:00 ICT.";
+  if (prefersReducedMotion.value === "reduce") {
+    stamped.value = true;
+    return;
+  }
+  stampTimer = window.setTimeout(() => {
+    stamped.value = true;
+  }, 180);
+}
+
+watch([isMounted, prefersReducedMotion], ([mounted, motion]) => {
+  if (!mounted) return;
+  if (motion === "reduce") {
+    stopClock();
+    stopRules();
+    showRules();
+    return;
+  }
+  void startClock();
+  void armRules();
+});
+
+const removePageFinish = useNuxtApp().hook("page:finish", () => {
+  if (rulesTrigger) ScrollTrigger.refresh();
+});
+
+onUnmounted(() => {
+  removePageFinish();
+  window.clearTimeout(stampTimer);
+  stopClock();
+  stopRules();
+});
 </script>
 
 <template>
@@ -67,32 +345,52 @@ const deskLinks = computed(() => [
           </div>
 
           <div class="rounded-sm border border-default bg-default p-4 sm:p-5">
-            <div v-if="subscribed" class="space-y-1 py-2 text-center">
-              <span class="font-sans text-xs font-semibold tracking-wider text-primary uppercase">
-                &check; Subscribed to The Morning Wire
-              </span>
-              <p class="font-mono text-xs text-muted">
-                First dispatch will arrive tomorrow at 06:00 ICT.
-              </p>
+            <p class="sr-only" aria-live="polite">{{ liveMessage }}</p>
+
+            <div :class="footer({ open: !subscribed }).collapse()">
+              <form
+                class="min-h-0 overflow-hidden"
+                :inert="subscribed"
+                @submit.prevent="handleSubscribe"
+              >
+                <div class="flex flex-col gap-2 sm:flex-row">
+                  <UInput
+                    v-model="email"
+                    type="email"
+                    placeholder="your.email@example.com"
+                    required
+                    class="flex-1 rounded-sm font-mono text-xs"
+                  />
+
+                  <UButton
+                    type="submit"
+                    color="primary"
+                    variant="solid"
+                    label="Subscribe"
+                    class="shrink-0 rounded-sm px-4 font-sans text-xs font-semibold tracking-wider uppercase"
+                  />
+                </div>
+              </form>
             </div>
 
-            <form v-else class="flex flex-col gap-2 sm:flex-row" @submit.prevent="handleSubscribe">
-              <UInput
-                v-model="email"
-                type="email"
-                placeholder="your.email@example.com"
-                required
-                class="flex-1 rounded-sm font-mono text-xs"
-              />
-
-              <UButton
-                type="submit"
-                color="primary"
-                variant="solid"
-                label="Subscribe"
-                class="shrink-0 rounded-sm px-4 font-sans text-xs font-semibold tracking-wider uppercase"
-              />
-            </form>
+            <div
+              :class="footer({ open: subscribed, delayed: true }).collapse()"
+              :inert="!subscribed"
+            >
+              <div class="min-h-0 overflow-hidden" :aria-hidden="!subscribed">
+                <div class="space-y-1 py-2 text-center">
+                  <span :class="footer({ stamped }).stamp()">
+                    &check; Subscribed to The Morning Wire
+                  </span>
+                  <p
+                    class="font-mono text-xs text-muted transition-opacity delay-100 duration-500 motion-reduce:transition-none"
+                    :class="stamped ? 'opacity-100' : 'opacity-0'"
+                  >
+                    First dispatch will arrive tomorrow at 06:00 ICT.
+                  </p>
+                </div>
+              </div>
+            </div>
 
             <p class="mt-2 font-mono text-[10px] text-muted">
               Free edition &middot; Unsubscribe at any time &middot; Zero telemetry trackers
@@ -103,7 +401,7 @@ const deskLinks = computed(() => [
     </div>
 
     <div class="mx-auto max-w-7xl space-y-6 px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-      <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
+      <div ref="columns" class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
         <div class="space-y-4">
           <NuxtLink to="/" class="inline-block">
             <span
@@ -120,47 +418,54 @@ const deskLinks = computed(() => [
         </div>
 
         <div class="space-y-4">
-          <div :class="columnHeadingClass">
-            <span class="size-1.5 rounded-full bg-primary" />
-            <h4 :class="columnTitleClass">Editorial Desks</h4>
+          <div :class="columnHeading()">
+            <span aria-hidden="true" class="size-1.5 shrink-0 rounded-full bg-primary" />
+            <h4 :class="columnTitle()">Editorial Desks</h4>
+            <span data-rule aria-hidden="true" class="desk-rule" />
           </div>
           <ul class="space-y-2 font-serif text-sm">
             <li v-for="link in deskLinks" :key="link.label">
-              <NuxtLink :to="link.to" :class="linkRowClass">
+              <NuxtLink :to="link.to" :class="linkRow()">
                 <span>{{ link.label }}</span>
-                <span :class="linkArrowClass">&rarr;</span>
+                <span :class="linkArrow()">&rarr;</span>
               </NuxtLink>
             </li>
             <li>
               <NuxtLink
                 to="/category"
-                class="block border-t border-dashed border-default pt-2 font-sans text-xs tracking-wider text-muted uppercase transition-colors hover:text-highlighted"
+                class="group block border-t border-dashed border-default pt-2 font-sans text-xs tracking-wider text-muted uppercase transition-colors duration-150 hover:text-highlighted"
               >
-                Browse All Desks &rarr;
+                Browse All Desks
+                <span :class="linkArrow()">&rarr;</span>
               </NuxtLink>
             </li>
           </ul>
         </div>
 
         <div class="space-y-4">
-          <div :class="columnHeadingClass">
-            <span class="size-1.5 rounded-full bg-primary" />
-            <h4 :class="columnTitleClass">Standards &amp; Desk</h4>
+          <div :class="columnHeading()">
+            <span aria-hidden="true" class="size-1.5 shrink-0 rounded-full bg-primary" />
+            <h4 :class="columnTitle()">Standards &amp; Desk</h4>
+            <span data-rule aria-hidden="true" class="desk-rule" />
           </div>
           <ul class="space-y-2 font-serif text-sm">
             <li v-for="link in editorialLinks" :key="link.label">
-              <NuxtLink :to="link.to" :class="linkRowClass">
+              <NuxtLink :to="link.to" :class="linkRow()">
                 <span>{{ link.label }}</span>
-                <span :class="linkArrowClass">&rarr;</span>
+                <span :class="linkArrow()">&rarr;</span>
               </NuxtLink>
             </li>
           </ul>
         </div>
 
         <div class="space-y-4">
-          <div :class="columnHeadingClass">
-            <span class="size-1.5 rounded-full bg-primary" />
-            <h4 :class="columnTitleClass">Wire &amp; Network</h4>
+          <div :class="columnHeading()">
+            <span
+              aria-hidden="true"
+              class="wire-dot size-1.5 shrink-0 rounded-full bg-primary motion-safe:animate-pulse"
+            />
+            <h4 :class="columnTitle()">Wire &amp; Network</h4>
+            <span data-rule aria-hidden="true" class="desk-rule" />
           </div>
           <div class="space-y-3 font-mono text-xs">
             <div class="flex flex-col gap-2">
@@ -170,9 +475,18 @@ const deskLinks = computed(() => [
                 :href="s.to"
                 target="_blank"
                 rel="noopener"
-                class="flex items-center gap-2 text-toned transition-colors hover:text-primary"
+                class="group flex items-center gap-2 text-toned transition-colors duration-150 hover:text-primary focus-visible:text-primary"
               >
-                <span class="text-primary">[+]</span>
+                <span class="inline-grid text-primary" aria-hidden="true">
+                  <span
+                    class="col-start-1 row-start-1 group-hover:invisible group-focus-visible:invisible"
+                    >[+]</span
+                  >
+                  <span
+                    class="invisible col-start-1 row-start-1 group-hover:visible group-focus-visible:visible"
+                    >[&rarr;]</span
+                  >
+                </span>
                 <span>{{ s.label }}</span>
               </a>
             </div>
@@ -186,7 +500,16 @@ const deskLinks = computed(() => [
               </div>
               <div class="flex items-center justify-between">
                 <span>Clock:</span>
-                <span class="text-highlighted">{{ currentTime }}</span>
+                <span class="text-highlighted tabular-nums">
+                  <span
+                    v-if="liveClock"
+                    ref="clockReadout"
+                    class="clock-readout"
+                    aria-hidden="true"
+                  />
+                  <template v-else>{{ clockHours }} ICT</template>
+                  <span v-if="liveClock" class="sr-only">{{ clockHours }} ICT</span>
+                </span>
               </div>
             </div>
           </div>
@@ -206,3 +529,59 @@ const deskLinks = computed(() => [
     </div>
   </footer>
 </template>
+
+<style scoped>
+.desk-rule {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--ui-border);
+  pointer-events: none;
+}
+
+.wire-dot {
+  animation-duration: 2.4s;
+}
+
+.clock-readout {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.2;
+  white-space: pre;
+}
+
+.clock-readout :deep(.clock-cell) {
+  position: relative;
+  display: inline-block;
+  width: 1ch;
+  height: 1.2em;
+  overflow: hidden;
+}
+
+.clock-readout :deep(.clock-mark) {
+  line-height: 1.2;
+}
+
+.clock-readout :deep(.clock-face) {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 1.2em;
+  line-height: 1.2;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .desk-rule {
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wire-dot {
+    animation: none;
+  }
+}
+</style>
