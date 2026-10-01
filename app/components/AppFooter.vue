@@ -13,11 +13,11 @@ const props = defineProps<{
 const footer = tv({
   slots: {
     columnHeading: "relative flex items-center gap-2 pb-2",
-    columnTitle: "font-sans text-[11px] font-semibold tracking-widest text-highlighted uppercase",
+    columnTitle: "font-sans text-xs font-semibold tracking-widest text-highlighted uppercase",
     linkRow:
       "group flex items-center justify-between text-toned transition-colors duration-150 hover:text-primary",
     linkArrow:
-      "inline-block font-mono text-[10px] text-dimmed transition-transform duration-150 group-hover:translate-x-1 group-focus-visible:translate-x-1",
+      "size-3.5 text-dimmed transition-transform duration-150 group-hover:translate-x-1 group-focus-visible:translate-x-1",
     collapse:
       "grid transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none",
     stamp:
@@ -33,7 +33,7 @@ const footer = tv({
     },
     stamped: {
       true: { stamp: "tracking-wider opacity-100" },
-      false: { stamp: "tracking-[0em] opacity-0" },
+      false: { stamp: "tracking-normal opacity-0" },
     },
   },
   defaultVariants: {
@@ -328,9 +328,7 @@ onUnmounted(() => {
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 items-center gap-8 lg:grid-cols-[1.4fr_1fr]">
           <div class="space-y-2">
-            <span
-              class="font-sans text-[10px] font-semibold tracking-widest text-primary uppercase"
-            >
+            <span class="font-sans text-xs font-semibold tracking-widest text-primary uppercase">
               The Daily Dispatch
             </span>
             <h3
@@ -392,7 +390,7 @@ onUnmounted(() => {
               </div>
             </div>
 
-            <p class="mt-2 font-mono text-[10px] text-muted">
+            <p class="mt-2 font-mono text-xs text-muted">
               Free edition &middot; Unsubscribe at any time &middot; Zero telemetry trackers
             </p>
           </div>
@@ -427,16 +425,16 @@ onUnmounted(() => {
             <li v-for="link in deskLinks" :key="link.label">
               <NuxtLink :to="link.to" :class="linkRow()">
                 <span>{{ link.label }}</span>
-                <span :class="linkArrow()">&rarr;</span>
+                <UIcon name="i-lucide-arrow-right" :class="linkArrow()" />
               </NuxtLink>
             </li>
             <li>
               <NuxtLink
                 to="/category"
-                class="group block border-t border-dashed border-default pt-2 font-sans text-xs tracking-wider text-muted uppercase transition-colors duration-150 hover:text-highlighted"
+                class="group flex items-center justify-between border-t border-dashed border-default pt-2 font-sans text-xs tracking-wider text-muted uppercase transition-colors duration-150 hover:text-highlighted"
               >
-                Browse All Desks
-                <span :class="linkArrow()">&rarr;</span>
+                <span>Browse All Desks</span>
+                <UIcon name="i-lucide-arrow-right" :class="linkArrow()" />
               </NuxtLink>
             </li>
           </ul>
@@ -452,7 +450,7 @@ onUnmounted(() => {
             <li v-for="link in editorialLinks" :key="link.label">
               <NuxtLink :to="link.to" :class="linkRow()">
                 <span>{{ link.label }}</span>
-                <span :class="linkArrow()">&rarr;</span>
+                <UIcon name="i-lucide-arrow-right" :class="linkArrow()" />
               </NuxtLink>
             </li>
           </ul>
@@ -492,7 +490,7 @@ onUnmounted(() => {
             </div>
 
             <div
-              class="space-y-1.5 border-t border-dashed border-default pt-3 text-[10px] text-muted uppercase"
+              class="space-y-1.5 border-t border-dashed border-default pt-3 text-xs text-muted uppercase"
             >
               <div class="flex items-center justify-between">
                 <span>Infrastructure:</span>
@@ -519,10 +517,10 @@ onUnmounted(() => {
       <div class="border-t border-dashed border-default"></div>
 
       <div
-        class="flex flex-col items-start justify-between gap-4 font-mono text-[11px] text-muted md:flex-row md:items-center"
+        class="flex flex-col items-start justify-between gap-4 font-mono text-xs text-muted md:flex-row md:items-center"
       >
         <div>&copy; {{ copyright }} The Angkor Times Publishing Company. All Rights Reserved.</div>
-        <div class="text-[10px] tracking-wider text-dimmed uppercase">
+        <div class="text-xs tracking-wider text-dimmed uppercase">
           Typeset in Monomakh &amp; EB Garamond &middot; Broadsheet Edition
         </div>
       </div>

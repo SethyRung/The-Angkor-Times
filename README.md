@@ -1,9 +1,5 @@
 # The Angkor Times
 
-[![Nuxt](https://img.shields.io/badge/Nuxt-4.0-00DC82?logo=nuxt.js)](https://nuxt.com/)
-[![Nuxt Hub](https://img.shields.io/badge/Nuxt%20Hub-Latest-00DC82)](https://hub.nuxt.com/)
-[![License](https://img.shields.io/github/license/SethyRung/The-Angkor-Times)](LICENSE)
-
 _A modern news website powered by **Nuxt 4** (Frontend) on **Nuxt Hub** (Backend) with **PostgreSQL**._
 
 ---

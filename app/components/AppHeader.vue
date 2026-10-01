@@ -189,7 +189,7 @@ onUnmounted(() => {
   <header :class="pinHeader ? 'sticky top-0 z-50 overflow-x-clip bg-default' : 'contents'">
     <div ref="bar" class="bg-default" :class="pinHeader ? 'relative z-30' : 'sticky top-0 z-50'">
       <div
-        class="relative mx-auto flex max-w-7xl items-center justify-between px-4 py-2 font-mono text-[11px] tracking-widest text-muted uppercase sm:px-6 lg:px-8"
+        class="relative mx-auto flex max-w-7xl items-center justify-between px-4 py-2 font-mono text-xs tracking-widest text-muted uppercase sm:px-6 lg:px-8"
       >
         <div ref="leading" class="flex min-w-0 items-center gap-2 truncate">
           <span class="inline-block size-1.5 shrink-0 animate-pulse rounded-full bg-primary" />
@@ -265,7 +265,7 @@ onUnmounted(() => {
 
       <p
         ref="tagline"
-        class="mt-2 px-4 font-sans text-[10px] font-semibold tracking-[0.25em] text-muted uppercase sm:text-[11px]"
+        class="mt-2 px-4 font-sans text-xs font-semibold tracking-widest text-muted uppercase sm:text-xs"
       >
         <NuxtLink to="/" class="transition-colors hover:text-highlighted">
           The Independent Broadsheet of Record &middot; Kingdom of Cambodia
@@ -294,9 +294,7 @@ onUnmounted(() => {
               The Angkor Times
             </span>
 
-            <p class="font-mono text-[10px] tracking-widest text-muted uppercase">
-              Navigation Desk
-            </p>
+            <p class="font-mono text-xs tracking-widest text-muted uppercase">Navigation Desk</p>
           </div>
 
           <UButton icon="i-lucide-x" color="neutral" variant="ghost" size="xs" @click="close" />
@@ -305,7 +303,7 @@ onUnmounted(() => {
 
       <template #body>
         <div class="space-y-2">
-          <span class="font-sans text-[10px] font-semibold tracking-widest text-muted uppercase">
+          <span class="font-sans text-xs font-semibold tracking-widest text-muted uppercase">
             Search Archive
           </span>
           <UButton
@@ -320,7 +318,7 @@ onUnmounted(() => {
         </div>
 
         <div class="space-y-2">
-          <span class="font-sans text-[10px] font-semibold tracking-widest text-muted uppercase">
+          <span class="font-sans text-xs font-semibold tracking-widest text-muted uppercase">
             Desks &amp; Sections
           </span>
           <div class="divide-y divide-dashed divide-default border-y border-default">
@@ -332,7 +330,7 @@ onUnmounted(() => {
               @click="isMobileMenuOpen = false"
             >
               <span>{{ item.label }}</span>
-              <span class="font-mono text-xs text-muted">&rarr;</span>
+              <UIcon name="i-lucide-arrow-right" class="size-4 text-muted" />
             </NuxtLink>
           </div>
         </div>
