@@ -101,7 +101,7 @@ function readClock() {
 }
 
 function liveStamp() {
-  return `${clockHours.value}:${clockSeconds.value} ICT`;
+  return `${clockHours.value}:${clockSeconds.value} GMT+7`;
 }
 
 function killClockTweens() {
@@ -288,7 +288,7 @@ function handleSubscribe() {
   if (!email.value || !email.value.includes("@")) return;
   subscribed.value = true;
   liveMessage.value =
-    "Subscribed to The Morning Wire. First dispatch will arrive tomorrow at 06:00 ICT.";
+    "Subscribed to The Morning Wire. First dispatch will arrive tomorrow at 06:00 GMT+7.";
   if (prefersReducedMotion.value === "reduce") {
     stamped.value = true;
     return;
@@ -337,13 +337,13 @@ onUnmounted(() => {
               Independent journalism, delivered at dawn<span class="text-primary">.</span>
             </h3>
             <p class="max-w-xl font-serif text-sm leading-relaxed text-toned sm:text-base">
-              Every morning at 06:00 ICT, the Phnom Penh desk compiles curated investigations,
+              Every morning at 06:00 GMT+7, the Phnom Penh desk compiles curated investigations,
               economic analysis, and cultural dispatches. No clickbait, strictly broadsheet craft.
             </p>
           </div>
 
           <div class="rounded-sm border border-default bg-default p-4 sm:p-5">
-            <p class="sr-only" aria-live="polite">{{ liveMessage }}</p>
+            <p class="sr-only">{{ liveMessage }}</p>
 
             <div :class="footer({ open: !subscribed }).collapse()">
               <form
@@ -375,7 +375,7 @@ onUnmounted(() => {
               :class="footer({ open: subscribed, delayed: true }).collapse()"
               :inert="!subscribed"
             >
-              <div class="min-h-0 overflow-hidden" :aria-hidden="!subscribed">
+              <div class="min-h-0 overflow-hidden">
                 <div class="space-y-1 py-2 text-center">
                   <span :class="footer({ stamped }).stamp()">
                     &check; Subscribed to The Morning Wire
@@ -384,7 +384,7 @@ onUnmounted(() => {
                     class="font-mono text-xs text-muted transition-opacity delay-100 duration-500 motion-reduce:transition-none"
                     :class="stamped ? 'opacity-100' : 'opacity-0'"
                   >
-                    First dispatch will arrive tomorrow at 06:00 ICT.
+                    First dispatch will arrive tomorrow at 06:00 GMT+7.
                   </p>
                 </div>
               </div>
@@ -417,9 +417,9 @@ onUnmounted(() => {
 
         <div class="space-y-4">
           <div :class="columnHeading()">
-            <span aria-hidden="true" class="size-1.5 shrink-0 rounded-full bg-primary" />
+            <span class="size-1.5 shrink-0 rounded-full bg-primary" />
             <h4 :class="columnTitle()">Editorial Desks</h4>
-            <span data-rule aria-hidden="true" class="desk-rule" />
+            <span data-rule class="desk-rule" />
           </div>
           <ul class="space-y-2 font-serif text-sm">
             <li v-for="link in deskLinks" :key="link.label">
@@ -442,9 +442,9 @@ onUnmounted(() => {
 
         <div class="space-y-4">
           <div :class="columnHeading()">
-            <span aria-hidden="true" class="size-1.5 shrink-0 rounded-full bg-primary" />
+            <span class="size-1.5 shrink-0 rounded-full bg-primary" />
             <h4 :class="columnTitle()">Standards &amp; Desk</h4>
-            <span data-rule aria-hidden="true" class="desk-rule" />
+            <span data-rule class="desk-rule" />
           </div>
           <ul class="space-y-2 font-serif text-sm">
             <li v-for="link in editorialLinks" :key="link.label">
@@ -459,11 +459,10 @@ onUnmounted(() => {
         <div class="space-y-4">
           <div :class="columnHeading()">
             <span
-              aria-hidden="true"
               class="wire-dot size-1.5 shrink-0 rounded-full bg-primary motion-safe:animate-pulse"
             />
             <h4 :class="columnTitle()">Wire &amp; Network</h4>
-            <span data-rule aria-hidden="true" class="desk-rule" />
+            <span data-rule class="desk-rule" />
           </div>
           <div class="space-y-3 font-mono text-xs">
             <div class="flex flex-col gap-2">
@@ -475,7 +474,7 @@ onUnmounted(() => {
                 rel="noopener"
                 class="group flex items-center gap-2 text-toned transition-colors duration-150 hover:text-primary focus-visible:text-primary"
               >
-                <span class="inline-grid text-primary" aria-hidden="true">
+                <span class="inline-grid text-primary">
                   <span
                     class="col-start-1 row-start-1 group-hover:invisible group-focus-visible:invisible"
                     >[+]</span
@@ -493,20 +492,11 @@ onUnmounted(() => {
               class="space-y-1.5 border-t border-dashed border-default pt-3 text-xs text-muted uppercase"
             >
               <div class="flex items-center justify-between">
-                <span>Infrastructure:</span>
-                <span class="text-highlighted">PostgreSQL + NuxtHub</span>
-              </div>
-              <div class="flex items-center justify-between">
                 <span>Clock:</span>
                 <span class="text-highlighted tabular-nums">
-                  <span
-                    v-if="liveClock"
-                    ref="clockReadout"
-                    class="clock-readout"
-                    aria-hidden="true"
-                  />
-                  <template v-else>{{ clockHours }} ICT</template>
-                  <span v-if="liveClock" class="sr-only">{{ clockHours }} ICT</span>
+                  <span v-if="liveClock" ref="clockReadout" class="clock-readout" />
+                  <template v-else>{{ clockHours }} GMT+7</template>
+                  <span v-if="liveClock" class="sr-only">{{ clockHours }} GMT+7</span>
                 </span>
               </div>
             </div>

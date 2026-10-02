@@ -129,19 +129,8 @@ const storyMedia = tv({
   },
 });
 
-const emptyState = tv({
-  slots: {
-    root: "space-y-4 rounded-sm border border-dashed border-default px-8 py-20 text-center",
-    iconWrap:
-      "inline-flex size-12 items-center justify-center rounded-full bg-elevated text-primary",
-    title: "font-display text-2xl font-semibold text-highlighted",
-    description: "mx-auto max-w-md font-serif text-base text-toned",
-  },
-});
-
 const sec = sectionHeader();
 const hero = heroGrid();
-const empty = emptyState();
 const mediaLead = storyMedia({ aspect: "lead" });
 const mediaFeature = storyMedia({ aspect: "feature" });
 const mediaSupport = storyMedia({ aspect: "support" });
@@ -174,16 +163,13 @@ const mediaRail = storyMedia({ aspect: "rail" });
         </div>
       </div>
 
-      <div v-else-if="!stories.length" :class="empty.root()">
-        <div :class="empty.iconWrap()">
-          <UIcon name="i-lucide-newspaper" class="size-6" />
-        </div>
-
-        <h2 :class="empty.title()">No Dispatches on the Wire</h2>
-
-        <p :class="empty.description()">Please check back shortly.</p>
-
-        <div v-if="categories.length" class="flex flex-wrap justify-center gap-2 pt-4">
+      <AppEmpty
+        v-else-if="!stories.length"
+        dashed
+        title="No Dispatches on the Wire"
+        description="The Phnom Penh newsroom is preparing today's broadsheet edition. Please check back shortly."
+      >
+        <div v-if="categories.length" class="flex flex-wrap justify-center gap-2 pt-2">
           <UButton
             v-for="cat in categories"
             :key="cat.id"
@@ -195,10 +181,10 @@ const mediaRail = storyMedia({ aspect: "rail" });
             class="rounded-sm font-sans text-xs tracking-wider uppercase"
           />
         </div>
-      </div>
+      </AppEmpty>
 
       <div v-else class="space-y-12 lg:space-y-16">
-        <section aria-label="Hero Front Page">
+        <section>
           <div :class="hero.root()">
             <div :class="hero.supportCol()">
               <div :class="hero.header()">
@@ -219,7 +205,7 @@ const mediaRail = storyMedia({ aspect: "rail" });
                   <span class="text-primary">
                     {{ story.category?.name || "Dispatch" }}
                   </span>
-                  <span class="text-dimmed" aria-hidden="true">&middot;</span>
+                  <span class="text-dimmed">&middot;</span>
                   <time v-if="story.publishedAt" :datetime="story.publishedAt">
                     {{ formatDate(story.publishedAt) }}
                   </time>
@@ -264,7 +250,7 @@ const mediaRail = storyMedia({ aspect: "rail" });
                 <div class="flex items-center gap-2">
                   <span class="size-2 rounded-full bg-primary" />
                   <span class="text-primary">Lead Editorial</span>
-                  <span class="text-dimmed" aria-hidden="true">&middot;</span>
+                  <span class="text-dimmed">&middot;</span>
                   <span class="text-muted">{{ leadStory.category?.name || "In Focus" }}</span>
                 </div>
                 <time
@@ -360,7 +346,7 @@ const mediaRail = storyMedia({ aspect: "rail" });
                       <span class="truncate text-primary">{{
                         story.category?.name || "Wire"
                       }}</span>
-                      <span aria-hidden="true">&middot;</span>
+                      <span>&middot;</span>
                       <span v-if="story.publishedAt" class="shrink-0">{{
                         formatRelative(story.publishedAt)
                       }}</span>
@@ -388,7 +374,7 @@ const mediaRail = storyMedia({ aspect: "rail" });
                   The morning paper in your inbox.
                 </h4>
                 <p class="font-serif text-xs leading-relaxed text-toned">
-                  Direct from the Phnom Penh newsroom, every morning at 06:00 ICT.
+                  Direct from the Phnom Penh newsroom, every morning at 06:00 GMT+7.
                 </p>
                 <UButton
                   to="/#newsletter"
@@ -432,7 +418,7 @@ const mediaRail = storyMedia({ aspect: "rail" });
                 >
                   {{ featureLead.category?.name || "Investigation" }}
                 </span>
-                <span class="text-dimmed" aria-hidden="true">&middot;</span>
+                <span class="text-dimmed">&middot;</span>
                 <span v-if="featureLead.publishedAt">{{
                   formatDate(featureLead.publishedAt)
                 }}</span>

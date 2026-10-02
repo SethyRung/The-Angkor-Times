@@ -226,11 +226,7 @@ onUnmounted(() => {
           />
         </div>
 
-        <div
-          ref="dock"
-          class="pointer-events-none absolute top-1/2 left-1/2 size-0"
-          aria-hidden="true"
-        />
+        <div ref="dock" class="pointer-events-none absolute top-1/2 left-1/2 size-0" />
       </div>
       <div class="border-b border-default" />
 
@@ -258,7 +254,7 @@ onUnmounted(() => {
         >
           <span :class="wordmarkClass">THE ANGKOR TIMES</span>
         </NuxtLink>
-        <div v-else class="invisible" aria-hidden="true">
+        <div v-else class="invisible">
           <span :class="wordmarkClass">THE ANGKOR TIMES</span>
         </div>
       </div>
