@@ -37,6 +37,7 @@
 }
 
 @utility drop-cap {
+  & > p:first-of-type::first-letter,
   &::first-letter {
     font-family: var(--font-display, serif);
     font-size: 3.5rem;

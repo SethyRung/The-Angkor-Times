@@ -1,15 +1,14 @@
 import { db, schema } from "@nuxthub/db";
 import { eq, and, isNotNull } from "drizzle-orm";
 
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 export default defineEventHandler(async (event) => {
   try {
     const id = getRouterParam(event, "id");
 
-    if (!id) {
-      return createResponse(
-        { code: ApiResponseCode.InvalidRequest, message: "News ID is required" },
-        null,
-      );
+    if (!id || !UUID_REGEX.test(id)) {
+      return createResponse({ code: ApiResponseCode.NotFound, message: "News not found" }, null);
     }
 
     const rows = await db
