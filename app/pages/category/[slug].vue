@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { NewsItem } from "~/types/news";
-import type { ApiResponse, NewsWithRelations, DbCategory } from "#shared/types";
+import type { BreadcrumbItem } from "@nuxt/ui";
 
 interface CategoryWithCount extends Pick<DbCategory, "id" | "name" | "slug"> {
   newsCount: number;
@@ -10,66 +9,126 @@ interface CategoryWithCount extends Pick<DbCategory, "id" | "name" | "slug"> {
 const route = useRoute();
 const slug = route.params.slug as string;
 
-const { data: catRes } = useFetch<ApiResponse<CategoryWithCount[]>>("/api/categories");
+const { data: catRes } = await useFetch<ApiResponse<CategoryWithCount[]>>("/api/categories");
+
 const categoryName = computed(() => {
-  const res = catRes.value as ApiResponse<CategoryWithCount[]> | null;
+  const res = catRes.value;
   if (!res || !isSuccessResponse(res)) return "";
   const cat = res.data.find((c) => c.slug === slug);
   return cat?.name ?? "";
 });
 
-const { data, pending } = useFetch<ApiResponse<NewsWithRelations[]>>("/api/news", {
-  query: { category: slug, limit: 20, offset: 0 },
+const displayTitle = computed(() => {
+  const name = categoryName.value || slug;
+  return name.endsWith("Desk") ? name : `${name} Desk`;
 });
 
-const stories = computed<NewsItem[]>(() => {
-  const res = data.value as ApiResponse<NewsWithRelations[]> | null;
+const { data: newsRes, pending } = await useFetch<ApiResponse<NewsWithRelations[]>>("/api/news", {
+  query: computed(() => ({ category: slug, limit: 24, offset: 0 })),
+});
+
+const stories = computed<NewsWithRelations[]>(() => {
+  const res = newsRes.value;
   if (!res || !isSuccessResponse(res)) return [];
   return res.data;
 });
 
-useSeoMeta({
-  title: () => `${categoryName.value || slug} — The Angkor Times`,
-  description: () => `Stories in ${categoryName.value || slug} — The Angkor Times.`,
-  ogTitle: () => `${categoryName.value || slug} — The Angkor Times`,
-  ogDescription: () => `Stories in ${categoryName.value || slug} — The Angkor Times.`,
-  ogType: "website",
-});
+const leadStory = computed<NewsWithRelations | null>(() => stories.value[0] ?? null);
+const secondaryStories = computed<NewsWithRelations[]>(() => stories.value.slice(1));
+
+const breadcrumbs = computed<BreadcrumbItem[]>(() => [
+  { label: "Front Page", to: "/" },
+  { label: "Editorial Desks", to: "/category" },
+  { label: displayTitle.value },
+]);
+
+useHead(() => ({
+  title: `${displayTitle.value} — The Angkor Times`,
+  meta: [
+    {
+      name: "description",
+      content: `Dispatches and reporting from the ${displayTitle.value} of The Angkor Times.`,
+    },
+    { property: "og:title", content: `${displayTitle.value} — The Angkor Times` },
+    {
+      property: "og:description",
+      content: `Dispatches and reporting from the ${displayTitle.value} of The Angkor Times.`,
+    },
+    { property: "og:type", content: "website" },
+  ],
+}));
 </script>
 
 <template>
-  <UContainer class="py-10 md:py-16 font-mono max-w-5xl">
-    <NuxtLink
-      to="/category"
-      class="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-toned hover:text-primary-500 dark:hover:text-primary-400 transition-colors mb-4"
-    >
-      &larr; All categories
-    </NuxtLink>
+  <div class="py-8 sm:py-12 lg:py-16">
+    <UContainer class="max-w-7xl space-y-10 px-4 sm:space-y-12 sm:px-6 lg:px-8">
+      <UBreadcrumb :items="breadcrumbs" />
 
-    <h1 class="text-3xl sm:text-4xl md:text-5xl text-highlighted leading-none tracking-tight mb-10">
-      [+] {{ categoryName || slug }}
-    </h1>
+      <header class="space-y-3 border-b-2 border-default pb-6">
+        <div
+          class="flex items-center gap-2 font-sans text-xs font-semibold tracking-widest text-primary uppercase"
+        >
+          <span class="size-1.5 rounded-full bg-primary" />
+          <span>The Angkor Times Desk Report</span>
+        </div>
 
-    <div
-      v-if="pending && !stories.length"
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
-    >
-      <USkeleton v-for="n in 6" :key="n" class="h-48 rounded-sm" />
-    </div>
+        <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <h1
+            class="font-display text-3xl leading-tight font-semibold tracking-tight text-highlighted uppercase sm:text-5xl lg:text-6xl"
+          >
+            {{ displayTitle }}<span class="text-primary">.</span>
+          </h1>
 
-    <div v-else-if="stories.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-      <StoryTile v-for="story in stories" :key="story.id" :story="story" />
-    </div>
+          <span class="font-mono text-xs tracking-widest text-muted uppercase">
+            {{ stories.length }} {{ stories.length === 1 ? "Dispatch" : "Dispatches" }} Filed
+          </span>
+        </div>
 
-    <div v-else class="py-16 text-center space-y-3">
-      <p class="text-xs uppercase tracking-widest text-muted">[-] Empty</p>
-      <p class="text-toned text-sm">No published stories in this category yet.</p>
-      <NuxtLink
-        to="/"
-        class="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-primary hover:underline"
-      >
-        &larr; Back to home
-      </NuxtLink>
-    </div>
-  </UContainer>
+        <p class="max-w-2xl font-serif text-base leading-relaxed text-toned sm:text-lg">
+          In-depth investigations, breaking developments, and cultural perspectives filed by
+          correspondents assigned to the {{ categoryName || slug }} beat.
+        </p>
+      </header>
+
+      <div v-if="pending && !stories.length" class="space-y-8">
+        <USkeleton class="h-96 w-full rounded-xs" />
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <USkeleton v-for="n in 6" :key="n" class="h-64 rounded-xs" />
+        </div>
+      </div>
+
+      <div v-else-if="stories.length" class="space-y-10 sm:space-y-12">
+        <div v-if="leadStory">
+          <FeatureHero :story="leadStory" />
+        </div>
+
+        <div v-if="secondaryStories.length" class="space-y-6">
+          <div class="flex items-center justify-between border-b border-default pb-3">
+            <h3
+              class="font-display text-xl font-semibold tracking-wider text-highlighted uppercase sm:text-2xl"
+            >
+              Archive &middot; Further Dispatches<span class="text-primary">.</span>
+            </h3>
+            <span class="font-mono text-xs tracking-widest text-muted uppercase">
+              {{ secondaryStories.length }}
+              {{ secondaryStories.length === 1 ? "Dispatch" : "Dispatches" }}
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <StoryTile v-for="story in secondaryStories" :key="story.id" :story="story" />
+          </div>
+        </div>
+      </div>
+
+      <AppEmpty
+        v-else
+        dashed
+        title="No Dispatches Filed"
+        :description="`There are currently no published reports on the ${displayTitle} beat.`"
+        action-label="Return to Front Page"
+        action-to="/"
+      />
+    </UContainer>
+  </div>
 </template>
