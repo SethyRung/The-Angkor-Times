@@ -10,7 +10,7 @@ const categories = computed(() => categoriesData.value?.data ?? []);
 
 <template>
   <div
-    class="flex min-h-screen flex-col bg-default text-highlighted selection:bg-primary selection:text-muted"
+    class="flex min-h-screen flex-col bg-default font-serif text-highlighted selection:bg-primary selection:text-inverted"
   >
     <AppHeader :categories="categories" />
 
