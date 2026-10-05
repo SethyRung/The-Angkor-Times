@@ -43,7 +43,7 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
       <UDashboardNavbar
         title="Dashboard"
         :ui="{
-          title: 'text-base md:text-lg uppercase tracking-widest text-highlighted',
+          title: 'font-display text-base uppercase tracking-tight text-highlighted md:text-lg',
         }"
       >
         <template #leading>
@@ -53,161 +53,181 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
     </template>
 
     <template #body>
-      <header class="space-y-2 mb-2">
-        <p class="text-xs uppercase tracking-widest text-muted">
-          [+] Editorial Console &middot; {{ now().format("ddd, MMM D") }}
+      <header class="space-y-2 border-b border-default pb-5">
+        <p class="font-sans text-xs font-semibold tracking-widest text-primary uppercase">
+          Newsroom Desk &middot; {{ now().format("dddd, MMMM D") }}
         </p>
-        <h1 class="text-2xl md:text-3xl uppercase tracking-tight text-highlighted leading-none">
-          Welcome back, {{ user?.firstName }}
+        <h1
+          class="font-display text-2xl leading-none tracking-tight text-highlighted uppercase md:text-3xl"
+        >
+          Welcome back, {{ user?.firstName }}<span class="text-primary">.</span>
         </h1>
-        <p class="text-sm text-toned">
+        <p class="font-serif text-base text-toned">
           <template v-if="stats.pending > 0">
             {{ stats.pending }}
-            {{ stats.pending === 1 ? "story is" : "stories are" }} awaiting your review.
+            {{ stats.pending === 1 ? "dispatch is" : "dispatches are" }} awaiting review.
           </template>
           <template v-else>The queue is clear. Nothing pending right now.</template>
         </p>
       </header>
 
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <article class="border border-default rounded-sm p-5 bg-default">
-          <p class="text-xs uppercase tracking-widest text-muted">[+] Pending</p>
-          <p class="text-3xl md:text-4xl text-error mt-2 leading-none">
+      <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <article class="rounded-xs border border-default bg-elevated p-5">
+          <p class="font-sans text-xs font-semibold tracking-widest text-muted uppercase">
+            Pending
+          </p>
+          <p class="mt-2 font-display text-3xl leading-none text-error md:text-4xl">
             {{ stats.pending }}
           </p>
-          <p class="text-[10px] uppercase tracking-widest text-muted mt-1">Awaiting review</p>
+          <p class="mt-1 font-mono text-xs tracking-widest text-muted uppercase">Awaiting review</p>
         </article>
 
-        <article class="border border-default rounded-sm p-5 bg-default">
-          <p class="text-xs uppercase tracking-widest text-muted">[+] Published</p>
-          <p class="text-3xl md:text-4xl text-primary-500 mt-2 leading-none">
+        <article class="rounded-xs border border-default bg-elevated p-5">
+          <p class="font-sans text-xs font-semibold tracking-widest text-muted uppercase">
+            Published
+          </p>
+          <p class="mt-2 font-display text-3xl leading-none text-primary md:text-4xl">
             {{ stats.published }}
           </p>
-          <p class="text-[10px] uppercase tracking-widest text-muted mt-1">Live now</p>
+          <p class="mt-1 font-mono text-xs tracking-widest text-muted uppercase">Live now</p>
         </article>
 
-        <article class="border border-default rounded-sm p-5 bg-default">
-          <p class="text-xs uppercase tracking-widest text-muted">[+] Total</p>
-          <p class="text-3xl md:text-4xl text-highlighted mt-2 leading-none">
+        <article class="rounded-xs border border-default bg-elevated p-5">
+          <p class="font-sans text-xs font-semibold tracking-widest text-muted uppercase">Total</p>
+          <p class="mt-2 font-display text-3xl leading-none text-highlighted md:text-4xl">
             {{ stats.total }}
           </p>
-          <p class="text-[10px] uppercase tracking-widest text-muted mt-1">All stories</p>
+          <p class="mt-1 font-mono text-xs tracking-widest text-muted uppercase">All dispatches</p>
         </article>
 
-        <article class="border border-default rounded-sm p-5 bg-default">
-          <p class="text-xs uppercase tracking-widest text-muted">[+] Editors</p>
-          <p class="text-3xl md:text-4xl text-highlighted mt-2 leading-none">
+        <article class="rounded-xs border border-default bg-elevated p-5">
+          <p class="font-sans text-xs font-semibold tracking-widest text-muted uppercase">Staff</p>
+          <p class="mt-2 font-display text-3xl leading-none text-highlighted md:text-4xl">
             {{ stats.editors }}
           </p>
-          <p class="text-[10px] uppercase tracking-widest text-muted mt-1">Active accounts</p>
+          <p class="mt-1 font-mono text-xs tracking-widest text-muted uppercase">Active accounts</p>
         </article>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
         <NuxtLink
           to="/admin/news"
-          class="group block border border-default rounded-sm p-5 bg-default hover:border-primary transition-colors"
+          class="group block rounded-xs border border-default bg-default p-5 transition-colors hover:border-muted"
         >
           <div class="flex items-start justify-between gap-4">
             <div class="min-w-0">
-              <p class="text-xs uppercase tracking-widest text-muted">[+] News Queue</p>
-              <p class="text-lg md:text-xl uppercase text-highlighted mt-2 tracking-tight">
+              <p class="font-sans text-xs font-semibold tracking-widest text-primary uppercase">
+                News Queue
+              </p>
+              <p
+                class="mt-2 font-display text-lg tracking-tight text-highlighted uppercase md:text-xl"
+              >
                 Review &amp; Publish
               </p>
-              <p class="text-[10px] uppercase tracking-widest text-muted mt-2">
+              <p class="mt-2 font-mono text-xs tracking-widest text-muted uppercase">
                 {{ stats.pending }} pending &middot; {{ stats.published }} published
               </p>
             </div>
-            <span
-              class="text-muted group-hover:text-primary-500 dark:group-hover:text-primary-400 text-sm uppercase tracking-widest transition-colors"
-            >
-              &rarr;
-            </span>
+            <UIcon
+              name="i-lucide-arrow-right"
+              class="size-4 text-muted transition-colors group-hover:text-primary"
+            />
           </div>
         </NuxtLink>
 
         <NuxtLink
           v-if="user?.role === 'admin'"
           to="/admin/users"
-          class="group block border border-default rounded-sm p-5 bg-default hover:border-primary transition-colors"
+          class="group block rounded-xs border border-default bg-default p-5 transition-colors hover:border-muted"
         >
           <div class="flex items-start justify-between gap-4">
             <div class="min-w-0">
-              <p class="text-xs uppercase tracking-widest text-muted">[+] User Management</p>
-              <p class="text-lg md:text-xl uppercase text-highlighted mt-2 tracking-tight">
+              <p class="font-sans text-xs font-semibold tracking-widest text-primary uppercase">
+                Masthead
+              </p>
+              <p
+                class="mt-2 font-display text-lg tracking-tight text-highlighted uppercase md:text-xl"
+              >
                 Accounts &amp; Roles
               </p>
-              <p class="text-[10px] uppercase tracking-widest text-muted mt-2">
+              <p class="mt-2 font-mono text-xs tracking-widest text-muted uppercase">
                 {{ stats.editors }} active {{ stats.editors === 1 ? "account" : "accounts" }}
               </p>
             </div>
-            <span
-              class="text-muted group-hover:text-primary-500 dark:group-hover:text-primary-400 text-sm uppercase tracking-widest transition-colors"
-            >
-              &rarr;
-            </span>
+            <UIcon
+              name="i-lucide-arrow-right"
+              class="size-4 text-muted transition-colors group-hover:text-primary"
+            />
           </div>
         </NuxtLink>
 
         <div
           v-else
-          class="border border-default rounded-sm p-5 bg-default flex items-center justify-between"
+          class="flex items-center justify-between rounded-xs border border-dashed border-default bg-default p-5"
         >
           <div>
-            <p class="text-xs uppercase tracking-widest text-muted">[-] User Management</p>
-            <p class="text-lg md:text-xl uppercase text-muted mt-2 tracking-tight">Admin Only</p>
-            <p class="text-[10px] uppercase tracking-widest text-muted mt-2">
-              Editors cannot manage accounts
+            <p class="font-sans text-xs font-semibold tracking-widest text-muted uppercase">
+              Masthead
             </p>
+            <p class="mt-2 font-display text-lg tracking-tight text-muted uppercase md:text-xl">
+              Admin Only
+            </p>
+            <p class="mt-2 font-serif text-sm text-muted">Editors cannot manage accounts.</p>
           </div>
           <UIcon name="i-lucide-lock" class="size-5 text-muted" />
         </div>
       </div>
 
-      <section v-if="recent.length" class="space-y-3">
-        <header class="flex items-end justify-between">
-          <div>
-            <p class="text-xs uppercase tracking-widest text-muted">[+] Recent Activity</p>
-            <p class="text-lg uppercase text-highlighted mt-1">Latest Stories</p>
-          </div>
+      <section v-if="recent.length" class="space-y-4">
+        <header class="flex items-end justify-between border-b border-default pb-3">
+          <h2 class="font-display text-xl tracking-wider text-highlighted uppercase">
+            Latest Dispatches<span class="text-primary">.</span>
+          </h2>
           <NuxtLink
             to="/admin/news"
-            class="text-xs uppercase tracking-widest text-muted hover:text-primary-500 dark:hover:text-primary-400 transition-colors"
+            class="flex items-center gap-1.5 font-sans text-xs tracking-widest text-muted uppercase transition-colors hover:text-primary"
           >
-            View all &rarr;
+            <span>View queue</span>
+            <UIcon name="i-lucide-arrow-right" class="size-3.5" />
           </NuxtLink>
         </header>
 
-        <ul class="border border-default rounded-sm divide-y divide-default bg-default">
+        <ul
+          class="divide-y divide-dashed divide-default rounded-xs border border-default bg-default"
+        >
           <li
             v-for="item in recent"
             :key="item.id"
-            class="flex items-center gap-4 p-4 hover:bg-canvas-100 dark:hover:bg-canvas-900 transition-colors"
+            class="flex items-center gap-4 p-4 transition-colors hover:bg-elevated/60"
           >
-            <div class="size-10 shrink-0 rounded-sm bg-muted overflow-hidden">
+            <div
+              class="size-12 shrink-0 overflow-hidden rounded-xs border border-default bg-elevated"
+            >
               <img
                 v-if="item.featuredImage"
                 :src="item.featuredImage"
                 :alt="item.title"
-                class="w-full h-full object-cover"
+                class="h-full w-full object-cover"
               />
             </div>
 
-            <div class="flex-1 min-w-0">
-              <p class="text-sm text-highlighted truncate">
+            <div class="min-w-0 flex-1">
+              <p class="truncate font-serif text-base font-semibold text-highlighted">
                 {{ item.title }}
               </p>
-              <p class="text-[10px] uppercase tracking-widest text-muted mt-0.5">
-                <span v-if="item.category" class="text-primary">[+] {{ item.category.name }}</span>
-                <span v-if="item.category"> &middot; </span>
+              <p
+                class="mt-0.5 font-sans text-xs font-semibold tracking-widest text-muted uppercase"
+              >
+                <span v-if="item.category" class="text-primary">{{ item.category.name }}</span>
+                <span v-if="item.category" class="px-1.5 text-dimmed">&middot;</span>
                 {{ toDayJS(item.publishedAt ?? item.createdAt).fromNow() }}
               </p>
             </div>
 
             <span
-              class="text-[10px] uppercase tracking-widest shrink-0 px-2 py-1 rounded-sm border"
+              class="shrink-0 rounded-full border px-2.5 py-0.5 font-sans text-xs font-semibold tracking-widest uppercase"
               :class="
-                item.publishedAt ? 'text-primary border-primary/30' : 'text-error border-error/30'
+                item.publishedAt ? 'border-default text-primary' : 'border-error/40 text-error'
               "
             >
               {{ item.publishedAt ? "Published" : "Pending" }}

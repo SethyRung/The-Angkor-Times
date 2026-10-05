@@ -23,6 +23,8 @@ const state = reactive<Partial<UserFormSchema>>({
   password: "",
 });
 
+const formRef = useTemplateRef("formRef");
+
 const isEdit = computed(() => !!props.user);
 
 watch(
@@ -51,49 +53,52 @@ function onSubmit(event: FormSubmitEvent<UserFormSchema>) {
 </script>
 
 <template>
-  <UModal
-    :open="open"
-    :title="isEdit ? 'Edit User' : 'Add User'"
-    :ui="{
-      content: 'rounded-sm font-mono',
-      header: 'border-b border-default',
-      title: 'text-base uppercase tracking-widest text-highlighted',
+  <UTheme
+    :props="{
+      button: {
+        size: 'lg',
+      },
+      input: {
+        size: 'lg',
+        class: 'w-full font-sans',
+      },
+      formField: {
+        required: true,
+      },
     }"
-    @update:open="(v) => emit('update:open', v)"
   >
-    <template #body>
-      <UTheme
-        :props="{
-          button: {
-            size: 'lg',
-          },
-          input: {
-            size: 'lg',
-            class: 'w-full font-mono',
-          },
-          formField: {
-            required: true,
-          },
-        }"
-      >
-        <UForm :schema="userFormSchema" :state="state" class="space-y-4" @submit="onSubmit">
+    <AdminFormPanel
+      :open="open"
+      :title="isEdit ? 'Edit User' : 'Add User'"
+      description="Manage account details and newsroom access."
+      @update:open="(value) => emit('update:open', value)"
+    >
+      <template #body>
+        <UForm
+          ref="formRef"
+          :disabled="submitting"
+          :schema="userFormSchema"
+          :state="state"
+          class="space-y-4"
+          @submit="onSubmit"
+        >
           <UFormField name="email" label="Email" required>
             <UInput
               v-model="state.email"
               type="email"
               autocomplete="off"
               class="w-full"
-              :ui="{ base: 'rounded-sm font-mono' }"
+              :ui="{ base: 'rounded-sm font-sans' }"
             />
           </UFormField>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <UFormField name="firstName" label="First Name">
               <UInput
                 v-model="state.firstName"
                 autocomplete="off"
                 class="w-full"
-                :ui="{ base: 'rounded-sm font-mono' }"
+                :ui="{ base: 'rounded-sm font-sans' }"
               />
             </UFormField>
             <UFormField name="lastName" label="Last Name">
@@ -101,7 +106,7 @@ function onSubmit(event: FormSubmitEvent<UserFormSchema>) {
                 v-model="state.lastName"
                 autocomplete="off"
                 class="w-full"
-                :ui="{ base: 'rounded-sm font-mono' }"
+                :ui="{ base: 'rounded-sm font-sans' }"
               />
             </UFormField>
           </div>
@@ -114,7 +119,7 @@ function onSubmit(event: FormSubmitEvent<UserFormSchema>) {
                 { label: 'Admin', value: 'admin' },
               ]"
               class="w-full"
-              :ui="{ base: 'rounded-sm font-mono' }"
+              :ui="{ base: 'rounded-sm font-sans' }"
             />
           </UFormField>
 
@@ -128,36 +133,32 @@ function onSubmit(event: FormSubmitEvent<UserFormSchema>) {
               type="password"
               autocomplete="new-password"
               class="w-full"
-              :ui="{ base: 'rounded-sm font-mono' }"
+              :ui="{ base: 'rounded-sm font-sans' }"
             />
           </UFormField>
 
-          <p
-            v-if="formError"
-            class="font-mono text-xs uppercase tracking-widest text-error flex items-center gap-2"
-          >
-            <span class="text-primary-500">[+]</span>
+          <p v-if="formError" class="font-sans text-xs font-semibold tracking-wider text-error">
             {{ formError }}
           </p>
-
-          <div class="flex justify-end gap-2 pt-2">
-            <UButton
-              label="Cancel"
-              color="neutral"
-              variant="ghost"
-              :disabled="submitting"
-              class="rounded-sm font-mono uppercase tracking-widest text-xs"
-              @click="emit('update:open', false)"
-            />
-            <UButton
-              type="submit"
-              :loading="submitting"
-              :label="isEdit ? 'Save Changes' : 'Create User'"
-              class="rounded-sm font-mono uppercase tracking-widest text-xs"
-            />
-          </div>
         </UForm>
-      </UTheme>
-    </template>
-  </UModal>
+      </template>
+      <template #footer="{ close }">
+        <UButton
+          label="Cancel"
+          color="neutral"
+          variant="ghost"
+          :disabled="submitting"
+          @click="close"
+        />
+
+        <UButton
+          :label="isEdit ? 'Save Changes' : 'Create User'"
+          :loading="submitting"
+          :disabled="submitting"
+          color="primary"
+          @click="formRef?.submit()"
+        />
+      </template>
+    </AdminFormPanel>
+  </UTheme>
 </template>

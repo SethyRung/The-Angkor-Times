@@ -22,6 +22,7 @@ const isDesktop = useBreakpoints(breakpointsTailwind, { ssrWidth: 1024 }).greate
     :title="title"
     :description="description"
     side="right"
+    :close="false"
     :ui="{
       title: 'font-display text-lg uppercase tracking-tight text-highlighted',
       description: 'font-sans text-sm text-toned',

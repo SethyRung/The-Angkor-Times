@@ -30,15 +30,15 @@ const emit = defineEmits<{
     :open="open"
     :title="title"
     :ui="{
-      content: 'sm:max-w-md rounded-sm font-mono',
+      content: 'sm:max-w-md rounded-sm bg-default shadow-none sm:shadow-none sm:ring-0',
       header: 'border-b border-default',
-      title: 'text-base uppercase tracking-widest text-highlighted',
+      title: 'font-display text-lg uppercase tracking-tight text-highlighted',
     }"
     @update:open="(v) => emit('update:open', v)"
   >
     <template #body>
       <slot>
-        <p class="text-sm text-toned">{{ message }}</p>
+        <p class="font-serif text-base text-toned">{{ message }}</p>
       </slot>
 
       <div class="flex justify-end gap-2 pt-4">
@@ -47,14 +47,14 @@ const emit = defineEmits<{
           variant="ghost"
           :label="cancelLabel"
           :disabled="loading"
-          class="rounded-sm font-mono uppercase tracking-widest text-xs"
+          class="rounded-sm font-sans text-xs font-semibold tracking-wider uppercase"
           @click="emit('cancel')"
         />
         <UButton
           :color="confirmColor"
           :label="confirmLabel"
           :loading="loading"
-          class="rounded-sm font-mono uppercase tracking-widest text-xs"
+          class="rounded-sm font-sans text-xs font-semibold tracking-wider uppercase"
           @click="emit('confirm')"
         />
       </div>

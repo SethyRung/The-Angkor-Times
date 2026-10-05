@@ -30,7 +30,7 @@ const columns: TableColumn<PublicUser>[] = [
   { id: "user", header: "User" },
   { id: "role", header: "Role" },
   { id: "joined", header: "Joined" },
-  { id: "actions", header: "", enableSorting: false },
+  { id: "actions", enableSorting: false },
 ];
 
 const formOpen = ref(false);
@@ -167,7 +167,7 @@ function initials(item: PublicUser) {
       <UDashboardNavbar
         title="Users"
         :ui="{
-          title: 'text-base md:text-lg uppercase tracking-widest text-highlighted',
+          title: 'font-display text-base uppercase tracking-tight text-highlighted md:text-lg',
         }"
       >
         <template #leading>
@@ -177,16 +177,24 @@ function initials(item: PublicUser) {
     </template>
 
     <template #body>
-      <header class="flex items-end justify-between gap-4 flex-wrap">
+      <header class="flex flex-wrap items-end justify-between gap-4 border-b border-default pb-4">
         <div class="space-y-1">
-          <p class="text-xs uppercase tracking-widest text-muted">[+] User Management</p>
-          <p class="text-sm text-toned">Create, edit, and remove editor and admin accounts.</p>
+          <p class="font-sans text-xs font-semibold tracking-widest text-primary uppercase">
+            Masthead
+          </p>
+          <h1 class="font-display text-2xl tracking-tight text-highlighted uppercase">
+            Accounts &amp; Roles<span class="text-primary">.</span>
+          </h1>
+          <p class="font-serif text-sm text-toned">
+            Create, edit, and remove editor and admin accounts.
+          </p>
         </div>
 
         <UButton
           icon="i-lucide-plus"
           label="Add User"
-          class="rounded-sm font-mono uppercase tracking-widest text-xs"
+          color="primary"
+          class="rounded-sm font-sans text-xs font-semibold tracking-wider uppercase"
           @click="openCreate"
         />
       </header>
@@ -196,22 +204,22 @@ function initials(item: PublicUser) {
         :columns="columns"
         :loading="pending"
         :ui="{
-          root: 'min-h-max rounded-sm border border-default',
-          th: 'text-muted',
+          root: 'min-h-max rounded-xs border border-default',
+          th: 'font-sans text-xs font-semibold tracking-widest text-muted uppercase',
         }"
       >
         <template #user-cell="{ row }">
-          <div class="flex items-center gap-3 min-w-0 py-1">
+          <div class="flex min-w-0 items-center gap-3 py-1">
             <div
-              class="size-10 shrink-0 rounded-full bg-muted flex items-center justify-center text-highlighted text-xs"
+              class="flex size-10 shrink-0 items-center justify-center rounded-full border border-default bg-elevated font-mono text-xs text-primary"
             >
               {{ initials(row.original) }}
             </div>
             <div class="min-w-0">
-              <p class="text-sm text-highlighted truncate">
+              <p class="truncate font-serif text-base font-semibold text-highlighted">
                 {{ fullName(row.original) }}
               </p>
-              <p class="text-[10px] uppercase tracking-widest text-muted truncate mt-0.5">
+              <p class="mt-0.5 truncate font-mono text-xs tracking-widest text-muted uppercase">
                 {{ row.original.email }}
               </p>
             </div>
@@ -220,11 +228,11 @@ function initials(item: PublicUser) {
 
         <template #role-cell="{ row }">
           <span
-            class="text-[10px] uppercase tracking-widest px-2 py-1 rounded-sm border"
+            class="rounded-full border px-2.5 py-0.5 font-sans text-xs font-semibold tracking-widest uppercase"
             :class="
               row.original.role === 'admin'
-                ? 'text-primary border-primary/30'
-                : 'text-toned border-default'
+                ? 'border-primary/30 text-primary'
+                : 'border-default text-toned'
             "
           >
             {{ row.original.role }}
@@ -232,40 +240,28 @@ function initials(item: PublicUser) {
         </template>
 
         <template #joined-cell="{ row }">
-          <span class="text-[10px] uppercase tracking-widest text-muted">
+          <span class="font-mono text-xs tracking-widest text-muted uppercase">
             {{ toDayJS(row.original.createdAt).fromNow() }}
           </span>
         </template>
 
         <template #actions-cell="{ row }">
           <UDropdownMenu :items="actionItems(row.original)">
-            <UButton
-              icon="i-lucide-ellipsis"
-              color="neutral"
-              variant="ghost"
-              aria-label="Actions"
-              class="rounded-sm"
-            />
+            <UButton icon="i-lucide-ellipsis" color="neutral" variant="ghost" class="rounded-sm" />
           </UDropdownMenu>
         </template>
 
         <template #empty>
-          <div class="py-10 text-center space-y-3">
-            <p class="text-xs uppercase tracking-widest text-muted">[-] No Users</p>
-            <p class="text-sm text-toned">
+          <div class="space-y-3 py-10 text-center">
+            <p class="font-sans text-xs font-semibold tracking-widest text-muted uppercase">
+              No accounts
+            </p>
+            <p class="font-serif text-sm text-toned">
               Get started by creating the first editor or admin account.
             </p>
           </div>
         </template>
       </UTable>
-
-      <UserFormModal
-        v-model:open="formOpen"
-        :user="editing"
-        :submitting="submitting"
-        :form-error="formError"
-        @submit="onUserSubmit"
-      />
 
       <ConfirmModal
         v-model:open="deleteOpen"
@@ -280,4 +276,12 @@ function initials(item: PublicUser) {
       />
     </template>
   </UDashboardPanel>
+
+  <UserFormPanel
+    v-model:open="formOpen"
+    :user="editing"
+    :submitting="submitting"
+    :form-error="formError"
+    @submit="onUserSubmit"
+  />
 </template>

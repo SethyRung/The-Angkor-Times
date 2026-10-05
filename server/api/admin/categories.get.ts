@@ -8,6 +8,7 @@ export default defineEventHandler(async () => {
         id: schema.categories.id,
         name: schema.categories.name,
         slug: schema.categories.slug,
+        createdAt: schema.categories.createdAt,
       })
       .from(schema.categories)
       .orderBy(asc(schema.categories.name));

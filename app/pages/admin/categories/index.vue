@@ -29,7 +29,7 @@ const columns: TableColumn<DbCategory>[] = [
   { accessorKey: "name", header: "Name" },
   { accessorKey: "slug", header: "Slug" },
   { id: "created", header: "Created" },
-  { id: "actions", header: "", enableSorting: false },
+  { id: "actions", enableSorting: false },
 ];
 
 const formOpen = ref(false);
@@ -128,7 +128,7 @@ async function confirmDelete() {
       <UDashboardNavbar
         title="Categories"
         :ui="{
-          title: 'text-base md:text-lg uppercase tracking-widest text-highlighted',
+          title: 'font-display text-base uppercase tracking-tight text-highlighted md:text-lg',
         }"
       >
         <template #leading>
@@ -138,16 +138,22 @@ async function confirmDelete() {
     </template>
 
     <template #body>
-      <header class="flex items-end justify-between gap-4 flex-wrap">
+      <header class="flex flex-wrap items-end justify-between gap-4 border-b border-default pb-4">
         <div class="space-y-1">
-          <p class="text-xs uppercase tracking-widest text-muted">[+] Category Management</p>
-          <p class="text-sm text-toned">Create, edit, and remove story categories.</p>
+          <p class="font-sans text-xs font-semibold tracking-widest text-primary uppercase">
+            Desks
+          </p>
+          <h1 class="font-display text-2xl tracking-tight text-highlighted uppercase">
+            Sections<span class="text-primary">.</span>
+          </h1>
+          <p class="font-serif text-sm text-toned">Create, edit, and remove story desks.</p>
         </div>
 
         <UButton
           icon="i-lucide-plus"
-          label="Add Category"
-          class="rounded-sm font-mono uppercase tracking-widest text-xs"
+          label="Add Desk"
+          color="primary"
+          class="rounded-sm font-sans text-xs font-semibold tracking-wider uppercase"
           @click="openCreate"
         />
       </header>
@@ -157,20 +163,22 @@ async function confirmDelete() {
         :columns="columns"
         :loading="pending"
         :ui="{
-          root: 'min-h-max rounded-sm border border-default',
-          th: 'text-muted',
+          root: 'min-h-max rounded-xs border border-default',
+          th: 'font-sans text-xs font-semibold tracking-widest text-muted uppercase',
         }"
       >
         <template #name-cell="{ row }">
-          <span class="text-highlighted">{{ row.original.name }}</span>
+          <span class="font-serif text-base font-semibold text-highlighted">{{
+            row.original.name
+          }}</span>
         </template>
 
         <template #slug-cell="{ row }">
-          <span class="text-xs text-toned">{{ row.original.slug }}</span>
+          <span class="font-mono text-xs text-muted">{{ row.original.slug }}</span>
         </template>
 
         <template #created-cell="{ row }">
-          <span class="text-xs uppercase text-muted">
+          <span class="font-mono text-xs tracking-widest text-muted uppercase">
             {{ toDayJS(row.original.createdAt).fromNow() }}
           </span>
         </template>
@@ -196,20 +204,14 @@ async function confirmDelete() {
         </template>
 
         <template #empty>
-          <div class="py-10 text-center space-y-3">
-            <p class="text-xs uppercase tracking-widest text-muted">[-] No Categories</p>
-            <p class="text-sm text-toned">Get started by creating the first category.</p>
+          <div class="space-y-3 py-10 text-center">
+            <p class="font-sans text-xs font-semibold tracking-widest text-muted uppercase">
+              No desks
+            </p>
+            <p class="font-serif text-sm text-toned">Get started by creating the first section.</p>
           </div>
         </template>
       </UTable>
-
-      <CategoryFormModal
-        v-model:open="formOpen"
-        :category="editing"
-        :submitting="submitting"
-        :form-error="formError"
-        @submit="onCategorySubmit"
-      />
 
       <ConfirmModal
         v-model:open="deleteOpen"
@@ -224,4 +226,12 @@ async function confirmDelete() {
       />
     </template>
   </UDashboardPanel>
+
+  <CategoryFormPanel
+    v-model:open="formOpen"
+    :category="editing"
+    :submitting="submitting"
+    :form-error="formError"
+    @submit="onCategorySubmit"
+  />
 </template>
