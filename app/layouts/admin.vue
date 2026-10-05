@@ -21,30 +21,30 @@ async function onLogout() {
 </script>
 
 <template>
-  <UDashboardGroup storage-key="admin" class="font-mono">
+  <UDashboardGroup storage-key="admin" class="bg-default font-serif text-highlighted">
     <UDashboardSidebar
       collapsible
       resizable
       :ui="{
-        root: 'border-r border-muted',
-        header: 'border-b border-muted',
-        footer: 'border-t border-muted py-3',
+        root: 'border-e border-default bg-default',
+        header: 'border-b border-default',
+        footer: 'border-t border-default py-3',
+        content: 'bg-default',
       }"
     >
       <template #header="{ collapsed }">
         <NuxtLink
           to="/"
-          class="flex items-center gap-2"
-          :class="collapsed ? 'justify-center w-full' : ''"
-          aria-label="The Angkor Times"
+          class="flex min-w-0 items-center gap-2"
+          :class="collapsed ? 'w-full justify-center' : ''"
         >
           <span
             v-if="!collapsed"
-            class="text-xs uppercase tracking-widest text-highlighted truncate"
+            class="truncate font-display text-sm tracking-tight text-highlighted uppercase"
           >
-            The Angkor Times
+            The Angkor Times<span class="text-primary">.</span>
           </span>
-          <span v-else class="text-xs uppercase text-primary-500">AT</span>
+          <span v-else class="font-display text-sm text-primary">AT</span>
         </NuxtLink>
       </template>
 
@@ -54,17 +54,19 @@ async function onLogout() {
           :items="items"
           orientation="vertical"
           color="neutral"
-          :ui="{ link: 'font-mono text-xs uppercase tracking-widest' }"
+          :ui="{ link: 'font-sans text-xs font-semibold uppercase tracking-wider' }"
         />
       </template>
 
       <template #footer="{ collapsed }">
-        <div v-if="user" class="flex flex-col gap-2 w-full">
-          <div v-if="!collapsed" class="px-1 min-w-0">
-            <p class="font-mono text-[10px] uppercase tracking-widest text-highlighted truncate">
+        <div v-if="user" class="flex w-full flex-col gap-2">
+          <div v-if="!collapsed" class="min-w-0 px-1">
+            <p
+              class="truncate font-sans text-xs font-semibold tracking-wider text-highlighted uppercase"
+            >
               {{ user.firstName }} {{ user.lastName }}
             </p>
-            <p class="font-mono text-[10px] uppercase tracking-widest text-muted">
+            <p class="font-mono text-xs tracking-widest text-muted uppercase">
               {{ user.role }}
             </p>
           </div>
@@ -74,8 +76,9 @@ async function onLogout() {
             :label="collapsed ? undefined : 'Sign out'"
             :block="!collapsed"
             :square="collapsed"
-            variant="soft"
-            class="rounded-sm font-mono uppercase tracking-widest text-[10px]"
+            color="neutral"
+            variant="outline"
+            class="rounded-sm font-sans text-xs font-semibold tracking-widest uppercase"
             @click="onLogout"
           />
         </div>
