@@ -86,7 +86,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       </p>
       <h1
         id="sign-in-heading"
-        class="font-display text-3xl leading-tight tracking-tight text-highlighted sm:text-4xl"
+        class="font-serif text-3xl leading-tight tracking-tight text-highlighted sm:text-4xl"
       >
         Newsroom sign in<span class="text-primary">.</span>
       </h1>

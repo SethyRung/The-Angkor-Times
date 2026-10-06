@@ -34,7 +34,7 @@ withDefaults(defineProps<AppEmptyProps>(), {
       <UIcon :name="icon" class="size-6" />
     </div>
 
-    <h2 class="font-display text-2xl font-semibold tracking-tight text-highlighted sm:text-3xl">
+    <h2 class="font-serif text-2xl font-semibold tracking-tight text-highlighted sm:text-3xl">
       {{ title }}<span class="text-primary">.</span>
     </h2>
 

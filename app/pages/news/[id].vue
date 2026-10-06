@@ -104,7 +104,7 @@ useHead(() => ({
 
       <header class="mb-8 space-y-6 sm:mb-10">
         <h1
-          class="font-display text-3xl leading-tight font-semibold tracking-tight text-highlighted sm:text-5xl lg:text-6xl"
+          class="font-serif text-3xl leading-tight font-semibold tracking-tight text-highlighted sm:text-5xl lg:text-6xl"
         >
           {{ story.title }}
         </h1>

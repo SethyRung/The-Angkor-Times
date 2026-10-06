@@ -59,7 +59,7 @@ useHead(() => ({
         </div>
 
         <h1
-          class="font-display text-3xl leading-tight font-semibold tracking-tight text-highlighted sm:text-5xl lg:text-6xl"
+          class="font-serif text-3xl leading-tight font-semibold tracking-tight text-highlighted sm:text-5xl lg:text-6xl"
         >
           Editorial Desks &amp; Sections<span class="text-primary">.</span>
         </h1>
@@ -100,7 +100,7 @@ useHead(() => ({
             </div>
 
             <h2
-              class="font-display text-2xl leading-snug font-semibold text-highlighted underline-offset-4 group-hover:underline"
+              class="font-serif text-2xl leading-snug font-semibold text-highlighted underline-offset-4 group-hover:underline"
             >
               {{ cat.name.endsWith("Desk") ? cat.name : `${cat.name} Desk` }}
             </h2>

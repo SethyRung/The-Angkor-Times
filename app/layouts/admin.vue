@@ -40,11 +40,11 @@ async function onLogout() {
         >
           <span
             v-if="!collapsed"
-            class="truncate font-display text-sm tracking-tight text-highlighted uppercase"
+            class="truncate font-serif text-sm tracking-tight text-highlighted uppercase"
           >
             The Angkor Times<span class="text-primary">.</span>
           </span>
-          <span v-else class="font-display text-sm text-primary">AT</span>
+          <span v-else class="font-serif text-sm text-primary">AT</span>
         </NuxtLink>
       </template>
 

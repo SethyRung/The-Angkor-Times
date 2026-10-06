@@ -167,7 +167,7 @@ function initials(item: PublicUser) {
       <UDashboardNavbar
         title="Users"
         :ui="{
-          title: 'font-display text-base uppercase tracking-tight text-highlighted md:text-lg',
+          title: 'font-serif text-base uppercase tracking-tight text-highlighted md:text-lg',
         }"
       >
         <template #leading>
@@ -182,7 +182,7 @@ function initials(item: PublicUser) {
           <p class="font-sans text-xs font-semibold tracking-widest text-primary uppercase">
             Masthead
           </p>
-          <h1 class="font-display text-2xl tracking-tight text-highlighted uppercase">
+          <h1 class="font-serif text-2xl tracking-tight text-highlighted uppercase">
             Accounts &amp; Roles<span class="text-primary">.</span>
           </h1>
           <p class="font-serif text-sm text-toned">

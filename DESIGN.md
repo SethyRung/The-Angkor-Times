@@ -2,7 +2,7 @@
 version: alpha
 name: The Angkor Times
 description: |
-  A contemporary digital broadsheet design system for The Angkor Times, modeled on the editorial architecture of aiformortals.co and implemented with Nuxt UI v4 utility classes. Rooted in traditional broadsheet craft—multi-column grids, hairline rules, dashed column dividers, Monomakh headline titling, and EB Garamond narrative prose—paired with high-contrast Nuxt UI semantic tokens and an electric chartreuse (#B8EF79) primary action driver on deep forest obsidian (#111410).
+  A contemporary digital broadsheet design system for The Angkor Times, modeled on the editorial architecture of aiformortals.co and implemented with Nuxt UI v4 utility classes. Rooted in traditional broadsheet craft—multi-column grids, hairline rules, dashed column dividers, EB Garamond headline titling and narrative prose—paired with high-contrast Nuxt UI semantic tokens and an electric chartreuse (#B8EF79) primary action driver on deep forest obsidian (#111410).
 
 colors:
   primary: "#F1EFE8"
@@ -27,19 +27,19 @@ colors:
 
 typography:
   display-lg:
-    fontFamily: Monomakh, serif
+    fontFamily: EB Garamond, Georgia, serif
     fontSize: 48px
     fontWeight: 600
     lineHeight: 1.05
     letterSpacing: -0.015em
   display-md:
-    fontFamily: Monomakh, serif
+    fontFamily: EB Garamond, Georgia, serif
     fontSize: 32px
     fontWeight: 600
     lineHeight: 1.12
     letterSpacing: -0.02em
   section-title:
-    fontFamily: Monomakh, serif
+    fontFamily: EB Garamond, Georgia, serif
     fontSize: 23px
     fontWeight: 500
     lineHeight: 1.15
@@ -227,18 +227,18 @@ The palette centers on high-contrast editorial neutrals, subtle olive framing ru
 
 ## Typography
 
-The typographical strategy employs four distinct font families, each fulfilling a clear semantic role:
+The typographical strategy employs three distinct font families, each fulfilling a clear semantic role:
 
-- **Display & Section Titles:** Set in **Monomakh** (with serif fallback). Uppercase, tracked out (`0.035em`), evoking historical broadsheet mastheads with architectural authority.
+- **Display & Section Titles:** Set in **EB Garamond** (with Georgia fallback). Uppercase, tracked out (`0.035em`), evoking historical broadsheet mastheads with architectural authority.
 - **Body & Longform:** Set in **EB Garamond** (with Georgia fallback). Elegant, humanistic serif optimized for sustained reading at 16px–19px with generous line height (1.4–1.6).
 - **UI, Metadata, & Controls:** Set in **Inter** (sans-serif). Crisp, geometric, strictly rendered in uppercase for eyebrow badges and metadata with tracking (`0.055em`–`0.1em`).
 - **Technical & Retro Accents:** Set in **VT323** (monospace) for telemetry figures, timestamps, and terminal window headers.
 
 ### Hierarchy & Scale
 
-- **Display Large (`display-lg`):** Monomakh, 48px / line-height 1.05 / letter-spacing -0.015em / weight 600. Class: `font-serif text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-none text-highlighted`.
-- **Display Medium (`display-md`):** Monomakh, 32px / line-height 1.12 / letter-spacing -0.02em / weight 600. Class: `font-serif text-2xl sm:text-3xl lg:text-4xl tracking-tight leading-tight text-highlighted`.
-- **Section Title (`section-title`):** Monomakh, 23px / line-height 1.15 / letter-spacing 0.035em / weight 500 / uppercase. Class: `font-serif text-xl sm:text-2xl uppercase tracking-wider text-highlighted`.
+- **Display Large (`display-lg`):** EB Garamond, 48px / line-height 1.05 / letter-spacing -0.015em / weight 600. Class: `font-serif text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-none text-highlighted`.
+- **Display Medium (`display-md`):** EB Garamond, 32px / line-height 1.12 / letter-spacing -0.02em / weight 600. Class: `font-serif text-2xl sm:text-3xl lg:text-4xl tracking-tight leading-tight text-highlighted`.
+- **Section Title (`section-title`):** EB Garamond, 23px / line-height 1.15 / letter-spacing 0.035em / weight 500 / uppercase. Class: `font-serif text-xl sm:text-2xl uppercase tracking-wider text-highlighted`.
 - **Headline Card (`headline-card`):** EB Garamond, 21px / line-height 1.16 / letter-spacing -0.01em / weight 600. Class: `font-serif text-lg sm:text-xl font-semibold leading-snug text-highlighted group-hover:underline`.
 - **Body Lead (`body-lead`):** EB Garamond, 19px / line-height 1.4 / weight 400. Class: `font-serif text-lg leading-relaxed text-toned`.
 - **Body Medium (`body-md`):** EB Garamond, 16px / line-height 1.6 / weight 400. Class: `font-serif text-base leading-relaxed text-toned`.
@@ -325,7 +325,7 @@ Style guidance for core component patterns using Nuxt UI v4:
 ### Masthead & Navigation
 
 - **Grid:** `<header class="border-b border-default bg-default font-mono">`
-- **Masthead Bar:** 3-column header (`grid grid-cols-[1fr_auto_1fr] items-center gap-4 py-5 px-4 sm:px-8 max-w-7xl mx-auto`) aligning date/edition on the left (`text-[11px] uppercase tracking-widest text-muted`), uppercase Monomakh wordmark in the center (`font-serif text-3xl sm:text-4xl text-highlighted tracking-tight uppercase`), and `<UButton>` action on the right.
+- **Masthead Bar:** 3-column header (`grid grid-cols-[1fr_auto_1fr] items-center gap-4 py-5 px-4 sm:px-8 max-w-7xl mx-auto`) aligning date/edition on the left (`text-[11px] uppercase tracking-widest text-muted`), uppercase EB Garamond wordmark in the center (`font-serif text-3xl sm:text-4xl text-highlighted tracking-tight uppercase`), and `<UButton>` action on the right.
 - **Section Bar:** Centered row of category links (`flex items-center justify-center gap-7 py-2 border-t border-default text-xs uppercase tracking-wider text-muted hover:text-highlighted`).
 
 ### Editorial Card (`card-lead` / `card-standard`)

@@ -332,7 +332,7 @@ onUnmounted(() => {
               The Daily Dispatch
             </span>
             <h3
-              class="font-display text-2xl font-semibold tracking-tight text-highlighted sm:text-3xl"
+              class="font-serif text-2xl font-semibold tracking-tight text-highlighted sm:text-3xl"
             >
               Independent journalism, delivered at dawn<span class="text-primary">.</span>
             </h3>
@@ -403,7 +403,7 @@ onUnmounted(() => {
         <div class="space-y-4">
           <NuxtLink to="/" class="inline-block">
             <span
-              class="font-display text-2xl font-semibold tracking-tight text-highlighted uppercase"
+              class="font-serif text-2xl font-semibold tracking-tight text-highlighted uppercase"
             >
               THE ANGKOR TIMES
             </span>
@@ -511,7 +511,7 @@ onUnmounted(() => {
       >
         <div>&copy; {{ copyright }} The Angkor Times Publishing Company. All Rights Reserved.</div>
         <div class="text-xs tracking-wider text-dimmed uppercase">
-          Typeset in Monomakh &amp; EB Garamond &middot; Broadsheet Edition
+          Typeset in EB Garamond &middot; Broadsheet Edition
         </div>
       </div>
     </div>

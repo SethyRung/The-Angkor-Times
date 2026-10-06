@@ -74,7 +74,7 @@ useHead(() => ({
 
         <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <h1
-            class="font-display text-3xl leading-tight font-semibold tracking-tight text-highlighted uppercase sm:text-5xl lg:text-6xl"
+            class="font-serif text-3xl leading-tight font-semibold tracking-tight text-highlighted uppercase sm:text-5xl lg:text-6xl"
           >
             {{ displayTitle }}<span class="text-primary">.</span>
           </h1>
@@ -105,7 +105,7 @@ useHead(() => ({
         <div v-if="secondaryStories.length" class="space-y-6">
           <div class="flex items-center justify-between border-b border-default pb-3">
             <h3
-              class="font-display text-xl font-semibold tracking-wider text-highlighted uppercase sm:text-2xl"
+              class="font-serif text-xl font-semibold tracking-wider text-highlighted uppercase sm:text-2xl"
             >
               Archive &middot; Further Dispatches<span class="text-primary">.</span>
             </h3>

@@ -128,7 +128,7 @@ async function confirmDelete() {
       <UDashboardNavbar
         title="Categories"
         :ui="{
-          title: 'font-display text-base uppercase tracking-tight text-highlighted md:text-lg',
+          title: 'font-serif text-base uppercase tracking-tight text-highlighted md:text-lg',
         }"
       >
         <template #leading>
@@ -143,7 +143,7 @@ async function confirmDelete() {
           <p class="font-sans text-xs font-semibold tracking-widest text-primary uppercase">
             Desks
           </p>
-          <h1 class="font-display text-2xl tracking-tight text-highlighted uppercase">
+          <h1 class="font-serif text-2xl tracking-tight text-highlighted uppercase">
             Sections<span class="text-primary">.</span>
           </h1>
           <p class="font-serif text-sm text-toned">Create, edit, and remove story desks.</p>

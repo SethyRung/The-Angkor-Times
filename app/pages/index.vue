@@ -64,8 +64,7 @@ useSeoMeta({
 const sectionHeader = tv({
   slots: {
     root: "mb-6 flex items-center justify-between gap-4 border-b border-default pb-3",
-    title:
-      "font-display text-xl font-semibold tracking-wider text-highlighted uppercase sm:text-2xl",
+    title: "font-serif text-xl font-semibold tracking-wider text-highlighted uppercase sm:text-2xl",
     link: "flex items-center gap-1.5 font-sans text-xs tracking-widest text-muted uppercase transition-colors hover:text-primary",
     dot: "text-primary",
   },
@@ -87,8 +86,8 @@ const headline = tv({
   base: "font-semibold text-highlighted underline-offset-4 transition-colors group-hover:underline",
   variants: {
     size: {
-      lead: "font-display text-2xl leading-tight tracking-tight sm:text-4xl lg:text-5xl",
-      feature: "font-display text-2xl leading-tight sm:text-3xl",
+      lead: "font-serif text-2xl leading-tight tracking-tight sm:text-4xl lg:text-5xl",
+      feature: "font-serif text-2xl leading-tight sm:text-3xl",
       support: "font-serif text-lg leading-snug sm:text-xl",
       docket: "font-serif text-base leading-snug underline-offset-2",
       rail: "line-clamp-2 font-serif text-sm leading-snug underline-offset-2",

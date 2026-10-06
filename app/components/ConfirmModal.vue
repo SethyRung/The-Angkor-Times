@@ -32,7 +32,7 @@ const emit = defineEmits<{
     :ui="{
       content: 'sm:max-w-md rounded-sm bg-default shadow-none sm:shadow-none sm:ring-0',
       header: 'border-b border-default',
-      title: 'font-display text-lg uppercase tracking-tight text-highlighted',
+      title: 'font-serif text-lg uppercase tracking-tight text-highlighted',
     }"
     @update:open="(v) => emit('update:open', v)"
   >

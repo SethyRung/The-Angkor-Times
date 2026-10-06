@@ -40,7 +40,7 @@ const steps = [
           class="inline-block rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
         >
           <span
-            class="block font-display text-3xl leading-none font-semibold tracking-tight text-highlighted uppercase sm:text-5xl lg:text-6xl"
+            class="block font-serif text-3xl leading-none font-semibold tracking-tight text-highlighted uppercase sm:text-5xl lg:text-6xl"
           >
             The Angkor Times<span class="text-primary">.</span>
           </span>
@@ -75,7 +75,7 @@ const steps = [
             </p>
             <h2
               id="desk-heading"
-              class="font-display text-4xl leading-tight tracking-tight text-highlighted xl:text-5xl"
+              class="font-serif text-4xl leading-tight tracking-tight text-highlighted xl:text-5xl"
             >
               Every story<br />starts here<span class="text-primary">.</span>
             </h2>

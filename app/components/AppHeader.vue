@@ -5,7 +5,7 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 import type { NavigationMenuItem } from "@nuxt/ui";
 
 const wordmarkClass =
-  "block font-display text-3xl font-semibold tracking-tight whitespace-nowrap text-highlighted uppercase transition-colors duration-150 group-hover:opacity-90 sm:text-5xl lg:text-6xl";
+  "block font-serif text-3xl font-semibold tracking-tight whitespace-nowrap text-highlighted uppercase transition-colors duration-150 group-hover:opacity-90 sm:text-5xl lg:text-6xl";
 
 const props = defineProps<{
   navItems?: NavigationMenuItem[];
@@ -285,7 +285,7 @@ onUnmounted(() => {
         <div class="flex w-full items-center justify-between">
           <div>
             <span
-              class="font-display text-lg font-semibold tracking-tight text-highlighted uppercase"
+              class="font-serif text-lg font-semibold tracking-tight text-highlighted uppercase"
             >
               The Angkor Times
             </span>

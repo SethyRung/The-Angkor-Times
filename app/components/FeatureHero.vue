@@ -45,7 +45,7 @@ const authorName = computed(() => {
 
     <NuxtLink :to="`/news/${story.id}`" class="group block space-y-4">
       <h1
-        class="font-display text-3xl leading-tight font-semibold tracking-tight text-highlighted underline-offset-6 transition-colors group-hover:underline sm:text-4xl md:text-5xl lg:text-6xl"
+        class="font-serif text-3xl leading-tight font-semibold tracking-tight text-highlighted underline-offset-6 transition-colors group-hover:underline sm:text-4xl md:text-5xl lg:text-6xl"
       >
         {{ story.title }}
       </h1>

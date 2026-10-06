@@ -43,7 +43,7 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
       <UDashboardNavbar
         title="Dashboard"
         :ui="{
-          title: 'font-display text-base uppercase tracking-tight text-highlighted md:text-lg',
+          title: 'font-serif text-base uppercase tracking-tight text-highlighted md:text-lg',
         }"
       >
         <template #leading>
@@ -58,7 +58,7 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
           Newsroom Desk &middot; {{ now().format("dddd, MMMM D") }}
         </p>
         <h1
-          class="font-display text-2xl leading-none tracking-tight text-highlighted uppercase md:text-3xl"
+          class="font-serif text-2xl leading-none tracking-tight text-highlighted uppercase md:text-3xl"
         >
           Welcome back, {{ user?.firstName }}<span class="text-primary">.</span>
         </h1>
@@ -76,7 +76,7 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
           <p class="font-sans text-xs font-semibold tracking-widest text-muted uppercase">
             Pending
           </p>
-          <p class="mt-2 font-display text-3xl leading-none text-error md:text-4xl">
+          <p class="mt-2 font-serif text-3xl leading-none text-error md:text-4xl">
             {{ stats.pending }}
           </p>
           <p class="mt-1 font-mono text-xs tracking-widest text-muted uppercase">Awaiting review</p>
@@ -86,7 +86,7 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
           <p class="font-sans text-xs font-semibold tracking-widest text-muted uppercase">
             Published
           </p>
-          <p class="mt-2 font-display text-3xl leading-none text-primary md:text-4xl">
+          <p class="mt-2 font-serif text-3xl leading-none text-primary md:text-4xl">
             {{ stats.published }}
           </p>
           <p class="mt-1 font-mono text-xs tracking-widest text-muted uppercase">Live now</p>
@@ -94,7 +94,7 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
 
         <article class="rounded-xs border border-default bg-elevated p-5">
           <p class="font-sans text-xs font-semibold tracking-widest text-muted uppercase">Total</p>
-          <p class="mt-2 font-display text-3xl leading-none text-highlighted md:text-4xl">
+          <p class="mt-2 font-serif text-3xl leading-none text-highlighted md:text-4xl">
             {{ stats.total }}
           </p>
           <p class="mt-1 font-mono text-xs tracking-widest text-muted uppercase">All dispatches</p>
@@ -102,7 +102,7 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
 
         <article class="rounded-xs border border-default bg-elevated p-5">
           <p class="font-sans text-xs font-semibold tracking-widest text-muted uppercase">Staff</p>
-          <p class="mt-2 font-display text-3xl leading-none text-highlighted md:text-4xl">
+          <p class="mt-2 font-serif text-3xl leading-none text-highlighted md:text-4xl">
             {{ stats.editors }}
           </p>
           <p class="mt-1 font-mono text-xs tracking-widest text-muted uppercase">Active accounts</p>
@@ -120,7 +120,7 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
                 News Queue
               </p>
               <p
-                class="mt-2 font-display text-lg tracking-tight text-highlighted uppercase md:text-xl"
+                class="mt-2 font-serif text-lg tracking-tight text-highlighted uppercase md:text-xl"
               >
                 Review &amp; Publish
               </p>
@@ -146,7 +146,7 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
                 Masthead
               </p>
               <p
-                class="mt-2 font-display text-lg tracking-tight text-highlighted uppercase md:text-xl"
+                class="mt-2 font-serif text-lg tracking-tight text-highlighted uppercase md:text-xl"
               >
                 Accounts &amp; Roles
               </p>
@@ -169,7 +169,7 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
             <p class="font-sans text-xs font-semibold tracking-widest text-muted uppercase">
               Masthead
             </p>
-            <p class="mt-2 font-display text-lg tracking-tight text-muted uppercase md:text-xl">
+            <p class="mt-2 font-serif text-lg tracking-tight text-muted uppercase md:text-xl">
               Admin Only
             </p>
             <p class="mt-2 font-serif text-sm text-muted">Editors cannot manage accounts.</p>
@@ -180,7 +180,7 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
 
       <section v-if="recent.length" class="space-y-4">
         <header class="flex items-end justify-between border-b border-default pb-3">
-          <h2 class="font-display text-xl tracking-wider text-highlighted uppercase">
+          <h2 class="font-serif text-xl tracking-wider text-highlighted uppercase">
             Latest Dispatches<span class="text-primary">.</span>
           </h2>
           <NuxtLink

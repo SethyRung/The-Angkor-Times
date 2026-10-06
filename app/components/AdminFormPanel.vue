@@ -24,7 +24,7 @@ const isDesktop = useBreakpoints(breakpointsTailwind, { ssrWidth: 1024 }).greate
     side="right"
     :close="false"
     :ui="{
-      title: 'font-display text-lg uppercase tracking-tight text-highlighted',
+      title: 'font-serif text-lg uppercase tracking-tight text-highlighted',
       description: 'font-sans text-sm text-toned',
       body: 'overflow-y-auto',
       footer: 'justify-end gap-2',
@@ -51,7 +51,7 @@ const isDesktop = useBreakpoints(breakpointsTailwind, { ssrWidth: 1024 }).greate
     handle-only
     :ui="{
       container: 'gap-0 p-0 divide-y divide-default *:p-4',
-      title: 'font-display text-lg uppercase tracking-tight text-highlighted',
+      title: 'font-serif text-lg uppercase tracking-tight text-highlighted',
       description: 'font-sans text-sm text-toned',
       footer: 'flex-row justify-end gap-2',
     }"
