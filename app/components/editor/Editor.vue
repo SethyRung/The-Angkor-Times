@@ -14,8 +14,10 @@ import { CodeBlockShiki } from "tiptap-extension-code-block-shiki";
 import { ImageUpload } from "./EditorImageUploadExtension";
 import EditorLinkPopover from "./EditorLinkPopover.vue";
 
-const modelValue = defineModel<string>("", {
-  default: ``,
+const props = withDefaults(defineProps<{ disabled?: boolean }>(), { disabled: false });
+
+const modelValue = defineModel<string>({
+  default: "",
 });
 
 const customHandlers = {
@@ -32,17 +34,20 @@ const fixedToolbarItems = [
     {
       kind: "undo",
       icon: "i-lucide-undo",
+      "aria-label": "Undo",
       tooltip: { text: "Undo" },
     },
     {
       kind: "redo",
       icon: "i-lucide-redo",
+      "aria-label": "Redo",
       tooltip: { text: "Redo" },
     },
   ],
   [
     {
       icon: "i-lucide-heading",
+      "aria-label": "Headings",
       tooltip: { text: "Headings" },
       content: {
         align: "start",
@@ -76,6 +81,7 @@ const fixedToolbarItems = [
     },
     {
       icon: "i-lucide-list",
+      "aria-label": "Lists",
       tooltip: { text: "Lists" },
       content: {
         align: "start",
@@ -96,11 +102,13 @@ const fixedToolbarItems = [
     {
       kind: "blockquote",
       icon: "i-lucide-text-quote",
+      "aria-label": "Blockquote",
       tooltip: { text: "Blockquote" },
     },
     {
       kind: "codeBlock",
       icon: "i-lucide-square-code",
+      "aria-label": "Code Block",
       tooltip: { text: "Code Block" },
     },
   ],
@@ -109,30 +117,35 @@ const fixedToolbarItems = [
       kind: "mark",
       mark: "bold",
       icon: "i-lucide-bold",
+      "aria-label": "Bold",
       tooltip: { text: "Bold" },
     },
     {
       kind: "mark",
       mark: "italic",
       icon: "i-lucide-italic",
+      "aria-label": "Italic",
       tooltip: { text: "Italic" },
     },
     {
       kind: "mark",
       mark: "underline",
       icon: "i-lucide-underline",
+      "aria-label": "Underline",
       tooltip: { text: "Underline" },
     },
     {
       kind: "mark",
       mark: "strike",
       icon: "i-lucide-strikethrough",
+      "aria-label": "Strikethrough",
       tooltip: { text: "Strikethrough" },
     },
     {
       kind: "mark",
       mark: "code",
       icon: "i-lucide-code",
+      "aria-label": "Code",
       tooltip: { text: "Code" },
     },
   ],
@@ -144,12 +157,14 @@ const fixedToolbarItems = [
     {
       kind: "imageUpload",
       icon: "i-lucide-image",
+      "aria-label": "Image",
       tooltip: { text: "Image" },
     },
   ],
   [
     {
       icon: "i-lucide-align-justify",
+      "aria-label": "Text Align",
       tooltip: { text: "Text Align" },
       content: {
         align: "end",
@@ -193,10 +208,12 @@ const imageToolbarItems = (editor: Editor): EditorToolbarItem[][] => {
         icon: "i-lucide-download",
         to: node?.attrs?.src,
         download: true,
+        "aria-label": "Download",
         tooltip: { text: "Download" },
       },
       {
         icon: "i-lucide-refresh-cw",
+        "aria-label": "Replace",
         tooltip: { text: "Replace" },
         onClick: () => {
           const { state } = editor;
@@ -219,6 +236,7 @@ const imageToolbarItems = (editor: Editor): EditorToolbarItem[][] => {
     [
       {
         icon: "i-lucide-trash",
+        "aria-label": "Delete",
         tooltip: { text: "Delete" },
         onClick: () => {
           const { state } = editor;
@@ -335,6 +353,7 @@ const emojiItems: EditorEmojiMenuItem[] = gitHubEmojis.filter(
     v-slot="{ editor, handlers }"
     v-model="modelValue"
     content-type="markdown"
+    :starter-kit="{ codeBlock: false }"
     :extensions="[
       Emoji,
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
@@ -348,16 +367,19 @@ const emojiItems: EditorEmojiMenuItem[] = gitHubEmojis.filter(
       }),
     ]"
     :handlers="customHandlers"
-    placeholder="Write something amazing..."
+    :editable="!props.disabled"
+    :class="{ 'pointer-events-none opacity-60': props.disabled }"
+    placeholder="Start with the story that matters…"
     :ui="{
-      root: 'w-full pt-16 rounded-sm border border-muted relative overflow-clip font-mono',
-      base: 'p-4',
+      root: 'relative flex w-full min-w-0 flex-col rounded-xs border border-default bg-default font-serif',
+      base: 'min-h-128 px-8 py-4 font-serif text-lg leading-relaxed sm:px-16',
     }"
   >
     <UEditorToolbar
       :editor="editor"
       :items="fixedToolbarItems"
-      class="w-full border-b border-muted p-4 absolute top-0 z-50 bg-default overflow-x-auto"
+      class="sticky top-0 z-10 w-full flex-wrap rounded-t-xs border-b border-default bg-elevated p-2"
+      :ui="{ base: 'flex-wrap gap-1', group: 'gap-0.5' }"
     >
       <template #link>
         <EditorLinkPopover :editor="editor" auto-open />
@@ -384,6 +406,7 @@ const emojiItems: EditorEmojiMenuItem[] = gitHubEmojis.filter(
     >
       <UButton
         icon="i-lucide-plus"
+        aria-label="Insert block"
         color="neutral"
         variant="ghost"
         size="sm"
@@ -412,6 +435,7 @@ const emojiItems: EditorEmojiMenuItem[] = gitHubEmojis.filter(
           active-variant="soft"
           size="sm"
           icon="i-lucide-grip-vertical"
+          aria-label="Block actions"
           :active="open"
           :class="ui.handle()"
         />

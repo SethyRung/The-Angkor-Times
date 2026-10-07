@@ -97,6 +97,7 @@ function handleKeyDown(event: KeyboardEvent) {
     <UTooltip text="Link">
       <UButton
         icon="i-lucide-link"
+        aria-label="Link"
         color="neutral"
         active-color="primary"
         variant="ghost"
@@ -117,7 +118,7 @@ function handleKeyDown(event: KeyboardEvent) {
         placeholder="Paste a link..."
         @keydown="handleKeyDown"
       >
-        <div class="flex items-center mr-0.5">
+        <div class="mr-0.5 flex items-center">
           <UButton
             icon="i-lucide-corner-down-left"
             variant="ghost"
@@ -127,7 +128,7 @@ function handleKeyDown(event: KeyboardEvent) {
             @click="setLink"
           />
 
-          <USeparator orientation="vertical" class="h-6 mx-1" />
+          <USeparator orientation="vertical" class="mx-1 h-6" />
 
           <UButton
             icon="i-lucide-external-link"

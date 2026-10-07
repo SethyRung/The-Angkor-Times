@@ -101,12 +101,12 @@ const items = [
     :handlers="customHandlers"
     content-type="markdown"
     :ui="{ base: 'p-8 sm:px-16' }"
-    class="w-full min-h-74"
+    class="min-h-74 w-full"
   >
     <UEditorToolbar
       :editor="editor"
       :items="items"
-      class="border-b border-muted py-2 px-8 sm:px-16 overflow-x-auto"
+      class="overflow-x-auto border-b border-default px-8 py-2 sm:px-16"
     />
   </UEditor>
 </template>
