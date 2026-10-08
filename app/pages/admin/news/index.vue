@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DropdownMenuItem, TableColumn } from "@nuxt/ui";
-import type { NewsFormSchema, NewsCategory } from "#shared/types";
+import { isSuccessResponse, type ApiResponse, type NewsWithRelations } from "#shared/types";
 
 import { toDayJS } from "#shared/utils/date";
 
@@ -25,13 +25,10 @@ const { data, pending, refresh } = await useFetch<ApiResponse<NewsWithRelations[
   { query: { status: "all", limit: 200 }, key: "admin:news" },
 );
 
-const { data: categoriesData } = await useFetch<ApiResponse<NewsCategory[]>>(
-  "/api/admin/categories",
-  { key: "admin:categories" },
-);
-
-const items = computed<NewsWithRelations[]>(() => data.value?.data ?? []);
-const categories = computed<NewsCategory[]>(() => categoriesData.value?.data ?? []);
+const items = computed<NewsWithRelations[]>(() => {
+  const response = data.value ?? undefined;
+  return isSuccessResponse(response) ? response.data : [];
+});
 
 const stats = computed(() => {
   const list = items.value;
@@ -69,71 +66,16 @@ const columns: TableColumn<NewsWithRelations>[] = [
   { id: "author", header: "Author" },
   { id: "status", header: "Status" },
   { id: "date", header: "Date" },
-  { id: "actions", header: "", enableSorting: false },
+  { id: "actions", enableSorting: false },
 ];
-
-const formOpen = ref(false);
-const editing = ref<NewsWithRelations | null>(null);
-const submitting = ref(false);
-const formError = ref<string | null>(null);
 
 const deleteOpen = ref(false);
 const pendingDelete = ref<NewsWithRelations | null>(null);
 const deleting = ref(false);
 
-function openCreate() {
-  editing.value = null;
-  formError.value = null;
-  formOpen.value = true;
-}
-
-function openEdit(item: NewsWithRelations) {
-  editing.value = item;
-  formError.value = null;
-  formOpen.value = true;
-}
-
 function askDelete(item: NewsWithRelations) {
   pendingDelete.value = item;
   deleteOpen.value = true;
-}
-
-async function onNewsSubmit(data: NewsFormSchema) {
-  submitting.value = true;
-  formError.value = null;
-  try {
-    const body: Record<string, unknown> = {
-      title: data.title,
-      description: data.description,
-      content: data.content,
-      featuredImage: data.featuredImage || null,
-      categoryId: data.categoryId,
-    };
-
-    const res = editing.value
-      ? await $fetch<ApiResponse<NewsWithRelations>>(`/api/admin/news/${editing.value.id}`, {
-          method: "PUT",
-          body,
-          credentials: "include",
-        })
-      : await $fetch<ApiResponse<NewsWithRelations>>("/api/admin/news", {
-          method: "POST",
-          body,
-          credentials: "include",
-        });
-
-    if (!isSuccessResponse(res)) {
-      formError.value = res?.status?.message ?? "Failed to save story.";
-      return;
-    }
-
-    formOpen.value = false;
-    await refresh();
-  } catch (e: any) {
-    formError.value = e?.data?.status?.message ?? "Request failed.";
-  } finally {
-    submitting.value = false;
-  }
 }
 
 async function publish(id: string) {
@@ -193,7 +135,7 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
       {
         label: "Edit",
         icon: "i-lucide-pencil",
-        onSelect: () => openEdit(item),
+        to: `/admin/news/${item.id}`,
       },
     ],
     toggle,
@@ -215,7 +157,7 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
       <UDashboardNavbar
         title="News"
         :ui="{
-          title: 'text-base md:text-lg uppercase tracking-widest text-highlighted',
+          title: 'font-serif text-base uppercase tracking-tight text-highlighted md:text-lg',
         }"
       >
         <template #leading>
@@ -230,7 +172,7 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
             icon="i-lucide-search"
             placeholder="Search stories..."
             class="w-full sm:w-72"
-            :ui="{ base: 'rounded-sm font-mono' }"
+            :ui="{ base: 'rounded-sm font-sans' }"
           />
         </template>
         <template #right>
@@ -243,49 +185,61 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
             ]"
             color="neutral"
             :content="false"
-            :ui="{ list: 'font-mono p-0 rounded-sm', indicator: 'rounded-sm' }"
+            :ui="{ list: 'font-sans p-0 rounded-sm', indicator: 'rounded-sm' }"
           />
         </template>
       </UDashboardToolbar>
     </template>
 
     <template #body>
-      <header class="flex items-end justify-between gap-4 flex-wrap">
+      <header class="flex flex-wrap items-end justify-between gap-4 border-b border-default pb-4">
         <div class="space-y-1">
-          <p class="text-xs uppercase tracking-widest text-muted">[+] News Queue</p>
-          <p class="text-sm text-toned">Review, publish, and manage story submissions.</p>
+          <p class="font-sans text-xs font-semibold tracking-widest text-primary uppercase">
+            Publishing Desk
+          </p>
+          <h1 class="font-serif text-2xl tracking-tight text-highlighted uppercase">
+            News Queue<span class="text-primary">.</span>
+          </h1>
+          <p class="font-serif text-sm text-toned">
+            Review, publish, and manage story submissions.
+          </p>
         </div>
         <UButton
           icon="i-lucide-plus"
           label="Add Story"
-          class="rounded-sm font-mono uppercase tracking-widest text-xs"
-          @click="openCreate"
+          color="primary"
+          class="rounded-sm font-sans text-xs font-semibold tracking-wider uppercase"
+          to="/admin/news/new"
         />
       </header>
 
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <article class="border border-default rounded-sm p-5 bg-default">
-          <p class="text-xs uppercase tracking-widest text-muted">[+] Pending</p>
-          <p class="text-3xl md:text-4xl text-error mt-2 leading-none">
+      <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <article class="rounded-xs border border-default bg-elevated p-5">
+          <p class="font-sans text-xs font-semibold tracking-widest text-muted uppercase">
+            Pending
+          </p>
+          <p class="mt-2 font-serif text-3xl leading-none text-error md:text-4xl">
             {{ stats.pending }}
           </p>
-          <p class="text-[10px] uppercase tracking-widest text-muted mt-1">Awaiting review</p>
+          <p class="mt-1 font-mono text-xs tracking-widest text-muted uppercase">Awaiting review</p>
         </article>
 
-        <article class="border border-default rounded-sm p-5 bg-default">
-          <p class="text-xs uppercase tracking-widest text-muted">[+] Published</p>
-          <p class="text-3xl md:text-4xl text-primary-500 mt-2 leading-none">
+        <article class="rounded-xs border border-default bg-elevated p-5">
+          <p class="font-sans text-xs font-semibold tracking-widest text-muted uppercase">
+            Published
+          </p>
+          <p class="mt-2 font-serif text-3xl leading-none text-primary md:text-4xl">
             {{ stats.published }}
           </p>
-          <p class="text-[10px] uppercase tracking-widest text-muted mt-1">Live now</p>
+          <p class="mt-1 font-mono text-xs tracking-widest text-muted uppercase">Live now</p>
         </article>
 
-        <article class="border border-default rounded-sm p-5 bg-default">
-          <p class="text-xs uppercase tracking-widest text-muted">[+] Total</p>
-          <p class="text-3xl md:text-4xl text-highlighted mt-2 leading-none">
+        <article class="rounded-xs border border-default bg-elevated p-5">
+          <p class="font-sans text-xs font-semibold tracking-widest text-muted uppercase">Total</p>
+          <p class="mt-2 font-serif text-3xl leading-none text-highlighted md:text-4xl">
             {{ stats.total }}
           </p>
-          <p class="text-[10px] uppercase tracking-widest text-muted mt-1">All stories</p>
+          <p class="mt-1 font-mono text-xs tracking-widest text-muted uppercase">All dispatches</p>
         </article>
       </div>
 
@@ -294,27 +248,32 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
         :columns="columns"
         :loading="pending"
         :ui="{
-          root: 'min-h-max rounded-sm border border-default',
-          th: 'text-muted',
+          root: 'min-h-max rounded-xs border border-default',
+          th: 'font-sans text-xs font-semibold tracking-widest text-muted uppercase',
         }"
       >
         <template #title-cell="{ row }">
-          <div class="flex items-center gap-3 min-w-0 py-1">
-            <div class="size-10 shrink-0 rounded-sm bg-muted overflow-hidden">
+          <div class="flex min-w-0 items-center gap-3 py-1">
+            <div
+              class="size-10 shrink-0 overflow-hidden rounded-xs border border-default bg-elevated"
+            >
               <img
                 v-if="row.original.featuredImage"
                 :src="row.original.featuredImage"
                 :alt="row.original.title"
-                class="w-full h-full object-cover"
+                class="h-full w-full object-cover"
               />
             </div>
             <div class="min-w-0">
-              <p class="text-sm text-highlighted truncate">
+              <NuxtLink
+                :to="`/admin/news/${row.original.id}`"
+                class="block truncate font-serif text-base font-semibold text-highlighted hover:text-primary hover:underline"
+              >
                 {{ row.original.title }}
-              </p>
+              </NuxtLink>
               <p
                 v-if="row.original.description"
-                class="text-[10px] uppercase tracking-widest text-muted line-clamp-1 mt-0.5"
+                class="mt-0.5 line-clamp-1 font-serif text-xs text-toned"
               >
                 {{ row.original.description }}
               </p>
@@ -323,16 +282,19 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
         </template>
 
         <template #category-cell="{ row }">
-          <span v-if="row.original.category" class="text-xs uppercase tracking-widest text-toned">
+          <span
+            v-if="row.original.category"
+            class="font-sans text-xs font-semibold tracking-widest text-primary uppercase"
+          >
             {{ row.original.category.name }}
           </span>
-          <span v-else class="text-xs uppercase tracking-widest text-muted">—</span>
+          <span v-else class="font-sans text-xs tracking-widest text-muted uppercase">—</span>
         </template>
 
         <template #author-cell="{ row }">
           <span
             v-if="row.original.author"
-            class="whitespace-nowrap text-xs uppercase tracking-widest"
+            class="font-sans text-xs font-semibold tracking-widest whitespace-nowrap uppercase"
           >
             {{ row.original.author.firstName }} {{ row.original.author.lastName }}
           </span>
@@ -341,11 +303,11 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
 
         <template #status-cell="{ row }">
           <span
-            class="text-[10px] uppercase tracking-widest px-2 py-1 rounded-sm border"
+            class="rounded-full border px-2.5 py-0.5 font-sans text-xs font-semibold tracking-widest uppercase"
             :class="
               row.original.publishedAt
-                ? 'text-primary border-primary/30'
-                : 'text-error border-error/30'
+                ? 'border-primary/30 text-primary'
+                : 'border-error/30 text-error'
             "
           >
             {{ row.original.publishedAt ? "Published" : "Pending" }}
@@ -353,39 +315,26 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
         </template>
 
         <template #date-cell="{ row }">
-          <span class="text-[10px] uppercase tracking-widest text-muted">
+          <span class="font-mono text-xs tracking-widest text-muted uppercase">
             {{ toDayJS(row.original.publishedAt ?? row.original.createdAt).fromNow() }}
           </span>
         </template>
 
         <template #actions-cell="{ row }">
           <UDropdownMenu :items="actionItems(row.original)">
-            <UButton
-              icon="i-lucide-ellipsis"
-              color="neutral"
-              variant="ghost"
-              aria-label="Actions"
-              class="rounded-sm"
-            />
+            <UButton icon="i-lucide-ellipsis" color="neutral" variant="ghost" class="rounded-sm" />
           </UDropdownMenu>
         </template>
 
         <template #empty>
-          <div class="py-10 text-center space-y-2">
-            <p class="text-xs uppercase tracking-widest text-muted">[-] Queue Empty</p>
-            <p class="text-sm text-toned">No stories match this filter.</p>
+          <div class="space-y-2 py-10 text-center">
+            <p class="font-sans text-xs font-semibold tracking-widest text-muted uppercase">
+              Queue empty
+            </p>
+            <p class="font-serif text-sm text-toned">No dispatches match this filter.</p>
           </div>
         </template>
       </UTable>
-
-      <NewsFormModal
-        v-model:open="formOpen"
-        :news="editing"
-        :categories="categories"
-        :submitting="submitting"
-        :form-error="formError"
-        @submit="onNewsSubmit"
-      />
 
       <ConfirmModal
         v-model:open="deleteOpen"
