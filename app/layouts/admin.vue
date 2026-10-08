@@ -7,10 +7,10 @@ const items = computed<NavigationMenuItem[]>(() => {
   const base: NavigationMenuItem[] = [
     { label: "Dashboard", icon: "i-lucide-layout-dashboard", to: "/admin" },
     { label: "News", icon: "i-lucide-newspaper", to: "/admin/news" },
+    { label: "Categories", icon: "i-lucide-tags", to: "/admin/categories" },
   ];
   if (user.value?.role === "admin") {
     base.push({ label: "Users", icon: "i-lucide-users", to: "/admin/users" });
-    base.push({ label: "Categories", icon: "i-lucide-tags", to: "/admin/categories" });
   }
   return base;
 });
