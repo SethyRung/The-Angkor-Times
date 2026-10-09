@@ -197,7 +197,7 @@ useHead(() => ({
         <UButton
           to="/"
           icon="i-lucide-arrow-left"
-          label="Return to Front Page"
+          label="Return"
           color="neutral"
           variant="ghost"
           size="xs"
@@ -207,7 +207,7 @@ useHead(() => ({
         <UButton
           v-if="story.category"
           :to="`/category/${story.category.slug}`"
-          :label="`More in ${story.category.name}`"
+          label="More"
           trailing-icon="i-lucide-arrow-right"
           color="neutral"
           variant="ghost"
