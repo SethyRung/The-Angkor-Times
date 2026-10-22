@@ -23,6 +23,11 @@ const emit = defineEmits<{
   confirm: [];
   cancel: [];
 }>();
+
+function cancel() {
+  emit("update:open", false);
+  emit("cancel");
+}
 </script>
 
 <template>
@@ -48,7 +53,7 @@ const emit = defineEmits<{
           :label="cancelLabel"
           :disabled="loading"
           class="rounded-sm font-sans text-xs font-semibold tracking-wider uppercase"
-          @click="emit('cancel')"
+          @click="cancel"
         />
         <UButton
           :color="confirmColor"

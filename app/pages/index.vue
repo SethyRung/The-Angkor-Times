@@ -395,7 +395,7 @@ const mediaRail = storyMedia({ aspect: "rail" });
               Investigations &amp; Analysis<span :class="sec.dot()">.</span>
             </h3>
             <UButton
-              label="Browse All Desks"
+              label="Browse"
               trailing-icon="i-lucide-arrow-right"
               color="neutral"
               variant="ghost"

@@ -365,7 +365,7 @@ onUnmounted(() => {
                     color="primary"
                     variant="solid"
                     label="Subscribe"
-                    class="shrink-0 rounded-sm px-4 font-sans text-xs font-semibold tracking-wider uppercase"
+                    class="shrink-0 justify-center rounded-sm px-4 font-sans text-xs font-semibold tracking-wider uppercase"
                   />
                 </div>
               </form>
