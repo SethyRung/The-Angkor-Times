@@ -334,7 +334,7 @@ onUnmounted(() => {
             <h3
               class="font-serif text-2xl font-semibold tracking-tight text-highlighted sm:text-3xl"
             >
-              Independent journalism, delivered at dawn<span class="text-primary">.</span>
+              Independent journalism, delivered at dawn
             </h3>
             <p class="max-w-xl font-serif text-sm leading-relaxed text-toned sm:text-base">
               Every morning at 06:00 GMT+7, the Phnom Penh desk compiles curated investigations,

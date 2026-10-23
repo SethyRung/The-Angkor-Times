@@ -202,10 +202,11 @@ onUnmounted(() => {
             variant="ghost"
             color="neutral"
             size="xs"
+            class="hidden md:inline-flex"
             @click="openSearch"
           />
 
-          <UColorModeButton size="xs" />
+          <UColorModeButton size="xs" class="hidden md:inline-flex" />
 
           <UButton
             v-if="loggedIn"
@@ -272,8 +273,9 @@ onUnmounted(() => {
 
     <UNavigationMenu
       :items="items"
+      variant="link"
       :ui="{
-        root: 'relative z-20 border-b border-default justify-center bg-default',
+        root: 'relative z-20 border-b border-default justify-center bg-default hidden md:flex',
         list: 'mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 overflow-x-auto no-scrollbar',
         item: 'shrink-0',
         link: 'font-sans text-xs tracking-wider uppercase',

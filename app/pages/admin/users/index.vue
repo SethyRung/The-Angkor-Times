@@ -183,7 +183,7 @@ function initials(item: PublicUser) {
             Masthead
           </p>
           <h1 class="font-serif text-2xl tracking-tight text-highlighted uppercase">
-            Accounts &amp; Roles<span class="text-primary">.</span>
+            Accounts &amp; Roles
           </h1>
           <p class="font-serif text-sm text-toned">
             Create, edit, and remove editor and admin accounts.

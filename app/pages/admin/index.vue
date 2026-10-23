@@ -60,7 +60,7 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
         <h1
           class="font-serif text-2xl leading-none tracking-tight text-highlighted uppercase md:text-3xl"
         >
-          Welcome back, {{ user?.firstName }}<span class="text-primary">.</span>
+          Welcome back, {{ user?.firstName }}
         </h1>
         <p class="font-serif text-base text-toned">
           <template v-if="stats.pending > 0">
@@ -181,7 +181,7 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
       <section v-if="recent.length" class="space-y-4">
         <header class="flex items-end justify-between border-b border-default pb-3">
           <h2 class="font-serif text-xl tracking-wider text-highlighted uppercase">
-            Latest Dispatches<span class="text-primary">.</span>
+            Latest Dispatches
           </h2>
           <NuxtLink
             to="/admin/news"

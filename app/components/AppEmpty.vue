@@ -29,13 +29,13 @@ withDefaults(defineProps<AppEmptyProps>(), {
   >
     <div
       v-if="icon"
-      class="inline-flex size-12 items-center justify-center rounded-full border border-default bg-elevated text-primary"
+      class="inline-flex size-12 items-center justify-center rounded-full border border-default bg-muted text-primary"
     >
       <UIcon :name="icon" class="size-6" />
     </div>
 
     <h2 class="font-serif text-2xl font-semibold tracking-tight text-highlighted sm:text-3xl">
-      {{ title }}<span class="text-primary">.</span>
+      {{ title }}
     </h2>
 
     <p v-if="description" class="mx-auto max-w-md font-serif text-base text-toned">

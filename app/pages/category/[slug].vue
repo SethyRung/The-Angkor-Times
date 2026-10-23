@@ -76,7 +76,7 @@ useHead(() => ({
           <h1
             class="font-serif text-3xl leading-tight font-semibold tracking-tight text-highlighted uppercase sm:text-5xl lg:text-6xl"
           >
-            {{ displayTitle }}<span class="text-primary">.</span>
+            {{ displayTitle }}
           </h1>
 
           <span class="font-mono text-xs tracking-widest text-muted uppercase">
@@ -107,7 +107,7 @@ useHead(() => ({
             <h3
               class="font-serif text-xl font-semibold tracking-wider text-highlighted uppercase sm:text-2xl"
             >
-              Archive &middot; Further Dispatches<span class="text-primary">.</span>
+              Archive &middot; Further Dispatches
             </h3>
             <span class="font-mono text-xs tracking-widest text-muted uppercase">
               {{ secondaryStories.length }}

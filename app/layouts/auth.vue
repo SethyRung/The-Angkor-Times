@@ -42,7 +42,7 @@ const steps = [
           <span
             class="block font-serif text-3xl leading-none font-semibold tracking-tight text-highlighted uppercase sm:text-5xl lg:text-6xl"
           >
-            The Angkor Times<span class="text-primary">.</span>
+            The Angkor Times
           </span>
         </NuxtLink>
         <p
@@ -77,7 +77,7 @@ const steps = [
               id="desk-heading"
               class="font-serif text-4xl leading-tight tracking-tight text-highlighted xl:text-5xl"
             >
-              Every story<br />starts here<span class="text-primary">.</span>
+              Every story<br />starts here
             </h2>
             <p class="max-w-sm font-serif text-lg leading-relaxed text-toned">
               A place for our editors to shape the day's reporting, from the first draft to the

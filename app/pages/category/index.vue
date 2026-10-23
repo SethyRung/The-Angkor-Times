@@ -61,7 +61,7 @@ useHead(() => ({
         <h1
           class="font-serif text-3xl leading-tight font-semibold tracking-tight text-highlighted sm:text-5xl lg:text-6xl"
         >
-          Editorial Desks &amp; Sections<span class="text-primary">.</span>
+          Editorial Desks &amp; Sections
         </h1>
 
         <p class="max-w-2xl font-serif text-base leading-relaxed text-toned sm:text-lg">

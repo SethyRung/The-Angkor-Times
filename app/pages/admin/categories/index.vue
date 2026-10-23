@@ -143,9 +143,7 @@ async function confirmDelete() {
           <p class="font-sans text-xs font-semibold tracking-widest text-primary uppercase">
             Desks
           </p>
-          <h1 class="font-serif text-2xl tracking-tight text-highlighted uppercase">
-            Sections<span class="text-primary">.</span>
-          </h1>
+          <h1 class="font-serif text-2xl tracking-tight text-highlighted uppercase">Sections</h1>
           <p class="font-serif text-sm text-toned">Create, edit, and remove story desks.</p>
         </div>
 

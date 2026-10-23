@@ -197,9 +197,7 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
           <p class="font-sans text-xs font-semibold tracking-widest text-primary uppercase">
             Publishing Desk
           </p>
-          <h1 class="font-serif text-2xl tracking-tight text-highlighted uppercase">
-            News Queue<span class="text-primary">.</span>
-          </h1>
+          <h1 class="font-serif text-2xl tracking-tight text-highlighted uppercase">News Queue</h1>
           <p class="font-serif text-sm text-toned">
             Review, publish, and manage story submissions.
           </p>

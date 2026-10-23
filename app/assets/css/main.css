@@ -6,29 +6,29 @@
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: "Martian Mono", ui-monospace, monospace;
 
-  --color-primary-50: oklch(0.985 0.013 129.725);
-  --color-primary-100: oklch(0.976 0.033 129.725);
-  --color-primary-200: oklch(0.962 0.063 129.725);
-  --color-primary-300: oklch(0.94 0.104 129.725);
-  --color-primary-400: oklch(0.912 0.143 129.725);
-  --color-primary-500: oklch(0.889 0.158 129.725);
-  --color-primary-600: oklch(0.761 0.155 129.725);
-  --color-primary-700: oklch(0.636 0.136 129.725);
-  --color-primary-800: oklch(0.532 0.112 129.725);
-  --color-primary-900: oklch(0.454 0.09 129.725);
-  --color-primary-950: oklch(0.278 0.063 129.725);
+  --color-primary-50: oklch(0.985 0.015 129.725);
+  --color-primary-100: oklch(0.973 0.036 129.725);
+  --color-primary-200: oklch(0.954 0.069 129.725);
+  --color-primary-300: oklch(0.926 0.115 129.725);
+  --color-primary-400: oklch(0.889 0.158 129.725);
+  --color-primary-500: oklch(0.798 0.174 129.725);
+  --color-primary-600: oklch(0.689 0.171 129.725);
+  --color-primary-700: oklch(0.582 0.15 129.725);
+  --color-primary-800: oklch(0.494 0.123 129.725);
+  --color-primary-900: oklch(0.428 0.099 129.725);
+  --color-primary-950: oklch(0.278 0.07 129.725);
 
   --color-slate-50: oklch(0.977 0.001 137.851);
-  --color-slate-100: oklch(0.941 0.003 137.851);
-  --color-slate-200: oklch(0.88 0.006 137.851);
-  --color-slate-300: oklch(0.792 0.01 137.851);
-  --color-slate-400: oklch(0.674 0.014 137.851);
-  --color-slate-500: oklch(0.577 0.016 137.851);
-  --color-slate-600: oklch(0.462 0.016 137.851);
-  --color-slate-700: oklch(0.35 0.014 137.851);
-  --color-slate-800: oklch(0.256 0.011 137.851);
-  --color-slate-900: oklch(0.186 0.009 137.851);
-  --color-slate-950: oklch(0.07 0.006 137.851);
+  --color-slate-100: oklch(0.937 0.002 137.851);
+  --color-slate-200: oklch(0.87 0.005 137.851);
+  --color-slate-300: oklch(0.774 0.008 137.851);
+  --color-slate-400: oklch(0.644 0.011 137.851);
+  --color-slate-500: oklch(0.538 0.012 137.851);
+  --color-slate-600: oklch(0.412 0.012 137.851);
+  --color-slate-700: oklch(0.288 0.01 137.851);
+  --color-slate-800: oklch(0.186 0.009 137.851);
+  --color-slate-900: oklch(0.135 0.007 137.851);
+  --color-slate-950: oklch(0.02 0.005 137.851);
 }
 
 :root {

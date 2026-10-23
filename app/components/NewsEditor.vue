@@ -216,8 +216,7 @@ async function onSubmit(event: FormSubmitEvent<NewsFormSchema>) {
               Publishing Desk
             </p>
             <h1 class="font-serif text-3xl tracking-tight text-highlighted uppercase">
-              {{ isEdit ? "Edit your dispatch" : "A new dispatch"
-              }}<span class="text-primary">.</span>
+              {{ isEdit ? "Edit your dispatch" : "A new dispatch" }}
             </h1>
             <p class="font-serif text-lg text-toned">
               Shape the story. Prepare the details. Send it to the desk.
@@ -311,9 +310,7 @@ async function onSubmit(event: FormSubmitEvent<NewsFormSchema>) {
           >
             <section class="space-y-4 rounded-xs border border-default bg-elevated p-5">
               <div class="flex items-center justify-between gap-3">
-                <h2 class="font-serif text-lg text-highlighted uppercase">
-                  Publication<span class="text-primary">.</span>
-                </h2>
+                <h2 class="font-serif text-lg text-highlighted uppercase">Publication</h2>
                 <UBadge
                   :color="published ? 'primary' : 'neutral'"
                   variant="subtle"
@@ -369,7 +366,7 @@ async function onSubmit(event: FormSubmitEvent<NewsFormSchema>) {
               <h2
                 class="border-b border-default pb-3 font-serif text-lg text-highlighted uppercase"
               >
-                Story Details<span class="text-primary">.</span>
+                Story Details
               </h2>
               <UFormField name="categoryId" label="Category" required>
                 <USelect
@@ -385,7 +382,7 @@ async function onSubmit(event: FormSubmitEvent<NewsFormSchema>) {
               <h2
                 class="border-b border-default pb-3 font-serif text-lg text-highlighted uppercase"
               >
-                Cover Image<span class="text-primary">.</span>
+                Cover Image
               </h2>
               <UFormField
                 name="featuredImage"

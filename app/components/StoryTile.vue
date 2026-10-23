@@ -26,7 +26,7 @@ const theme = tv({
     root: "group flex h-full cursor-pointer flex-col gap-3 rounded-xs border border-default bg-default p-4 transition-colors hover:border-muted sm:p-5",
     meta: "flex min-w-0 items-center justify-between gap-3 font-sans text-xs font-semibold tracking-widest text-muted uppercase",
     badge:
-      "min-w-0 truncate rounded-full border border-default bg-elevated px-2.5 py-0.5 whitespace-nowrap text-primary",
+      "min-w-0 truncate rounded-full border border-default bg-muted px-2.5 py-0.5 whitespace-nowrap text-primary",
     date: "shrink-0 whitespace-nowrap",
     header:
       "block aspect-video w-full overflow-hidden rounded-xs border border-default transition-colors group-hover:border-muted",

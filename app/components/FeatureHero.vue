@@ -24,10 +24,7 @@ const authorName = computed(() => {
       class="flex items-center justify-between border-b border-default pb-3 font-sans text-xs tracking-widest uppercase"
     >
       <div class="flex items-center gap-2">
-        <span class="size-2 rounded-full bg-primary" />
-        <span
-          class="rounded-full border border-default bg-elevated px-2.5 py-0.5 text-xs font-semibold text-primary"
-        >
+        <span class="rounded-full bg-muted px-2.5 py-0.5 text-xs font-semibold text-primary">
           {{ story.category?.name || "Lead Story" }}
         </span>
         <span class="text-dimmed">&middot;</span>
@@ -75,7 +72,7 @@ const authorName = computed(() => {
     >
       <UUser
         :name="`By ${authorName}`"
-        description="The Angkor Times Bureau"
+        description="The Angkor Times"
         :avatar="{ text: authorName.charAt(0) }"
         size="sm"
         :ui="{
@@ -91,7 +88,7 @@ const authorName = computed(() => {
         color="primary"
         variant="solid"
         size="sm"
-        class="rounded-sm px-4 font-sans text-xs font-semibold tracking-wider uppercase"
+        class="justify-center font-semibold uppercase"
       />
     </div>
   </article>

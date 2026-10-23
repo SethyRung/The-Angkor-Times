@@ -338,7 +338,7 @@ Style guidance for core component patterns using Nuxt UI v4:
 ### Category Section Header (`cathd`)
 
 - **Container Classes:** `flex items-center justify-between gap-4 pb-3 mb-6 border-b border-default`
-- **Title:** `font-serif text-2xl uppercase tracking-wider text-highlighted` followed by `<span class="text-primary">.</span>` (`.dot`).
+- **Title:** `font-serif text-2xl uppercase tracking-wider text-highlighted`.
 - **Archive Link:** `<NuxtLink class="font-sans text-xs uppercase tracking-widest text-muted hover:text-primary transition-colors flex items-center gap-2">Browse section &rarr;</NuxtLink>`.
 
 ### Newsletter Rail & Banner (`railsub` / `subband`)
@@ -361,7 +361,6 @@ Style guidance for core component patterns using Nuxt UI v4:
 - **Do** separate broadsheet columns with vertical 1px dashed rules (`border-dashed border-default`) rather than wide empty gutters.
 - **Do** maintain WCAG AA contrast (minimum 4.5:1) for all text against its immediate background.
 - **Do** format editorial metadata (category, date, read time) in uppercase Inter (`font-sans text-[10px] font-semibold tracking-widest`).
-- **Do** append the signature colored terminal dot (`<span class="text-primary">.</span>`) to all section titles and brand wordmarks.
 - **Don't** apply heavy blurred drop shadows (`shadow-lg`); depth is strictly achieved through surface tone and ruled borders (`shadow-none`).
 - **Don't** use non-serif fonts for long-form narrative headlines, lead excerpts, or article bodies (`font-serif` / EB Garamond).
 - **Don't** mix rounded bubbly corners (e.g. `rounded-xl` or `rounded-2xl`) with the sharp broadsheet aesthetic (micro-radii `rounded-[3px]` / `rounded-sm`).

@@ -361,7 +361,7 @@ const mediaRail = storyMedia({ aspect: "rail" });
               </div>
 
               <div
-                class="mt-2 space-y-3 rounded-sm border border-default bg-elevated p-5 text-highlighted"
+                class="mt-2 space-y-3 rounded-sm border border-default bg-muted p-5 text-highlighted"
               >
                 <div
                   class="flex items-center gap-2 font-sans text-xs font-semibold tracking-widest text-primary uppercase"

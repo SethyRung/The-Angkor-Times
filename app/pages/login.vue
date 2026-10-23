@@ -88,7 +88,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         id="sign-in-heading"
         class="font-serif text-3xl leading-tight tracking-tight text-highlighted sm:text-4xl"
       >
-        Newsroom sign in<span class="text-primary">.</span>
+        Newsroom sign in
       </h1>
       <p class="font-serif text-lg leading-relaxed text-toned">
         Welcome back. Sign in with your assigned account to continue to the publishing desk.
