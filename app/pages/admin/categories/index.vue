@@ -185,6 +185,7 @@ async function confirmDelete() {
 
         <template #actions-cell="{ row }">
           <UDropdownMenu
+            :modal="false"
             :items="[
               {
                 label: 'Edit',

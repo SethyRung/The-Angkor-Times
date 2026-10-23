@@ -321,7 +321,7 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
         </template>
 
         <template #actions-cell="{ row }">
-          <UDropdownMenu :items="actionItems(row.original)">
+          <UDropdownMenu :modal="false" :items="actionItems(row.original)">
             <UButton icon="i-lucide-ellipsis" color="neutral" variant="ghost" class="rounded-sm" />
           </UDropdownMenu>
         </template>
