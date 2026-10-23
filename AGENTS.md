@@ -20,11 +20,14 @@ bun run lint:fix      # oxlint --fix
 bun run fmt           # oxfmt
 bun run fmt:check     # oxfmt --check
 bun run typecheck     # nuxt typecheck (vue-tsc)
+bunx vitest run       # one-shot, all projects
 ```
 
-`oxlint` and `oxfmt` accept file paths for targeted runs.
+`oxlint` and `oxfmt` accept file paths for targeted runs. `bunx vitest run --project unit <name>` runs one unit file.
 
-**Validation order**: `lint` → `fmt` → `typecheck`. No test suite, no CI — run all three locally before pushing.
+`bun run test` / `test:unit` / `test:nuxt` are **watch**. No `test:e2e` script. No CI.
+
+**Validation order**: `lint` → `fmt` → `typecheck` → `bunx vitest run`. Run all four locally before pushing.
 
 **After bumping `typescript` or `@nuxthub/core`, run `bun install`** — incompatible pairs break `nuxt prepare` (rolldown-plugin-dts).
 
@@ -111,6 +114,12 @@ Import `dayjs` itself only inside the util — it owns plugin setup. Chain dayjs
 ## Design
 
 `DESIGN.md` is the binding spec — read it before any UI work. It covers typography, color tokens, radius, link colors, and elevation; the theme files in Architecture are its implementation.
+
+## Testing
+
+- `unit`: `test/unit/*.{test,spec}.ts` (**not recursive**). `e2e`: `test/e2e/*` (no dir yet). `nuxt`: `test/nuxt/**` (no dir yet).
+- The `nuxt` project aliases `bun:test` → `test/stubs/bun-test.ts`. Don't import `bun:test` in `unit`/`e2e`.
+- Write tests inside those globs.
 
 ## Code style
 
