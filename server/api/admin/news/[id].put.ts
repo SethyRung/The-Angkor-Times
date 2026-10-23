@@ -23,6 +23,16 @@ export default defineEventHandler(async (event) => {
     }
 
     const body = await readBody<UpdateNewsBody>(event);
+    if ((body.publish === true || body.unpublish === true) && !isAdmin(event.context.user?.role)) {
+      return createResponse(
+        {
+          code: ApiResponseCode.Forbidden,
+          message: "Admin access required to publish or unpublish news",
+        },
+        null,
+      );
+    }
+
     const update: Record<string, any> = { updatedAt: new Date() };
     if (body.title !== undefined) update.title = body.title;
     if (body.description !== undefined) update.description = body.description;

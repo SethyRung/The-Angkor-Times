@@ -19,6 +19,8 @@ useSeoMeta({
 
 const filter = ref<"all" | "pending" | "published">("pending");
 const search = ref("");
+const { user } = useUserSession();
+const toast = useToast();
 
 const { data, pending, refresh } = await useFetch<ApiResponse<NewsWithRelations[]>>(
   "/api/admin/news",
@@ -78,20 +80,21 @@ function askDelete(item: NewsWithRelations) {
   deleteOpen.value = true;
 }
 
-async function publish(id: string) {
-  await $fetch(`/api/admin/news/${id}`, {
-    method: "PUT",
-    body: { publish: true },
-  });
-  await refresh();
-}
-
-async function unpublish(id: string) {
-  await $fetch(`/api/admin/news/${id}`, {
-    method: "PUT",
-    body: { unpublish: true },
-  });
-  await refresh();
+async function setPublished(id: string, published: boolean) {
+  const failureMessage = published ? "Failed to publish news" : "Failed to unpublish news";
+  try {
+    const res = await $fetch<ApiResponse<unknown>>(`/api/admin/news/${id}`, {
+      method: "PUT",
+      body: published ? { publish: true } : { unpublish: true },
+    });
+    if (!isSuccessResponse(res)) {
+      toast.add({ title: res.status.message || failureMessage, color: "error" });
+      return;
+    }
+    await refresh();
+  } catch (e: any) {
+    toast.add({ title: e?.data?.status?.message || failureMessage, color: "error" });
+  }
 }
 
 async function confirmDelete() {
@@ -120,14 +123,14 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
         {
           label: "Unpublish",
           icon: "i-lucide-eye-off",
-          onSelect: () => unpublish(item.id),
+          onSelect: () => setPublished(item.id, false),
         },
       ]
     : [
         {
           label: "Publish",
           icon: "i-lucide-check",
-          onSelect: () => publish(item.id),
+          onSelect: () => setPublished(item.id, true),
         },
       ];
   return [
@@ -138,7 +141,7 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
         to: `/admin/news/${item.id}`,
       },
     ],
-    toggle,
+    ...(user.value?.role === "admin" ? [toggle] : []),
     [
       {
         label: "Delete",
