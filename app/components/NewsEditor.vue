@@ -34,11 +34,10 @@ const busy = computed(() => submitting.value || uploading.value);
 
 const {
   data: categoriesData,
+  pending: categoriesLoading,
   error: categoriesError,
   refresh: refreshCategories,
-} = await useFetch<ApiResponse<NewsCategory[]>>("/api/admin/categories", {
-  key: "admin:categories",
-});
+} = await useLazyFetch<ApiResponse<NewsCategory[]>>("/api/admin/categories");
 const categories = computed(() => {
   const response = categoriesData.value ?? undefined;
   return isSuccessResponse(response) ? response.data : [];
@@ -253,7 +252,7 @@ async function onSubmit(event: FormSubmitEvent<NewsFormSchema>) {
           ]"
         />
         <UAlert
-          v-else-if="!categories.length"
+          v-else-if="!categoriesLoading && !categories.length"
           color="warning"
           variant="subtle"
           title="A category is required"
@@ -369,7 +368,13 @@ async function onSubmit(event: FormSubmitEvent<NewsFormSchema>) {
                 Story Details
               </h2>
               <UFormField name="categoryId" label="Category" required>
+                <USkeleton
+                  v-if="categoriesLoading && !categories.length"
+                  aria-label="Loading categories"
+                  class="h-11 w-full rounded-sm"
+                />
                 <USelect
+                  v-else
                   v-model="state.categoryId"
                   :items="categoryItems"
                   placeholder="Choose a category"

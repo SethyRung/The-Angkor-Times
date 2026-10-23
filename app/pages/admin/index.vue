@@ -16,15 +16,17 @@ useSeoMeta({
 
 const { user } = useUserSession();
 
-const { data } = await useFetch<ApiResponse<DashboardStats>>("/api/admin/stats");
+const { data, pending: loading } =
+  await useLazyFetch<ApiResponse<DashboardStats>>("/api/admin/stats");
 
-const payload = computed<DashboardStats>(
-  () =>
-    data.value?.data ?? {
-      news: { total: 0, pending: 0, published: 0 },
-      users: { total: 0, admins: 0, editors: 0 },
-      recent: [],
-    },
+const payload = computed<DashboardStats>(() =>
+  isSuccessResponse(data.value)
+    ? data.value.data
+    : {
+        news: { total: 0, pending: 0, published: 0 },
+        users: { total: 0, admins: 0, editors: 0 },
+        recent: [],
+      },
 );
 
 const stats = computed(() => ({
@@ -63,7 +65,8 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
           Welcome back, {{ user?.firstName }}
         </h1>
         <p class="font-serif text-base text-toned">
-          <template v-if="stats.pending > 0">
+          <USkeleton v-if="loading" as="span" class="inline-block h-5 w-64 max-w-full" />
+          <template v-else-if="stats.pending > 0">
             {{ stats.pending }}
             {{ stats.pending === 1 ? "dispatch is" : "dispatches are" }} awaiting review.
           </template>
@@ -77,7 +80,8 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
             Pending
           </p>
           <p class="mt-2 font-serif text-3xl leading-none text-error md:text-4xl">
-            {{ stats.pending }}
+            <USkeleton v-if="loading" as="span" class="inline-block h-9 w-14" />
+            <template v-else>{{ stats.pending }}</template>
           </p>
           <p class="mt-1 font-mono text-xs tracking-widest text-muted uppercase">Awaiting review</p>
         </article>
@@ -87,7 +91,8 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
             Published
           </p>
           <p class="mt-2 font-serif text-3xl leading-none text-primary md:text-4xl">
-            {{ stats.published }}
+            <USkeleton v-if="loading" as="span" class="inline-block h-9 w-14" />
+            <template v-else>{{ stats.published }}</template>
           </p>
           <p class="mt-1 font-mono text-xs tracking-widest text-muted uppercase">Live now</p>
         </article>
@@ -95,7 +100,8 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
         <article class="rounded-xs border border-default bg-elevated p-5">
           <p class="font-sans text-xs font-semibold tracking-widest text-muted uppercase">Total</p>
           <p class="mt-2 font-serif text-3xl leading-none text-highlighted md:text-4xl">
-            {{ stats.total }}
+            <USkeleton v-if="loading" as="span" class="inline-block h-9 w-14" />
+            <template v-else>{{ stats.total }}</template>
           </p>
           <p class="mt-1 font-mono text-xs tracking-widest text-muted uppercase">All dispatches</p>
         </article>
@@ -103,7 +109,8 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
         <article class="rounded-xs border border-default bg-elevated p-5">
           <p class="font-sans text-xs font-semibold tracking-widest text-muted uppercase">Staff</p>
           <p class="mt-2 font-serif text-3xl leading-none text-highlighted md:text-4xl">
-            {{ stats.editors }}
+            <USkeleton v-if="loading" as="span" class="inline-block h-9 w-14" />
+            <template v-else>{{ stats.editors }}</template>
           </p>
           <p class="mt-1 font-mono text-xs tracking-widest text-muted uppercase">Active accounts</p>
         </article>
@@ -125,7 +132,10 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
                 Review &amp; Publish
               </p>
               <p class="mt-2 font-mono text-xs tracking-widest text-muted uppercase">
-                {{ stats.pending }} pending &middot; {{ stats.published }} published
+                <USkeleton v-if="loading" as="span" class="inline-block h-4 w-48" />
+                <template v-else>
+                  {{ stats.pending }} pending &middot; {{ stats.published }} published
+                </template>
               </p>
             </div>
             <UIcon
@@ -151,7 +161,10 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
                 Accounts &amp; Roles
               </p>
               <p class="mt-2 font-mono text-xs tracking-widest text-muted uppercase">
-                {{ stats.editors }} active {{ stats.editors === 1 ? "account" : "accounts" }}
+                <USkeleton v-if="loading" as="span" class="inline-block h-4 w-32" />
+                <template v-else>
+                  {{ stats.editors }} active {{ stats.editors === 1 ? "account" : "accounts" }}
+                </template>
               </p>
             </div>
             <UIcon
@@ -178,7 +191,7 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
         </div>
       </div>
 
-      <section v-if="recent.length" class="space-y-4">
+      <section v-if="loading || recent.length" class="space-y-4">
         <header class="flex items-end justify-between border-b border-default pb-3">
           <h2 class="font-serif text-xl tracking-wider text-highlighted uppercase">
             Latest Dispatches
@@ -192,7 +205,22 @@ const recent = computed<NewsWithRelations[]>(() => payload.value.recent);
           </NuxtLink>
         </header>
 
+        <div
+          v-if="loading"
+          aria-label="Loading latest dispatches"
+          class="divide-y divide-dashed divide-default rounded-xs border border-default"
+        >
+          <div v-for="n in 5" :key="n" class="flex items-center gap-4 p-4">
+            <USkeleton class="size-12 shrink-0 rounded-xs" />
+            <div class="flex-1 space-y-2">
+              <USkeleton class="h-5 w-3/4" />
+              <USkeleton class="h-3 w-1/3" />
+            </div>
+            <USkeleton class="h-5 w-20 rounded-full" />
+          </div>
+        </div>
         <ul
+          v-else
           class="divide-y divide-dashed divide-default rounded-xs border border-default bg-default"
         >
           <li

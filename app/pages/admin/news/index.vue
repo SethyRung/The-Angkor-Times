@@ -22,10 +22,14 @@ const search = ref("");
 const { user } = useUserSession();
 const toast = useToast();
 
-const { data, pending, refresh } = await useFetch<ApiResponse<NewsWithRelations[]>>(
-  "/api/admin/news",
-  { query: { status: "all", limit: 200 }, key: "admin:news" },
-);
+const {
+  data,
+  pending: loading,
+  refresh,
+} = await useLazyFetch<ApiResponse<NewsWithRelations[]>>("/api/admin/news", {
+  query: { status: "all", limit: 200 },
+  key: "admin:news",
+});
 
 const items = computed<NewsWithRelations[]>(() => {
   const response = data.value ?? undefined;
@@ -220,7 +224,8 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
             Pending
           </p>
           <p class="mt-2 font-serif text-3xl leading-none text-error md:text-4xl">
-            {{ stats.pending }}
+            <USkeleton v-if="loading && !data" as="span" class="inline-block h-9 w-14" />
+            <template v-else>{{ stats.pending }}</template>
           </p>
           <p class="mt-1 font-mono text-xs tracking-widest text-muted uppercase">Awaiting review</p>
         </article>
@@ -230,7 +235,8 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
             Published
           </p>
           <p class="mt-2 font-serif text-3xl leading-none text-primary md:text-4xl">
-            {{ stats.published }}
+            <USkeleton v-if="loading && !data" as="span" class="inline-block h-9 w-14" />
+            <template v-else>{{ stats.published }}</template>
           </p>
           <p class="mt-1 font-mono text-xs tracking-widest text-muted uppercase">Live now</p>
         </article>
@@ -238,7 +244,8 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
         <article class="rounded-xs border border-default bg-elevated p-5">
           <p class="font-sans text-xs font-semibold tracking-widest text-muted uppercase">Total</p>
           <p class="mt-2 font-serif text-3xl leading-none text-highlighted md:text-4xl">
-            {{ stats.total }}
+            <USkeleton v-if="loading && !data" as="span" class="inline-block h-9 w-14" />
+            <template v-else>{{ stats.total }}</template>
           </p>
           <p class="mt-1 font-mono text-xs tracking-widest text-muted uppercase">All dispatches</p>
         </article>
@@ -247,7 +254,7 @@ function actionItems(item: NewsWithRelations): DropdownMenuItem[][] {
       <UTable
         :data="visibleItems"
         :columns="columns"
-        :loading="pending"
+        :loading="loading"
         :ui="{
           root: 'min-h-max rounded-xs border border-default',
           th: 'font-sans text-xs font-semibold tracking-widest text-muted uppercase',

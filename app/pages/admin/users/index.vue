@@ -20,11 +20,10 @@ useSeoMeta({
 
 const { user } = useUserSession();
 
-const { data, pending, refresh } = await useFetch<ApiResponse<PublicUser[]>>("/api/admin/users", {
-  key: "admin:users",
-});
+const { data, pending, refresh } =
+  await useLazyFetch<ApiResponse<PublicUser[]>>("/api/admin/users");
 
-const items = computed<PublicUser[]>(() => data.value?.data ?? []);
+const items = computed<PublicUser[]>(() => (isSuccessResponse(data.value) ? data.value.data : []));
 
 const columns: TableColumn<PublicUser>[] = [
   { id: "user", header: "User" },

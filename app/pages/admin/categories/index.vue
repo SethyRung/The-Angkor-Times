@@ -18,12 +18,10 @@ useSeoMeta({
   ogType: "website",
 });
 
-const { data, pending, refresh } = await useFetch<ApiResponse<DbCategory[]>>(
-  "/api/admin/categories",
-  { key: "admin:categories" },
-);
+const { data, pending, refresh } =
+  await useLazyFetch<ApiResponse<DbCategory[]>>("/api/admin/categories");
 
-const items = computed<DbCategory[]>(() => data.value?.data ?? []);
+const items = computed<DbCategory[]>(() => (isSuccessResponse(data.value) ? data.value.data : []));
 
 const columns: TableColumn<DbCategory>[] = [
   { accessorKey: "name", header: "Name" },

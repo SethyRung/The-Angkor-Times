@@ -8,7 +8,9 @@ interface CategoryWithCount extends Pick<DbCategory, "id" | "name" | "slug"> {
   latestPublishedAt: string | null;
 }
 
-const { data, pending } = await useFetch<ApiResponse<CategoryWithCount[]>>("/api/categories");
+const { data, pending } = await useLazyFetch<ApiResponse<CategoryWithCount[]>>("/api/categories", {
+  key: "categories",
+});
 
 const categories = computed<CategoryWithCount[]>(() => {
   const res = data.value;
@@ -72,6 +74,7 @@ useHead(() => ({
 
       <div
         v-if="pending && !categories.length"
+        aria-label="Loading editorial desks"
         class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
       >
         <USkeleton v-for="n in 6" :key="n" class="h-44 rounded-xs" />

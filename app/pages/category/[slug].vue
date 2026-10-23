@@ -9,7 +9,7 @@ interface CategoryWithCount extends Pick<DbCategory, "id" | "name" | "slug"> {
 const route = useRoute();
 const slug = route.params.slug as string;
 
-const { data: catRes } = await useFetch<ApiResponse<CategoryWithCount[]>>("/api/categories");
+const { data: catRes } = await useLazyFetch<ApiResponse<CategoryWithCount[]>>("/api/categories");
 
 const categoryName = computed(() => {
   const res = catRes.value;
@@ -23,9 +23,13 @@ const displayTitle = computed(() => {
   return name.endsWith("Desk") ? name : `${name} Desk`;
 });
 
-const { data: newsRes, pending } = await useFetch<ApiResponse<NewsWithRelations[]>>("/api/news", {
-  query: computed(() => ({ category: slug, limit: 24, offset: 0 })),
-});
+const { data: newsRes, status } = await useLazyFetch<ApiResponse<NewsWithRelations[]>>(
+  "/api/news",
+  {
+    query: computed(() => ({ category: slug, limit: 24, offset: 0 })),
+  },
+);
+const loading = computed(() => status.value === "idle" || status.value === "pending");
 
 const stories = computed<NewsWithRelations[]>(() => {
   const res = newsRes.value;
@@ -79,7 +83,8 @@ useHead(() => ({
             {{ displayTitle }}
           </h1>
 
-          <span class="font-mono text-xs tracking-widest text-muted uppercase">
+          <USkeleton v-if="loading && !newsRes" class="h-4 w-32" />
+          <span v-else class="font-mono text-xs tracking-widest text-muted uppercase">
             {{ stories.length }} {{ stories.length === 1 ? "Dispatch" : "Dispatches" }} Filed
           </span>
         </div>
@@ -90,7 +95,7 @@ useHead(() => ({
         </p>
       </header>
 
-      <div v-if="pending && !stories.length" class="space-y-8">
+      <div v-if="loading && !stories.length" aria-label="Loading dispatches" class="space-y-8">
         <USkeleton class="h-96 w-full rounded-xs" />
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <USkeleton v-for="n in 6" :key="n" class="h-64 rounded-xs" />

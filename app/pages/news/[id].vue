@@ -4,7 +4,7 @@ import type { BreadcrumbItem } from "@nuxt/ui";
 const route = useRoute();
 const id = route.params.id as string;
 
-const { data, pending } = await useFetch<ApiResponse<NewsWithRelations>>(`/api/news/${id}`);
+const { data, pending } = await useLazyFetch<ApiResponse<NewsWithRelations>>(`/api/news/${id}`);
 
 const story = computed<NewsWithRelations | null>(() => {
   const res = data.value;
@@ -84,7 +84,7 @@ useHead(() => ({
 
 <template>
   <div class="py-8 sm:py-12 lg:py-16">
-    <UContainer v-if="pending && !story" class="space-y-6">
+    <UContainer v-if="pending && !story" aria-label="Loading story" class="space-y-6">
       <USkeleton class="h-6 w-48" />
       <USkeleton class="h-16 w-full" />
       <USkeleton class="h-8 w-3/4" />

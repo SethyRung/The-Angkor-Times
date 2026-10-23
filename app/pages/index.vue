@@ -5,11 +5,16 @@ import type { NewsItem } from "~/types/news";
 import type { ApiResponse, NewsWithRelations, DbCategory } from "#shared/types";
 import { now, toDayJS } from "#shared/utils/date";
 
-const { data: newsData, pending } = await useFetch<ApiResponse<NewsWithRelations[]>>("/api/news", {
-  query: { limit: 20, offset: 0 },
-});
+const { data: newsData, pending } = await useLazyFetch<ApiResponse<NewsWithRelations[]>>(
+  "/api/news",
+  {
+    query: { limit: 20, offset: 0 },
+  },
+);
 
-const { data: categoriesData } = await useFetch<ApiResponse<DbCategory[]>>("/api/categories");
+const { data: categoriesData } = await useLazyFetch<ApiResponse<DbCategory[]>>("/api/categories", {
+  key: "categories",
+});
 
 const stories = computed<NewsItem[]>(() => {
   const res = newsData.value;
@@ -17,7 +22,9 @@ const stories = computed<NewsItem[]>(() => {
   return res.data;
 });
 
-const categories = computed(() => categoriesData.value?.data ?? []);
+const categories = computed(() =>
+  isSuccessResponse(categoriesData.value) ? categoriesData.value.data : [],
+);
 
 const leadStory = computed<NewsItem | null>(() => stories.value[0] ?? null);
 const supportStories = computed<NewsItem[]>(() => stories.value.slice(1, 3));
@@ -139,21 +146,21 @@ const mediaRail = storyMedia({ aspect: "rail" });
 <template>
   <div class="space-y-12 py-6 sm:py-8 lg:space-y-16 lg:py-10">
     <UContainer class="max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div v-if="pending && !stories.length" class="space-y-8">
+      <div v-if="pending && !stories.length" aria-label="Loading dispatches" class="space-y-8">
         <div :class="hero.root()">
-          <div class="space-y-6">
+          <div :class="hero.supportCol()">
             <USkeleton class="h-6 w-32" />
             <USkeleton class="h-32 w-full rounded-sm" />
             <USkeleton class="h-20 w-full" />
             <USkeleton class="h-32 w-full rounded-sm" />
           </div>
-          <div class="space-y-6 lg:border-x lg:border-dashed lg:border-default lg:px-7">
+          <div :class="hero.leadCol()">
             <USkeleton class="h-8 w-48" />
             <USkeleton class="h-12 w-full" />
             <USkeleton class="aspect-16/10 w-full rounded-sm" />
             <USkeleton class="h-24 w-full" />
           </div>
-          <div class="space-y-4">
+          <div :class="hero.railCol()">
             <USkeleton class="h-6 w-36" />
             <USkeleton class="h-16 w-full" />
             <USkeleton class="h-16 w-full" />

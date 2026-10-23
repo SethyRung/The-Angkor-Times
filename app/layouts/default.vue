@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { ApiResponse, DbCategory } from "#shared/types";
 
-const { data: categoriesData } = await useFetch<ApiResponse<DbCategory[]>>("/api/categories", {
-  key: "categories",
-});
+const { data: categoriesData } = await useLazyFetch<ApiResponse<DbCategory[]>>("/api/categories");
 
-const categories = computed(() => categoriesData.value?.data ?? []);
+const categories = computed(() =>
+  isSuccessResponse(categoriesData.value) ? categoriesData.value.data : [],
+);
 </script>
 
 <template>
