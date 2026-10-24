@@ -21,6 +21,7 @@ const state = reactive<Partial<UserFormSchema>>({
   lastName: "",
   role: "editor",
   password: "",
+  isAgent: false,
 });
 
 const formRef = useTemplateRef("formRef");
@@ -36,16 +37,30 @@ watch(
       state.firstName = user.firstName ?? "";
       state.lastName = user.lastName ?? "";
       state.role = user.role as "admin" | "editor";
+      state.isAgent = user.role === "editor" && !!user.isAgent;
     } else {
       state.email = "";
       state.firstName = "";
       state.lastName = "";
       state.role = "editor";
+      state.isAgent = false;
     }
     state.password = "";
   },
   { immediate: true },
 );
+
+watch(
+  () => state.role,
+  (role) => {
+    if (role !== "editor") state.isAgent = false;
+  },
+);
+
+function onAccount(value: unknown) {
+  state.isAgent = value === "agent";
+  if (state.isAgent) state.password = "";
+}
 
 function onSubmit(event: FormSubmitEvent<UserFormSchema>) {
   emit("submit", event.data);
@@ -82,16 +97,6 @@ function onSubmit(event: FormSubmitEvent<UserFormSchema>) {
           class="space-y-4"
           @submit="onSubmit"
         >
-          <UFormField name="email" label="Email" required>
-            <UInput
-              v-model="state.email"
-              type="email"
-              autocomplete="off"
-              class="w-full"
-              :ui="{ base: 'rounded-sm font-sans' }"
-            />
-          </UFormField>
-
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <UFormField name="firstName" label="First Name">
               <UInput
@@ -123,7 +128,34 @@ function onSubmit(event: FormSubmitEvent<UserFormSchema>) {
             />
           </UFormField>
 
+          <UFormField v-if="state.role === 'editor'" name="isAgent" label="Account" required>
+            <USelect
+              :model-value="state.isAgent ? 'agent' : 'human'"
+              :items="[
+                { label: 'Human', value: 'human' },
+                { label: 'Agent', value: 'agent' },
+              ]"
+              class="w-full"
+              :ui="{ base: 'rounded-sm font-sans' }"
+              @update:model-value="onAccount"
+            />
+          </UFormField>
+          <p v-if="state.role === 'editor' && state.isAgent" class="font-serif text-sm text-toned">
+            This Editor cannot sign in. An Admin issues their token.
+          </p>
+
+          <UFormField name="email" label="Email" required>
+            <UInput
+              v-model="state.email"
+              type="email"
+              autocomplete="off"
+              class="w-full"
+              :ui="{ base: 'rounded-sm font-sans' }"
+            />
+          </UFormField>
+
           <UFormField
+            v-if="!state.isAgent"
             name="password"
             :label="isEdit ? 'New Password (leave empty to keep current)' : 'Password'"
             :required="!isEdit"

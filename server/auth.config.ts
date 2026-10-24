@@ -29,6 +29,12 @@ export default defineServerAuth({
         input: true,
         required: false,
       },
+      isAgent: {
+        type: "boolean",
+        required: false,
+        defaultValue: false,
+        input: false,
+      },
     },
   },
   advanced: {
@@ -52,6 +58,25 @@ export default defineServerAuth({
         throw new APIError("BAD_REQUEST", {
           message: "Sign-up is disabled. Accounts are created by an administrator.",
         });
+      }
+
+      if (ctx.path === "/sign-in/email") {
+        const email = typeof ctx.body?.email === "string" ? ctx.body.email : "";
+        if (!email) return;
+
+        const { db, schema } = await import("@nuxthub/db");
+        const { eq } = await import("drizzle-orm");
+        const rows = await db
+          .select({ isAgent: schema.users.isAgent })
+          .from(schema.users)
+          .where(eq(schema.users.email, email))
+          .limit(1);
+
+        if (rows[0]?.isAgent) {
+          throw new APIError("FORBIDDEN", {
+            message: "Agents cannot sign in.",
+          });
+        }
       }
     }),
   },

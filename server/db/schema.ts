@@ -49,6 +49,23 @@ export const newsTags = pgTable(
   (table) => [index("news_tags_pk").on(table.newsId, table.tagId)],
 );
 
+export const agentTokens = pgTable(
+  "agent_tokens",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    name: varchar("name", { length: 100 }).notNull(),
+    tokenHash: varchar("token_hash", { length: 64 }).notNull(),
+    secret: varchar("secret", { length: 80 }),
+    keyHint: varchar("key_hint", { length: 16 }),
+    createdAt: timestamp("created_at").defaultNow(),
+    expiresAt: timestamp("expires_at"),
+  },
+  (table) => [index("idx_agent_tokens_user").on(table.userId)],
+);
+
 export const navigation = pgTable(
   "navigation",
   {

@@ -6,6 +6,7 @@ export const userFormSchema = z.object({
   lastName: z.string().optional().default(""),
   role: z.enum(["admin", "editor"], { message: "Role is required." }),
   password: z.string().optional().default(""),
+  isAgent: z.boolean().optional().default(false),
 });
 
 export type UserFormSchema = z.output<typeof userFormSchema>;

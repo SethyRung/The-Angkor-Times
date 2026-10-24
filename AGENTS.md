@@ -117,7 +117,8 @@ Import `dayjs` itself only inside the util — it owns plugin setup. Chain dayjs
 
 ## Testing
 
-- `unit`: `test/unit/*.{test,spec}.ts` (**not recursive**). `e2e`: `test/e2e/*` (no dir yet). `nuxt`: `test/nuxt/**` (no dir yet).
+- `unit`: `test/unit/*.{test,spec}.ts` (**not recursive**). `e2e`: `test/e2e/*.{test,spec}.ts`. `nuxt`: `test/nuxt/**` (no dir yet).
+- E2e calls the Nuxt app from `bun run dev` at `http://localhost:3000` (override with `TEST_BASE_URL`). Start the app first. Sign-in uses `NUXT_ADMIN_EMAIL` and `NUXT_ADMIN_PASSWORD` from `.env`. Run with `bunx vitest run --project e2e`.
 - The `nuxt` project aliases `bun:test` → `test/stubs/bun-test.ts`. Don't import `bun:test` in `unit`/`e2e`.
 - Write tests inside those globs.
 

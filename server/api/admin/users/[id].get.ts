@@ -1,6 +1,7 @@
 import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
 import type { PublicUser } from "./index.get";
+import { agentTokensByUser } from "../../../utils/agent-token";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -19,7 +20,8 @@ export default defineEventHandler(async (event) => {
     }
 
     const row = rows[0]!;
-    const data: PublicUser = row;
+    const tokens = await agentTokensByUser();
+    const data: PublicUser = { ...row, tokens: tokens.get(row.id) ?? [] };
 
     return createResponse({ code: ApiResponseCode.Success, message: "OK" }, data);
   } catch (e) {

@@ -2,6 +2,7 @@ import { db, schema } from "@nuxthub/db";
 import { eq } from "drizzle-orm";
 import { APIError } from "better-auth/api";
 import type { PublicUser } from "./index.get";
+import { agentTokensByUser } from "../../../utils/agent-token";
 
 const VALID_ROLES = ["admin", "editor"] as const;
 type Role = (typeof VALID_ROLES)[number];
@@ -12,6 +13,7 @@ interface UpdateUserBody {
   firstName?: string;
   lastName?: string;
   role?: Role;
+  isAgent?: boolean;
 }
 
 function isValidRole(role: string): role is Role {
@@ -79,14 +81,6 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    if (body.password !== undefined && body.password.length > 0) {
-      const auth = serverAuth(event);
-      await auth.api.setUserPassword({
-        body: { userId: id, newPassword: body.password },
-        headers: event.headers,
-      });
-    }
-
     const existing = await db.select().from(schema.users).where(eq(schema.users.id, id)).limit(1);
 
     if (!existing.length) {
@@ -94,6 +88,21 @@ export default defineEventHandler(async (event) => {
     }
 
     const current = existing[0]!;
+    const nextRole = body.role ?? current.role;
+    if (body.isAgent === true && nextRole !== "editor") {
+      return createResponse(
+        { code: ApiResponseCode.ValidationError, message: "Only an Editor can be an agent" },
+        null,
+      );
+    }
+
+    if (body.password !== undefined && body.password.length > 0) {
+      await adminApi(event).setUserPassword({
+        body: { userId: id, newPassword: body.password },
+        headers: event.headers,
+      });
+    }
+
     const firstName = body.firstName !== undefined ? body.firstName : current.firstName;
     const lastName = body.lastName !== undefined ? body.lastName : current.lastName;
 
@@ -105,6 +114,8 @@ export default defineEventHandler(async (event) => {
     };
     if (body.email !== undefined) update.email = body.email;
     if (body.role !== undefined) update.role = body.role;
+    if (nextRole !== "editor") update.isAgent = false;
+    else if (body.isAgent !== undefined) update.isAgent = body.isAgent;
 
     const updated = await db
       .update(schema.users)
@@ -116,7 +127,8 @@ export default defineEventHandler(async (event) => {
       return createResponse({ code: ApiResponseCode.NotFound, message: "User not found" }, null);
     }
 
-    const data: PublicUser = updated[0]!;
+    const tokens = await agentTokensByUser();
+    const data: PublicUser = { ...updated[0]!, tokens: tokens.get(id) ?? [] };
 
     return createResponse({ code: ApiResponseCode.Success, message: "User updated" }, data);
   } catch (e) {
