@@ -14,6 +14,7 @@ export default defineNuxtConfig({
     "@nuxtjs/better-auth",
     "@comark/nuxt",
     "@nuxt/test-utils/module",
+    "@nuxtjs/mcp-toolkit",
   ],
   auth: {
     schema: {
@@ -49,6 +50,10 @@ export default defineNuxtConfig({
       ],
     },
   },
+  mcp: {
+    name: "the-angkor-times",
+    description: "Prepare Pending news for The Angkor Times.",
+  },
   runtimeConfig: {
     admin: {
       email: "",
@@ -58,6 +63,7 @@ export default defineNuxtConfig({
   nitro: {
     experimental: {
       tasks: true,
+      asyncContext: true,
     },
   },
 });
