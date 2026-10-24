@@ -32,6 +32,10 @@ _Avoid_: Admin
 An Editor that is not a human. An agent holds the Editor role, not a role of its own.
 _Avoid_: a third role, Admin
 
+**Token**:
+A named secret an Admin issues to an agent. An agent may hold more than one. Each token has a name, the date it was created, and an expiry. The secret is shown once. An Admin can revoke one token and leave the agent's other tokens in place.
+_Avoid_: session, password, a third role
+
 **Admin**:
 A newsroom member who decides what is published and who belongs to the newsroom.
 _Avoid_: Editor
