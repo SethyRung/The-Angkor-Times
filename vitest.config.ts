@@ -23,6 +23,7 @@ export default defineConfig(async (config) => {
             env: {
               NUXT_ADMIN_EMAIL: env.NUXT_ADMIN_EMAIL,
               NUXT_ADMIN_PASSWORD: env.NUXT_ADMIN_PASSWORD,
+              DATABASE_URL: env.DATABASE_URL,
             },
           },
         },

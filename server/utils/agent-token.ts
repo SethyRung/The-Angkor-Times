@@ -1,12 +1,21 @@
 import { createHash, randomBytes } from "node:crypto";
 import { db, schema } from "@nuxthub/db";
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { now } from "#shared/utils/date";
 
 export const TOKEN_EXPIRIES = ["30d", "90d", "180d", "1y", "never"] as const;
 export type TokenExpiry = (typeof TOKEN_EXPIRIES)[number];
 
 const KEY_PREFIX = "atk_";
+
+export type AgentPrincipal = {
+  tokenId: string;
+  userId: string;
+  email: string;
+  firstName: string | null;
+  lastName: string | null;
+  role: "editor";
+};
 
 export type PublicAgentToken = {
   id: string;
@@ -35,6 +44,36 @@ export function expiryDate(choice: TokenExpiry): Date | null {
   if (choice === "1y") return start.add(1, "year").toDate();
   const days = { "30d": 30, "90d": 90, "180d": 180 }[choice];
   return start.add(days, "day").toDate();
+}
+
+export async function resolveAgentToken(secret: string): Promise<AgentPrincipal | null> {
+  if (!secret.startsWith(KEY_PREFIX)) return null;
+  const rows = await db
+    .select({
+      tokenId: schema.agentTokens.id,
+      expiresAt: schema.agentTokens.expiresAt,
+      userId: schema.users.id,
+      email: schema.users.email,
+      firstName: schema.users.firstName,
+      lastName: schema.users.lastName,
+      role: schema.users.role,
+      isAgent: schema.users.isAgent,
+    })
+    .from(schema.agentTokens)
+    .innerJoin(schema.users, eq(schema.agentTokens.userId, schema.users.id))
+    .where(eq(schema.agentTokens.tokenHash, hashAgentToken(secret)))
+    .limit(1);
+  const row = rows[0];
+  if (!row || row.role !== "editor" || !row.isAgent) return null;
+  if (row.expiresAt && row.expiresAt.getTime() <= Date.now()) return null;
+  return {
+    tokenId: row.tokenId,
+    userId: row.userId,
+    email: row.email,
+    firstName: row.firstName,
+    lastName: row.lastName,
+    role: "editor",
+  };
 }
 
 export async function agentTokensByUser() {
