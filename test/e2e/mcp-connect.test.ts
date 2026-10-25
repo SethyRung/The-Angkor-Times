@@ -290,3 +290,37 @@ describe("Hermes connects with an agent token", () => {
     expect(editor.body.data.role).toBe("editor");
   });
 });
+
+describe("an Admin revokes a token", () => {
+  test("the revoked token cannot connect, and the other token still can", async () => {
+    const cookie = await adminCookie();
+    const agent = await createUser(cookie, {
+      email: address("agent"),
+      password: "agent-password",
+      role: "editor",
+      isAgent: true,
+    });
+    const laptop = await issueToken(cookie, agent.body.data.id, "Laptop", "30d");
+    const desk = await issueToken(cookie, agent.body.data.id, "Desk", "90d");
+
+    const before = await mcp({ token: laptop.secret, body: toolsListBody() });
+    expect(before.status).toBe(200);
+
+    const revoked = await api(`/api/admin/users/${agent.body.data.id}/token/${laptop.id}`, cookie, {
+      method: "DELETE",
+    });
+    expect(revoked.body.status.code).toBe("SUCCESS");
+
+    const after = await mcp({ token: laptop.secret, body: toolsListBody() });
+    expect(after.status).toBe(403);
+
+    const still = await mcp({ token: desk.secret, body: toolsListBody() });
+    expect(still.status).toBe(200);
+    assertToolList(still.json);
+
+    const user = await api<UserRow>(`/api/admin/users/${agent.body.data.id}`, cookie);
+    expect(user.body.status.code).toBe("SUCCESS");
+    expect(user.body.data.isAgent).toBe(true);
+    expect(user.body.data.role).toBe("editor");
+  });
+});
