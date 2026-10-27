@@ -67,6 +67,44 @@ export async function listAgentNews(limit: number) {
   };
 }
 
+export async function createAgentNews(input: {
+  title: string;
+  description: string;
+  content: string;
+  categoryId: string;
+  authorId: string;
+}) {
+  const [category] = await db
+    .select({ id: schema.categories.id })
+    .from(schema.categories)
+    .where(eq(schema.categories.id, input.categoryId))
+    .limit(1);
+
+  if (!category) return null;
+
+  const [inserted] = await db
+    .insert(schema.news)
+    .values({
+      title: input.title,
+      description: input.description,
+      content: input.content,
+      categoryId: input.categoryId,
+      authorId: input.authorId,
+      publishedAt: null,
+    })
+    .returning({ id: schema.news.id });
+
+  if (!inserted) {
+    throw createError({ statusCode: 500, message: "Failed to create news" });
+  }
+
+  const piece = await readAgentNews(inserted.id);
+  if (!piece) {
+    throw createError({ statusCode: 500, message: "Failed to create news" });
+  }
+  return piece;
+}
+
 export async function readAgentNews(id: string) {
   const rows = await db
     .select(readSelection)
