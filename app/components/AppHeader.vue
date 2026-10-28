@@ -100,7 +100,7 @@ function build() {
 
   const titleCenterX = titleBox.left + titleBox.width / 2;
   const titleCenterY = titleBox.top + titleBox.height / 2;
-  const gap = trailingBox.left - leadingBox.right - 28;
+  const gap = 2 * Math.min(dockBox.left - leadingBox.right, trailingBox.left - dockBox.left) - 28;
   const heightScale = 22 / titleBox.height;
   const dockToSide = gap < 148 || gap / titleBox.width < 0.18;
   const room = dockToSide ? trailingBox.left - leadingBox.left - 12 : gap;
