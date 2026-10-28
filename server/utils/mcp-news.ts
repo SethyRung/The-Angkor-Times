@@ -1,5 +1,5 @@
 import { db, schema } from "@nuxthub/db";
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq, isNull } from "drizzle-orm";
 
 const listSelection = {
   id: schema.news.id,
@@ -103,6 +103,58 @@ export async function createAgentNews(input: {
     throw createError({ statusCode: 500, message: "Failed to create news" });
   }
   return piece;
+}
+
+export async function updateAgentNews(input: {
+  id: string;
+  title?: string;
+  description?: string;
+  content?: string;
+  categoryId?: string;
+}) {
+  const [existing] = await db
+    .select({ id: schema.news.id, publishedAt: schema.news.publishedAt })
+    .from(schema.news)
+    .where(eq(schema.news.id, input.id))
+    .limit(1);
+
+  if (!existing) return { error: "not_found" as const };
+  if (existing.publishedAt) return { error: "published" as const };
+
+  if (input.categoryId) {
+    const [category] = await db
+      .select({ id: schema.categories.id })
+      .from(schema.categories)
+      .where(eq(schema.categories.id, input.categoryId))
+      .limit(1);
+    if (!category) return { error: "category_not_found" as const };
+  }
+
+  const patch: {
+    title?: string;
+    description?: string;
+    content?: string;
+    categoryId?: string;
+    updatedAt: Date;
+  } = { updatedAt: new Date() };
+  if (input.title !== undefined) patch.title = input.title;
+  if (input.description !== undefined) patch.description = input.description;
+  if (input.content !== undefined) patch.content = input.content;
+  if (input.categoryId !== undefined) patch.categoryId = input.categoryId;
+
+  const [updated] = await db
+    .update(schema.news)
+    .set(patch)
+    .where(and(eq(schema.news.id, input.id), isNull(schema.news.publishedAt)))
+    .returning({ id: schema.news.id });
+
+  if (!updated) return { error: "published" as const };
+
+  const piece = await readAgentNews(updated.id);
+  if (!piece) {
+    throw createError({ statusCode: 500, message: "Failed to revise news" });
+  }
+  return { piece };
 }
 
 export async function readAgentNews(id: string) {
