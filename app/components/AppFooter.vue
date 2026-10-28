@@ -62,16 +62,8 @@ const liveMessage = ref("");
 
 const socials = [
   { label: "GitHub", to: "https://github.com/SethyRung/The-Angkor-Times" },
-  { label: "X / Twitter", to: "https://x.com" },
+  { label: "X / Twitter", to: "https://x.com/SethyRung" },
   { label: "Wire Feed", to: "/api/news" },
-];
-
-const editorialLinks = [
-  { label: "Masthead & Staff", to: "#" },
-  { label: "Editorial Standards", to: "#" },
-  { label: "Corrections Policy", to: "#" },
-  { label: "Newsroom Desk", to: "/admin" },
-  { label: "Archive Index", to: "/category" },
 ];
 
 const deskLinks = computed(() => [
@@ -399,7 +391,7 @@ onUnmounted(() => {
     </div>
 
     <div class="mx-auto max-w-7xl space-y-6 px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-      <div ref="columns" class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
+      <div ref="columns" class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
         <div class="space-y-4">
           <NuxtLink to="/" class="inline-block">
             <span
@@ -434,22 +426,6 @@ onUnmounted(() => {
                 class="group flex items-center justify-between border-t border-dashed border-default pt-2 font-sans text-xs tracking-wider text-muted uppercase transition-colors duration-150 hover:text-highlighted"
               >
                 <span>Browse All Desks</span>
-                <UIcon name="i-lucide-arrow-right" :class="linkArrow()" />
-              </NuxtLink>
-            </li>
-          </ul>
-        </div>
-
-        <div class="space-y-4">
-          <div :class="columnHeading()">
-            <span class="size-1.5 shrink-0 rounded-full bg-primary" />
-            <h4 :class="columnTitle()">Standards &amp; Desk</h4>
-            <span data-rule class="desk-rule" />
-          </div>
-          <ul class="space-y-2 font-serif text-sm">
-            <li v-for="link in editorialLinks" :key="link.label">
-              <NuxtLink :to="link.to" :class="linkRow()">
-                <span>{{ link.label }}</span>
                 <UIcon name="i-lucide-arrow-right" :class="linkArrow()" />
               </NuxtLink>
             </li>
