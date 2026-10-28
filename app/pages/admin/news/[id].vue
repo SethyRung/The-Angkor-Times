@@ -13,17 +13,17 @@ useSeoMeta({
 });
 
 const route = useRoute();
-const {
-  data,
-  error,
-  pending: loading,
-} = await useLazyFetch<ApiResponse<DbNews>>(`/api/admin/news/${route.params.id}`);
+const { data, error, pending } = await useLazyFetch<ApiResponse<DbNews>>(
+  `/api/admin/news/${route.params.id}`,
+);
 
 const news = computed(() => (isSuccessResponse(data.value) ? data.value.data : null));
 
-watchEffect(() => {
-  if (loading.value || news.value) return;
+watch([pending, news, error], () => {
+  if (pending.value || news.value) return;
+
   const response = data.value;
+
   showError({
     statusCode:
       response?.status.code === ApiResponseCode.NotFound
@@ -31,13 +31,13 @@ watchEffect(() => {
         : response?.status.code === ApiResponseCode.ValidationError
           ? 400
           : 500,
-    statusMessage: response?.status.message ?? error.value?.statusMessage ?? "Unable to load story",
+    statusMessage: response?.status.message ?? error.value?.message ?? "Unable to load story",
   });
 });
 </script>
 
 <template>
-  <UDashboardPanel v-if="loading" :ui="{ body: 'gap-7' }">
+  <UDashboardPanel v-if="pending" :ui="{ body: 'gap-7' }">
     <template #header>
       <UDashboardNavbar
         title="Edit Story"
