@@ -176,6 +176,31 @@ export async function deleteAgentNews(id: string) {
   return { id: deleted.id };
 }
 
+export async function setAgentFeaturedImage(input: { id: string; url: string | null }) {
+  const [existing] = await db
+    .select({ id: schema.news.id, publishedAt: schema.news.publishedAt })
+    .from(schema.news)
+    .where(eq(schema.news.id, input.id))
+    .limit(1);
+
+  if (!existing) return { error: "not_found" as const };
+  if (existing.publishedAt) return { error: "published" as const };
+
+  const [updated] = await db
+    .update(schema.news)
+    .set({ featuredImage: input.url, updatedAt: new Date() })
+    .where(and(eq(schema.news.id, input.id), isNull(schema.news.publishedAt)))
+    .returning({ id: schema.news.id });
+
+  if (!updated) return { error: "published" as const };
+
+  const piece = await readAgentNews(updated.id);
+  if (!piece) {
+    throw createError({ statusCode: 500, message: "Failed to set cover" });
+  }
+  return { piece };
+}
+
 export async function readAgentNews(id: string) {
   const rows = await db
     .select(readSelection)

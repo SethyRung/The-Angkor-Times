@@ -1,4 +1,7 @@
 import { resolveAgentToken } from "../utils/agent-token";
+import { allowAgentImageUploads } from "../utils/mcp-body";
+
+allowAgentImageUploads();
 
 function bearerToken(header: string | undefined) {
   if (!header) return null;
