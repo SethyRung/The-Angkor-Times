@@ -5,13 +5,13 @@ import type { FormSubmitEvent } from "@nuxt/ui";
 definePageMeta({ layout: "auth" });
 
 useHead(() => ({
-  title: "Newsroom Sign In — The Angkor Times",
+  title: "Newsroom Sign In",
   meta: [
     {
       name: "description",
       content: "Editor and correspondent sign-in for The Angkor Times publishing desk.",
     },
-    { property: "og:title", content: "Newsroom Sign In — The Angkor Times" },
+    { property: "og:title", content: "Newsroom Sign In" },
     {
       property: "og:description",
       content: "Editor and correspondent sign-in for The Angkor Times publishing desk.",

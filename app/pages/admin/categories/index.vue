@@ -11,9 +11,9 @@ definePageMeta({
 });
 
 useSeoMeta({
-  title: "Categories — The Angkor Times",
+  title: "Categories",
   description: "Create, edit, and remove story categories for The Angkor Times.",
-  ogTitle: "Categories — The Angkor Times",
+  ogTitle: "Categories",
   ogDescription: "Create, edit, and remove story categories for The Angkor Times.",
   ogType: "website",
 });

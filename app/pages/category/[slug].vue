@@ -9,7 +9,9 @@ interface CategoryWithCount extends Pick<DbCategory, "id" | "name" | "slug"> {
 const route = useRoute();
 const slug = route.params.slug as string;
 
-const { data: catRes } = await useLazyFetch<ApiResponse<CategoryWithCount[]>>("/api/categories");
+const { data: catRes } = await useFetch<ApiResponse<CategoryWithCount[]>>("/api/categories", {
+  key: "categories",
+});
 
 const categoryName = computed(() => {
   const res = catRes.value;
@@ -23,12 +25,9 @@ const displayTitle = computed(() => {
   return name.endsWith("Desk") ? name : `${name} Desk`;
 });
 
-const { data: newsRes, status } = await useLazyFetch<ApiResponse<NewsWithRelations[]>>(
-  "/api/news",
-  {
-    query: computed(() => ({ category: slug, limit: 24, offset: 0 })),
-  },
-);
+const { data: newsRes, status } = await useFetch<ApiResponse<NewsWithRelations[]>>("/api/news", {
+  query: computed(() => ({ category: slug, limit: 24, offset: 0 })),
+});
 const loading = computed(() => status.value === "idle" || status.value === "pending");
 
 const stories = computed<NewsWithRelations[]>(() => {
@@ -46,21 +45,31 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => [
   { label: displayTitle.value },
 ]);
 
+const deskDescription = computed(
+  () => `Dispatches and reporting from the ${displayTitle.value} of The Angkor Times.`,
+);
+
 useHead(() => ({
-  title: `${displayTitle.value} — The Angkor Times`,
+  title: displayTitle.value,
   meta: [
-    {
-      name: "description",
-      content: `Dispatches and reporting from the ${displayTitle.value} of The Angkor Times.`,
-    },
-    { property: "og:title", content: `${displayTitle.value} — The Angkor Times` },
-    {
-      property: "og:description",
-      content: `Dispatches and reporting from the ${displayTitle.value} of The Angkor Times.`,
-    },
+    { name: "description", content: deskDescription.value },
+    { property: "og:title", content: displayTitle.value },
+    { property: "og:description", content: deskDescription.value },
     { property: "og:type", content: "website" },
   ],
 }));
+
+useSchemaOrg(
+  computed(() => [
+    defineBreadcrumb({
+      itemListElement: [
+        { name: "Front Page", item: "/" },
+        { name: "Editorial Desks", item: "/category" },
+        { name: displayTitle.value, item: `/category/${slug}` },
+      ],
+    }),
+  ]),
+);
 </script>
 
 <template>

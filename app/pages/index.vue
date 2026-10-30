@@ -59,7 +59,7 @@ function formatRelative(date: string | null) {
 const currentDateFormatted = computed(() => now().format("dddd, MMMM D, YYYY"));
 
 useSeoMeta({
-  title: "The Angkor Times — The Independent Broadsheet of Record",
+  title: "The Independent Broadsheet of Record",
   description:
     "A contemporary digital broadsheet publication covering political economy, culture, society, and technology across Cambodia and Southeast Asia.",
   ogTitle: "The Angkor Times — Broadsheet Edition",

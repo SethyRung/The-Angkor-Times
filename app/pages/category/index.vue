@@ -29,14 +29,14 @@ function formatLatest(date: string | null) {
 }
 
 useHead(() => ({
-  title: "Editorial Desks & Sections — The Angkor Times",
+  title: "Editorial Desks & Sections",
   meta: [
     {
       name: "description",
       content:
         "Independent reporting, investigative inquiry, and daily dispatches filed by correspondents across our dedicated editorial desks throughout the Kingdom of Cambodia.",
     },
-    { property: "og:title", content: "Editorial Desks — The Angkor Times" },
+    { property: "og:title", content: "Editorial Desks" },
     {
       property: "og:description",
       content:
@@ -45,6 +45,15 @@ useHead(() => ({
     { property: "og:type", content: "website" },
   ],
 }));
+
+useSchemaOrg([
+  defineBreadcrumb({
+    itemListElement: [
+      { name: "Front Page", item: "/" },
+      { name: "Editorial Desks", item: "/category" },
+    ],
+  }),
+]);
 </script>
 
 <template>

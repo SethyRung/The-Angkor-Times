@@ -7,9 +7,9 @@ definePageMeta({
 });
 
 useSeoMeta({
-  title: "Dashboard — The Angkor Times",
+  title: "Dashboard",
   description: "Editorial dashboard for The Angkor Times.",
-  ogTitle: "Dashboard — The Angkor Times",
+  ogTitle: "Dashboard",
   ogDescription: "Editorial dashboard for The Angkor Times.",
   ogType: "website",
 });

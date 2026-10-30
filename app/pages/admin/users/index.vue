@@ -11,9 +11,9 @@ definePageMeta({
 });
 
 useSeoMeta({
-  title: "Users — The Angkor Times",
+  title: "Users",
   description: "Manage editor and admin accounts for The Angkor Times.",
-  ogTitle: "Users — The Angkor Times",
+  ogTitle: "Users",
   ogDescription: "Manage editor and admin accounts for The Angkor Times.",
   ogType: "website",
 });

@@ -8,7 +8,7 @@ definePageMeta({
 });
 
 useSeoMeta({
-  title: "Edit Story — The Angkor Times",
+  title: "Edit Story",
   description: "Edit and prepare a dispatch for The Angkor Times publishing desk.",
 });
 

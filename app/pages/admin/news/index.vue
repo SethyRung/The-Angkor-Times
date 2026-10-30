@@ -10,9 +10,9 @@ definePageMeta({
 });
 
 useSeoMeta({
-  title: "News Queue — The Angkor Times",
+  title: "News Queue",
   description: "Review, publish, and manage story submissions for The Angkor Times.",
-  ogTitle: "News Queue — The Angkor Times",
+  ogTitle: "News Queue",
   ogDescription: "Review, publish, and manage story submissions for The Angkor Times.",
   ogType: "website",
 });

@@ -5,7 +5,7 @@ definePageMeta({
 });
 
 useSeoMeta({
-  title: "New Story — The Angkor Times",
+  title: "New Story",
   description: "Write a new dispatch for The Angkor Times publishing desk.",
 });
 </script>

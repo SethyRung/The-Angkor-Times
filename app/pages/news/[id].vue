@@ -4,7 +4,7 @@ import type { BreadcrumbItem } from "@nuxt/ui";
 const route = useRoute();
 const id = route.params.id as string;
 
-const { data, pending } = await useLazyFetch<ApiResponse<NewsWithRelations>>(`/api/news/${id}`);
+const { data, pending } = await useFetch<ApiResponse<NewsWithRelations>>(`/api/news/${id}`);
 
 const story = computed<NewsWithRelations | null>(() => {
   const res = data.value;
@@ -70,16 +70,54 @@ function printArticle() {
   window.print();
 }
 
-useHead(() => ({
-  title: story.value ? `${story.value.title} — The Angkor Times` : "Dispatch — The Angkor Times",
-  meta: [
-    { name: "description", content: story.value?.description ?? "" },
-    { property: "og:title", content: story.value?.title ?? "" },
-    { property: "og:description", content: story.value?.description ?? "" },
-    { property: "og:image", content: story.value?.featuredImage ?? "" },
-    { property: "og:type", content: "article" },
-  ],
-}));
+useHead(() => {
+  const current = story.value;
+  if (!current) return { title: "Dispatch" };
+  const image = current.featuredImage || undefined;
+  return {
+    title: current.title,
+    meta: [
+      { name: "description", content: current.description ?? "" },
+      { property: "og:title", content: current.title },
+      { property: "og:description", content: current.description ?? "" },
+      { property: "og:type", content: "article" },
+      ...(image ? [{ property: "og:image", content: image }] : []),
+      ...(current.publishedAt
+        ? [{ property: "article:published_time", content: current.publishedAt }]
+        : []),
+      ...(current.updatedAt
+        ? [{ property: "article:modified_time", content: current.updatedAt }]
+        : []),
+    ],
+  };
+});
+
+useSchemaOrg(
+  computed(() => {
+    const current = story.value;
+    if (!current) return [];
+    const crumbs = [{ name: "Front Page", item: "/" }];
+    if (current.category) {
+      crumbs.push({
+        name: current.category.name,
+        item: `/category/${current.category.slug}`,
+      });
+    }
+    crumbs.push({ name: current.title, item: `/news/${current.id}` });
+    return [
+      defineArticle({
+        "@type": "NewsArticle",
+        headline: current.title,
+        description: current.description || undefined,
+        image: current.featuredImage || undefined,
+        datePublished: current.publishedAt || undefined,
+        dateModified: current.updatedAt || current.publishedAt || undefined,
+        author: { "@type": "Person", name: authorName.value },
+      }),
+      defineBreadcrumb({ itemListElement: crumbs }),
+    ];
+  }),
+);
 </script>
 
 <template>

@@ -51,6 +51,54 @@ export default defineNuxtConfig({
       ],
     },
   },
+  site: {
+    name: "The Angkor Times",
+    description:
+      "A contemporary digital broadsheet publication covering political economy, culture, society, and technology across Cambodia and Southeast Asia.",
+    defaultLocale: "en",
+    separator: "—",
+  },
+  robots: {
+    disallow: [
+      "/admin",
+      "/login",
+      "/api/admin",
+      "/api/auth",
+      "/api/news",
+      "/api/categories",
+      "/api/navigation",
+      "/api/tags",
+    ],
+  },
+  routeRules: {
+    "/admin/**": { robots: false },
+    "/login": { robots: false },
+  },
+  sitemap: {
+    exclude: ["/admin/**", "/login", "/__better-auth-devtools", { regex: "/^\\x2f__/" }],
+    sources: ["/api/__sitemap__/urls"],
+  },
+  schemaOrg: {
+    identity: {
+      type: "Organization",
+      name: "The Angkor Times",
+      description:
+        "A contemporary digital broadsheet publication covering political economy, culture, society, and technology across Cambodia and Southeast Asia.",
+    },
+  },
+  seo: {
+    automaticTwitterTags: false,
+  },
+  ogImage: false,
+  aiReady: {
+    apiCatalog: false,
+    database: false,
+    mcpServerCard: false,
+    mcp: {
+      resources: false,
+      tools: false,
+    },
+  },
   mcp: {
     name: "the-angkor-times",
     description: "Prepare Pending news for The Angkor Times.",
