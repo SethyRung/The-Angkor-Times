@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     "@comark/nuxt",
     "@nuxt/test-utils/module",
     "@nuxtjs/mcp-toolkit",
+    "@nuxtjs/seo",
   ],
   auth: {
     schema: {
